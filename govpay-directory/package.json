@@ -1,0 +1,47 @@
+{
+  "name": "govpay-directory",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "db:seed": "npx tsx scripts/seed-reference.ts",
+    "etl:opm": "npx tsx scripts/etl-opm.ts",
+    "etl:tx": "npx tsx scripts/etl-state-tx.ts",
+    "etl:ca": "npx tsx scripts/etl-state-ca.ts",
+    "etl:all": "npm run db:seed && npm run etl:opm && npm run etl:tx && npm run etl:ca",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "type-check": "tsc --noEmit",
+    "validate": "npm run type-check && npm run lint && npm run test"
+  },
+  "dependencies": {
+    "@next/font": "^14.2.15",
+    "@supabase/supabase-js": "^2.97.0",
+    "@vercel/analytics": "^1.6.1",
+    "csv-parse": "^6.1.0",
+    "dotenv": "^17.3.1",
+    "lucide-react": "^0.575.0",
+    "next": "16.1.6",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "recharts": "^3.7.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^5.1.4",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.6",
+    "jsdom": "^28.1.0",
+    "tailwindcss": "^4",
+    "typescript": "^5",
+    "vitest": "^4.0.18"
+  }
+}
