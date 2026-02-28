@@ -20,7 +20,7 @@ export async function searchEmployees(
     .select(EMPLOYEE_SELECT, { count: "exact" });
 
   if (query.trim()) {
-    q = q.textSearch("full_name", query, { type: "websearch" });
+    q = q.textSearch("fts", query, { type: "websearch" });
   }
 
   if (filters.agency) {
