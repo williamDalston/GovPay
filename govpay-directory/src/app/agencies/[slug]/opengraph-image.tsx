@@ -73,7 +73,7 @@ export default async function Image({
               width: "40px",
               height: "40px",
               borderRadius: "8px",
-              background: "#3B82F6",
+              background: "#60A5FA",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -99,8 +99,8 @@ export default async function Image({
           >
             <div
               style={{
-                background: "rgba(59, 130, 246, 0.2)",
-                color: "#3B82F6",
+                background: "rgba(96, 165, 250, 0.2)",
+                color: "#60A5FA",
                 padding: "8px 20px",
                 borderRadius: "8px",
                 fontSize: "24px",
@@ -139,7 +139,7 @@ export default async function Image({
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div style={{ fontSize: "16px", color: "#64748B" }}>Employees</div>
             <div
-              style={{ fontSize: "42px", fontWeight: 700, color: "#3B82F6" }}
+              style={{ fontSize: "42px", fontWeight: 700, color: "#60A5FA" }}
             >
               {formatNumber(agency.employeeCount)}
             </div>
@@ -149,7 +149,7 @@ export default async function Image({
               Avg Salary
             </div>
             <div
-              style={{ fontSize: "42px", fontWeight: 700, color: "#10B981" }}
+              style={{ fontSize: "42px", fontWeight: 700, color: "#34D399" }}
             >
               {formatCurrency(agency.averageSalary)}
             </div>

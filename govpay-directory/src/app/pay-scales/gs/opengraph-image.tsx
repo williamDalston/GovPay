@@ -32,7 +32,7 @@ export default function Image() {
               width: "40px",
               height: "40px",
               borderRadius: "8px",
-              background: "#3B82F6",
+              background: "#60A5FA",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -82,8 +82,8 @@ export default function Image() {
               key={grade}
               style={{
                 background:
-                  grade >= 11 ? "rgba(59, 130, 246, 0.2)" : "#1E293B",
-                color: grade >= 11 ? "#3B82F6" : "#94A3B8",
+                  grade >= 11 ? "rgba(96, 165, 250, 0.2)" : "#1E293B",
+                color: grade >= 11 ? "#60A5FA" : "#94A3B8",
                 width: "56px",
                 height: "44px",
                 borderRadius: "8px",

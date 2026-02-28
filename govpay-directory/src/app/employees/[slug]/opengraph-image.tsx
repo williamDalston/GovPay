@@ -73,7 +73,7 @@ export default async function Image({
               width: "40px",
               height: "40px",
               borderRadius: "8px",
-              background: "#3B82F6",
+              background: "#60A5FA",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -126,7 +126,7 @@ export default async function Image({
               Total Compensation
             </div>
             <div
-              style={{ fontSize: "42px", fontWeight: 700, color: "#10B981" }}
+              style={{ fontSize: "42px", fontWeight: 700, color: "#34D399" }}
             >
               {formatCurrency(employee.totalCompensation)}
             </div>
@@ -134,7 +134,7 @@ export default async function Image({
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div style={{ fontSize: "16px", color: "#64748B" }}>Agency</div>
             <div
-              style={{ fontSize: "28px", fontWeight: 600, color: "#3B82F6" }}
+              style={{ fontSize: "28px", fontWeight: 600, color: "#60A5FA" }}
             >
               {employee.agency}
             </div>

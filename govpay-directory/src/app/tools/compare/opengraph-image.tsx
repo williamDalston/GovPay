@@ -32,7 +32,7 @@ export default function Image() {
               width: "40px",
               height: "40px",
               borderRadius: "8px",
-              background: "#3B82F6",
+              background: "#60A5FA",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -80,7 +80,7 @@ export default function Image() {
           {[
             { label: "GS-7", height: "80px", color: "#334155" },
             { label: "GS-9", height: "120px", color: "#334155" },
-            { label: "GS-11", height: "160px", color: "#3B82F6" },
+            { label: "GS-11", height: "160px", color: "#60A5FA" },
             { label: "GS-13", height: "220px", color: "#334155" },
             { label: "GS-15", height: "280px", color: "#334155" },
           ].map((bar) => (

@@ -4,7 +4,7 @@ export const metadata: Metadata = {
   title: "Cost of Living Calculator — Salary Adjustment Tool",
   description:
     "Calculate how far your federal salary goes in different cities. Adjust for housing, food, transportation, and other cost-of-living factors.",
-  alternates: { canonical: "https://govpay.directory/tools/cost-of-living" },
+  alternates: { canonical: "https://www.govpay.directory/tools/cost-of-living" },
 };
 
 const jsonLd = {
@@ -13,7 +13,7 @@ const jsonLd = {
   name: "Cost of Living Calculator",
   description:
     "Calculate how far your federal salary goes in different cities.",
-  url: "https://govpay.directory/tools/cost-of-living",
+  url: "https://www.govpay.directory/tools/cost-of-living",
   applicationCategory: "FinanceApplication",
   operatingSystem: "Any",
   offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },

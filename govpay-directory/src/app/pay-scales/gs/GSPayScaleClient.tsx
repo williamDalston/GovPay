@@ -25,7 +25,7 @@ export default function GSPayScaleClient() {
     name: "2026 General Schedule (GS) Federal Pay Scale",
     description:
       "Complete GS pay table for 2026 with 15 grades, 10 steps, and locality adjustments for 50+ pay areas. Published by the U.S. Office of Personnel Management.",
-    url: "https://govpay.directory/pay-scales/gs",
+    url: "https://www.govpay.directory/pay-scales/gs",
     license: "https://www.usa.gov/government-works",
     creator: {
       "@type": "GovernmentOrganization",
@@ -36,7 +36,7 @@ export default function GSPayScaleClient() {
     distribution: {
       "@type": "DataDownload",
       encodingFormat: "text/html",
-      contentUrl: "https://govpay.directory/pay-scales/gs",
+      contentUrl: "https://www.govpay.directory/pay-scales/gs",
     },
   };
 

@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   title: "Insights — Government Salary Trends & Analysis",
   description:
     "Explore trends and analysis of government employee compensation data. Federal salary insights, agency comparisons, and pay scale analysis.",
-  alternates: { canonical: "https://govpay.directory/insights" },
+  alternates: { canonical: "https://www.govpay.directory/insights" },
 };
 
 const insights = [
@@ -79,7 +79,7 @@ export default function InsightsPage() {
     name: "Government Salary Insights & Analysis",
     description:
       "Trends, comparisons, and analysis of government employee compensation data across America.",
-    url: "https://govpay.directory/insights",
+    url: "https://www.govpay.directory/insights",
     mainEntity: {
       "@type": "ItemList",
       itemListElement: [
@@ -89,7 +89,7 @@ export default function InsightsPage() {
           item: {
             "@type": "Article",
             headline: article.title,
-            url: `https://govpay.directory/insights/${article.slug}`,
+            url: `https://www.govpay.directory/insights/${article.slug}`,
             datePublished: article.publishedAt,
           },
         })),
@@ -97,7 +97,7 @@ export default function InsightsPage() {
           "@type": "ListItem",
           position: ARTICLES.length + index + 1,
           name: insight.title,
-          url: `https://govpay.directory${insight.href}`,
+          url: `https://www.govpay.directory${insight.href}`,
         })),
       ],
     },

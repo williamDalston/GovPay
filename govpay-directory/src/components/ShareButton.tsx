@@ -18,7 +18,7 @@ interface ShareButtonProps {
 export function ShareButton({ title, text, url }: ShareButtonProps) {
   const [copied, setCopied] = useState(false);
 
-  const fullUrl = `https://govpay.directory${url}`;
+  const fullUrl = `https://www.govpay.directory${url}`;
   const encodedUrl = encodeURIComponent(fullUrl);
   const encodedText = encodeURIComponent(text);
   const encodedTitle = encodeURIComponent(title);

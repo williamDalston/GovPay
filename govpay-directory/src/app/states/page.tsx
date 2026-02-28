@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title: "Browse by State — Federal Employee Salaries",
   description:
     "Browse federal employee salary data across all 50 states and DC. Find government compensation data in your state.",
-  alternates: { canonical: "https://govpay.directory/states" },
+  alternates: { canonical: "https://www.govpay.directory/states" },
 };
 
 export default function StatesPage() {
@@ -24,7 +24,7 @@ export default function StatesPage() {
       "@type": "ListItem",
       position: i + 1,
       name: s.name,
-      url: `https://govpay.directory/states/${s.slug}`,
+      url: `https://www.govpay.directory/states/${s.slug}`,
     })),
   };
 

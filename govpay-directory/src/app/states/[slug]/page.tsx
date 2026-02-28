@@ -9,6 +9,7 @@ import { getStateBySlug } from "@/lib/db";
 import { formatCurrency, formatNumber } from "@/lib/format";
 import { US_STATES, STATE_NEIGHBORS } from "@/lib/reference-data";
 import { AdSlot } from "@/components/AdSlot";
+import { ShareButton } from "@/components/ShareButton";
 import { Building2, Users, ArrowRight } from "lucide-react";
 
 export const revalidate = 3600;
@@ -22,10 +23,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const state = await getStateBySlug(slug);
   if (!state) return { title: "State Not Found" };
 
+  const hasData = state.employeeCount > 0;
+  
   return {
-    title: `${state.name} Federal Employee Salaries`,
-    description: `Browse salary data for ${formatNumber(state.employeeCount)} federal employees in ${state.name}. Average salary: ${formatCurrency(state.averageSalary)}.`,
-    alternates: { canonical: `https://govpay.directory/states/${slug}` },
+    title: `${state.name} Government Employee Salaries ${new Date().getFullYear()}`,
+    description: hasData
+      ? `Search ${formatNumber(state.employeeCount)} ${state.name} government employee salaries. Average pay: ${formatCurrency(state.averageSalary)}. Browse by agency, job title, and more.`
+      : `${state.name} government employee salary data coming soon. Browse federal pay scales and other states with available data.`,
+    alternates: { canonical: `https://www.govpay.directory/states/${slug}` },
+    // Don't index empty state pages
+    ...((!hasData) && { robots: { index: false, follow: true } }),
   };
 }
 
@@ -38,28 +45,58 @@ export default async function StatePage({ params }: PageProps) {
   const state = await getStateBySlug(slug);
   if (!state) notFound();
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: [
-      {
+  const sortedAgencies = [...state.agencies].sort((a, b) => b.count - a.count);
+  const topAgency = sortedAgencies.length > 0 ? sortedAgencies[0] : null;
+  const topEarner = state.topEarners.length > 0 ? state.topEarners[0] : null;
+
+  const faqItems = [
+    {
+      q: `How many federal employees work in ${state.name}?`,
+      a: `There are approximately ${formatNumber(state.employeeCount)} federal employees in ${state.name} across ${state.agencies.length} agencies.${topAgency ? ` The largest employer is the ${topAgency.name} with ${formatNumber(topAgency.count)} employees.` : ""}`,
+    },
+    {
+      q: `What is the average federal salary in ${state.name}?`,
+      a: `The average federal employee salary in ${state.name} is ${formatCurrency(state.averageSalary)}, with a median of ${formatCurrency(state.medianSalary)}. Salaries vary widely based on agency, GS grade, and position.`,
+    },
+    {
+      q: `Which federal agency employs the most people in ${state.name}?`,
+      a: topAgency
+        ? `The ${topAgency.name} is the largest federal employer in ${state.name} with ${formatNumber(topAgency.count)} employees. ${sortedAgencies.length > 1 ? `The second-largest is the ${sortedAgencies[1].name} with ${formatNumber(sortedAgencies[1].count)} employees.` : ""}`
+        : `Federal employment in ${state.name} is distributed across ${state.agencies.length} agencies.`,
+    },
+    {
+      q: `What is the highest federal salary in ${state.name}?`,
+      a: topEarner
+        ? `The highest-paid federal employee in ${state.name} earns ${formatCurrency(topEarner.totalCompensation)} as a ${topEarner.jobTitle} at the ${topEarner.agency}.`
+        : `Federal salaries in ${state.name} range widely based on grade level and locality pay. GS-15 employees in high-locality areas can earn over $200,000.`,
+    },
+    {
+      q: `Does locality pay apply in ${state.name}?`,
+      a: `Yes. Federal employees in ${state.name} receive locality pay adjustments based on their duty station. Rates vary by metro area — employees in major cities typically receive higher adjustments than those in rural areas. The "Rest of US" rate applies to duty stations outside designated locality pay areas.`,
+    },
+  ];
+
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faqItems.map((faq) => ({
         "@type": "Question",
-        name: `How many federal employees work in ${state.name}?`,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: `There are approximately ${formatNumber(state.employeeCount)} federal employees in ${state.name} across ${state.agencies.length} agencies.`,
-        },
+        name: faq.q,
+        acceptedAnswer: { "@type": "Answer", text: faq.a },
+      })),
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Place",
+      name: state.name,
+      address: {
+        "@type": "PostalAddress",
+        addressRegion: state.abbreviation,
+        addressCountry: "US",
       },
-      {
-        "@type": "Question",
-        name: `What is the average federal salary in ${state.name}?`,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: `The average federal employee salary in ${state.name} is ${formatCurrency(state.averageSalary)}, with a median of ${formatCurrency(state.medianSalary)}.`,
-        },
-      },
-    ],
-  };
+    },
+  ];
 
   return (
     <>
@@ -76,16 +113,23 @@ export default async function StatePage({ params }: PageProps) {
         ]}
       />
 
-      <div className="flex items-center gap-3">
-        <span className="flex h-12 w-12 items-center justify-center rounded-lg bg-accent-blue/20 font-data text-lg font-bold text-accent-blue">
-          {state.abbreviation}
-        </span>
-        <div>
-          <h1 className="font-heading text-2xl font-bold text-navy-100 sm:text-3xl">
-            {state.name}
-          </h1>
-          <p className="text-navy-400">Federal Employee Salary Data</p>
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <span className="flex h-12 w-12 items-center justify-center rounded-lg bg-accent-blue/20 font-data text-lg font-bold text-accent-blue">
+            {state.abbreviation}
+          </span>
+          <div>
+            <h1 className="font-heading text-2xl font-bold text-navy-100 sm:text-3xl">
+              {state.name}
+            </h1>
+            <p className="text-navy-400">Government Employee Salary Data</p>
+          </div>
         </div>
+        <ShareButton
+          title={`${state.name} Government Employee Salaries`}
+          text={`Explore salary data for ${formatNumber(state.employeeCount)} government employees in ${state.name}. Average salary: ${formatCurrency(state.averageSalary)}.`}
+          url={`/states/${slug}`}
+        />
       </div>
 
       <div className="mt-8">
@@ -204,6 +248,26 @@ export default async function StatePage({ params }: PageProps) {
           </div>
 
           <AdSlot slot="rectangle" />
+        </div>
+      </div>
+
+      {/* FAQ */}
+      <div className="mt-8 rounded-xl border border-navy-700 bg-navy-900 p-6">
+        <h2 className="font-heading text-sm font-bold uppercase tracking-wider text-navy-400">
+          Frequently Asked Questions
+        </h2>
+        <div className="mt-4 divide-y divide-navy-800">
+          {faqItems.map((faq) => (
+            <details key={faq.q} className="group py-4 first:pt-0 last:pb-0">
+              <summary className="flex cursor-pointer items-center justify-between text-sm font-medium text-navy-200 group-open:text-accent-blue">
+                {faq.q}
+                <ArrowRight size={14} className="shrink-0 transition-transform group-open:rotate-90" />
+              </summary>
+              <p className="mt-2 text-sm leading-relaxed text-navy-400">
+                {faq.a}
+              </p>
+            </details>
+          ))}
         </div>
       </div>
 

@@ -14,7 +14,7 @@ export const DATA_LAST_UPDATED = {
   localityAdjustments: "January 2026",
   costOfLiving: "Q4 2025",
   federalAgencies: "February 2026",
-  stateData: "Varies by state",
+  stateData: "February 2026", // 1.8M+ records: NY, CA, NJ, CT, TX, NC, DC, MA
 };
 
 export const GS_BASE_PAY_2026: Record<number, number[]> = {
@@ -163,6 +163,127 @@ export const STATE_NEIGHBORS: Record<string, string[]> = {
   WI: ["IA", "IL", "MI", "MN"],
   WY: ["CO", "ID", "MT", "NE", "SD", "UT"],
   DC: ["MD", "VA"],
+};
+
+/**
+ * Context for each GS grade: typical job titles, career path info.
+ * Used on grade detail pages to add educational content for SEO.
+ */
+export const GRADE_CONTEXT: Record<
+  number,
+  {
+    typicalJobs: string[];
+    level: string;
+    timeFromPrev: string | null;
+    timeToNext: string | null;
+    stepProgressionYears: number;
+  }
+> = {
+  1: {
+    typicalJobs: ["Clerk", "Messenger", "Mail Assistant"],
+    level: "Entry-Level Support",
+    timeFromPrev: null,
+    timeToNext: "6-12 months with career ladder",
+    stepProgressionYears: 18,
+  },
+  2: {
+    typicalJobs: ["Clerk-Typist", "Mail Clerk", "Data Transcriber"],
+    level: "Entry-Level Support",
+    timeFromPrev: "6-12 months from GS-1",
+    timeToNext: "6-12 months with career ladder",
+    stepProgressionYears: 18,
+  },
+  3: {
+    typicalJobs: ["Office Assistant", "Accounting Clerk", "Legal Clerk"],
+    level: "Entry-Level Support",
+    timeFromPrev: "6-12 months from GS-2",
+    timeToNext: "1 year with career ladder",
+    stepProgressionYears: 18,
+  },
+  4: {
+    typicalJobs: ["Administrative Assistant", "Paralegal Specialist", "Secretary"],
+    level: "Entry-Level Support",
+    timeFromPrev: "1 year from GS-3",
+    timeToNext: "1 year with career ladder",
+    stepProgressionYears: 18,
+  },
+  5: {
+    typicalJobs: ["Program Assistant", "HR Assistant", "IT Specialist (Trainee)"],
+    level: "Entry-Level Professional",
+    timeFromPrev: "1 year from GS-4 or bachelor's degree entry",
+    timeToNext: "1 year with career ladder",
+    stepProgressionYears: 18,
+  },
+  6: {
+    typicalJobs: ["Legal Technician", "Procurement Technician", "Medical Technician"],
+    level: "Experienced Technician",
+    timeFromPrev: "1 year from GS-5",
+    timeToNext: "1 year with career ladder",
+    stepProgressionYears: 18,
+  },
+  7: {
+    typicalJobs: ["Program Analyst (Entry)", "Auditor (Entry)", "Civil Engineer (Entry)"],
+    level: "Entry-Level Professional",
+    timeFromPrev: "1 year from GS-5 or master's degree entry",
+    timeToNext: "1-2 years with career ladder",
+    stepProgressionYears: 18,
+  },
+  8: {
+    typicalJobs: ["Supervisory Technician", "Engineering Technician", "Tax Examining Technician"],
+    level: "Senior Technician",
+    timeFromPrev: "1-2 years from GS-7",
+    timeToNext: "1-2 years with career ladder",
+    stepProgressionYears: 18,
+  },
+  9: {
+    typicalJobs: ["Program Analyst", "Contract Specialist", "Social Worker"],
+    level: "Mid-Level Professional",
+    timeFromPrev: "1 year from GS-7 or doctoral degree entry",
+    timeToNext: "1-2 years with career ladder",
+    stepProgressionYears: 18,
+  },
+  10: {
+    typicalJobs: ["Patent Examiner", "Medical Records Administrator", "Supervisory Technician"],
+    level: "Mid-Level Professional",
+    timeFromPrev: "1-2 years from GS-9",
+    timeToNext: "1-2 years with career ladder",
+    stepProgressionYears: 18,
+  },
+  11: {
+    typicalJobs: ["Management Analyst", "IT Specialist", "Attorney (Entry)"],
+    level: "Mid-Level Professional",
+    timeFromPrev: "1 year from GS-9 with career ladder",
+    timeToNext: "1-2 years with career ladder",
+    stepProgressionYears: 18,
+  },
+  12: {
+    typicalJobs: ["Senior Program Analyst", "Supervisory IT Specialist", "Project Manager"],
+    level: "Senior Professional",
+    timeFromPrev: "1 year from GS-11 with career ladder",
+    timeToNext: "2-4 years (competitive promotion)",
+    stepProgressionYears: 18,
+  },
+  13: {
+    typicalJobs: ["Supervisory Program Analyst", "Senior Attorney", "Senior IT Manager"],
+    level: "Senior Professional / Team Lead",
+    timeFromPrev: "2-4 years from GS-12 (competitive)",
+    timeToNext: "3-5 years (competitive promotion)",
+    stepProgressionYears: 18,
+  },
+  14: {
+    typicalJobs: ["Branch Chief", "Senior Policy Advisor", "Division Director"],
+    level: "Expert / Manager",
+    timeFromPrev: "3-5 years from GS-13 (competitive)",
+    timeToNext: "3-5 years (competitive promotion)",
+    stepProgressionYears: 18,
+  },
+  15: {
+    typicalJobs: ["Division Director", "Senior Scientific Advisor", "Chief of Staff"],
+    level: "Executive / Senior Expert",
+    timeFromPrev: "3-5 years from GS-14 (competitive)",
+    timeToNext: "SES or political appointment (highly competitive)",
+    stepProgressionYears: 18,
+  },
 };
 
 export const COST_INDICES: { city: string; index: number }[] = [

@@ -227,6 +227,145 @@ export const ARTICLES: Article[] = [
       { label: "Cost of Living Calculator", href: "/tools/cost-of-living" },
     ],
   },
+  {
+    slug: "how-to-calculate-federal-salary",
+    title: "How to Calculate Your Federal Salary: Step-by-Step Guide",
+    description:
+      "Learn how to calculate your total federal compensation from base pay, locality adjustments, and benefits. Includes worked examples for every GS grade.",
+    publishedAt: "2026-02-20",
+    updatedAt: "2026-02-20",
+    readingTime: "7 min read",
+    category: "Pay Scales",
+    sections: [
+      {
+        heading: "Why Your Salary Isn't What It Seems",
+        content:
+          "If you've ever looked at a federal job posting and wondered what you'll actually take home, you're not alone. The number listed on a vacancy announcement is the base pay — but your real compensation depends on three additional factors: locality pay, benefits, and any special pay authorities. Understanding how these pieces fit together is essential for evaluating job offers, planning promotions, and negotiating your starting step.\n\nThis guide walks through the complete calculation with real numbers so you can determine your exact compensation in any scenario.",
+      },
+      {
+        heading: "Step 1: Find Your Base Pay",
+        content:
+          "Start with the official GS base pay table published by OPM each January. You need two pieces of information:\n\n• Your grade (GS-1 through GS-15): This is determined by the position's classification — the difficulty, scope, and responsibilities of the job.\n• Your step (1 through 10): New hires usually start at Step 1 unless they negotiate a higher step through a superior qualifications appointment.\n\nFor example, a GS-12 Step 5 employee has a 2026 base pay of $83,877. You can find any grade/step combination on our interactive GS Pay Scale table.\n\nImportant: Base pay alone is never your actual salary. Every GS employee receives at least the 'Rest of US' locality adjustment on top of base pay.",
+      },
+      {
+        heading: "Step 2: Apply Your Locality Adjustment",
+        content:
+          "Locality pay is a percentage increase applied to your base salary based on where you work. OPM defines over 50 locality pay areas, each with a different adjustment percentage.\n\nThe formula is straightforward:\n\nAdjusted Salary = Base Pay × Locality Adjustment Factor\n\nWorked example — GS-12 Step 5 in Washington, DC:\n• Base pay: $83,877\n• DC locality factor: 1.3275 (32.75% increase)\n• Adjusted salary: $83,877 × 1.3275 = $111,347\n\nWorked example — GS-12 Step 5 in San Francisco:\n• Base pay: $83,877\n• SF locality factor: 1.4472 (44.72% increase)\n• Adjusted salary: $83,877 × 1.4472 = $121,365\n\nThat's a $10,018 difference between two employees at the same grade and step, based entirely on location. Use our Salary Comparison Tool to run your own scenarios instantly.",
+      },
+      {
+        heading: "Step 3: Factor In Benefits",
+        content:
+          "Cash salary is only part of the picture. Federal benefits typically add 30-40% in value above your adjusted salary:\n\n• FEHB (Health Insurance): The government pays roughly 72% of premiums. For a family plan, this is worth approximately $14,000-$18,000 per year.\n• FERS Retirement: You contribute 0.8% of pay; the government provides a defined benefit pension equal to 1% (or 1.1%) of your highest-3 average salary per year of service.\n• TSP Matching: The government automatically contributes 1% of pay and matches up to an additional 4% — a guaranteed 5% if you contribute at least 5%.\n• Paid Leave: 13-26 days of annual leave (depending on years of service), 13 days of sick leave, and 11 federal holidays. At GS-12 Step 5 in DC, each leave day is worth roughly $428.\n\nAdding these up, a GS-12 Step 5 in DC with $111,347 adjusted salary has total compensation closer to $145,000-$155,000.",
+      },
+      {
+        heading: "Common Calculation Mistakes",
+        content:
+          "Several misconceptions can lead you astray when estimating federal pay:\n\n• Forgetting locality pay: Never use the base pay table alone — every employee receives locality adjustments.\n• Comparing across locations without adjusting for cost of living: A GS-13 in San Francisco earns more nominally than one in Kansas City, but after housing costs, the Kansas City employee may have more purchasing power.\n• Ignoring step progression: A GS-12 Step 10 earns $96,212 — nearly $22,000 more than Step 1 ($74,009). Over an 18-year career at one grade, step increases alone add approximately 30% to your base pay.\n• Overlooking negotiation: Your starting step isn't fixed. If you have strong qualifications or a competitive current salary, you can request a higher starting step before accepting a formal offer.",
+      },
+      {
+        heading: "Quick Reference: All Grades at a Glance",
+        content:
+          "Here's what each GS grade pays at Step 1 and Step 10 (base pay, before locality):\n\n• GS-1: $21,986 – $27,556\n• GS-5: $33,878 – $44,039\n• GS-7: $41,925 – $54,498\n• GS-9: $51,115 – $66,451\n• GS-11: $61,764 – $80,286\n• GS-12: $74,009 – $96,212\n• GS-13: $88,012 – $114,418\n• GS-14: $103,994 – $135,197\n• GS-15: $122,319 – $159,012\n\nMultiply any of these by your locality factor to get your actual salary. Visit our GS Pay Scale page for the complete table with all 10 steps and 50+ locality areas.",
+      },
+    ],
+    relatedLinks: [
+      { label: "Interactive GS Pay Table", href: "/pay-scales/gs" },
+      { label: "Salary Comparison Tool", href: "/tools/compare" },
+      { label: "Cost of Living Calculator", href: "/tools/cost-of-living" },
+      { label: "Locality Pay Explained", href: "/insights/federal-locality-pay-explained" },
+    ],
+  },
+  {
+    slug: "federal-locality-pay-rankings-2026",
+    title: "Federal Pay by Location: 2026 Locality Pay Rankings",
+    description:
+      "See which federal duty stations pay the most in 2026. Complete locality pay area rankings with adjustment percentages, example salaries, and cost of living context.",
+    publishedAt: "2026-02-22",
+    updatedAt: "2026-02-22",
+    readingTime: "8 min read",
+    category: "Pay Scales",
+    sections: [
+      {
+        heading: "Where Federal Employees Earn the Most",
+        content:
+          "Your federal salary depends heavily on where you work. Locality pay adjustments can add anywhere from 17% to nearly 45% to your base GS salary — a difference of tens of thousands of dollars annually. For a GS-13 Step 1 earning a base salary of $88,012, locality pay creates a range from roughly $103,000 (Rest of US) to over $127,000 (San Francisco).\n\nUnderstanding locality rankings helps you make informed decisions about duty station preferences, geographic transfers, and career moves. Below, we rank all major locality areas by their 2026 adjustment percentages.",
+      },
+      {
+        heading: "2026 Locality Pay Rankings: Top 10",
+        content:
+          "Here are the highest-paying locality areas for federal employees in 2026:\n\n1. San Francisco-San Jose-Oakland, CA: +44.72% — The nation's highest locality rate. A GS-13 Step 1 earns $127,385 here.\n2. New York-Newark-Jersey City, NY-NJ: +36.14% — Second highest, reflecting New York's labor market. GS-13 Step 1: $119,824.\n3. Houston-The Woodlands, TX: +34.19% — Surprisingly high for Texas, driven by the energy sector labor market. GS-13 Step 1: $118,106.\n4. Los Angeles-Long Beach, CA: +34.49% — Southern California's adjustment rivals Houston. GS-13 Step 1: $118,370.\n5. Seattle-Tacoma, WA: +34.01% — Tech industry competition drives this Pacific Northwest rate. GS-13 Step 1: $117,947.\n6. Washington-Baltimore-Arlington, DC-MD-VA: +32.75% — Home to the largest concentration of federal workers. GS-13 Step 1: $116,836.\n7. Boston-Worcester-Providence, MA-RI: +31.17% — New England's academic and biotech economy. GS-13 Step 1: $115,444.\n8. Detroit-Warren-Ann Arbor, MI: +29.21% — Automotive industry wages lift this area. GS-13 Step 1: $113,720.\n9. Chicago-Naperville, IL-IN-WI: +29.59% — The Midwest's largest metro area. GS-13 Step 1: $114,055.\n10. Denver-Aurora, CO: +28.81% — Colorado's growing economy pushes rates higher. GS-13 Step 1: $113,367.",
+      },
+      {
+        heading: "How OPM Sets Locality Rates",
+        content:
+          "Locality pay is not based on cost of living — it's based on the gap between federal and private-sector wages in each area. Here's the process:\n\n1. The Bureau of Labor Statistics (BLS) surveys private-sector employers in each locality area.\n2. The Federal Salary Council compares private-sector pay to GS pay for similar occupations and experience levels.\n3. The Council recommends adjustment percentages to close the federal-private pay gap.\n4. The President's Pay Agent (Secretary of Labor, OPM Director, OMB Director) reviews the recommendations.\n5. The President makes the final decision, typically in a late-December executive order.\n\nHistorically, actual adjustments have been significantly lower than the Council's recommendations. The Council reports a national average pay gap of roughly 22-24%, but adjustments have closed only a portion of this gap. This persistent difference is why some federal agencies struggle to recruit in high-cost, competitive labor markets.",
+      },
+      {
+        heading: "Locality Pay vs. Purchasing Power",
+        content:
+          "A higher locality rate doesn't always mean better financial outcomes. The key question is whether the locality adjustment compensates for the higher cost of living in that area.\n\nBest value locations (high locality, moderate cost of living):\n• Houston, TX: 34.19% locality, but a cost of living index of only 96.5 (below national average). Your federal dollar goes far here.\n• Dallas-Fort Worth, TX: 27.24% locality with a modest 103.1 cost of living index.\n• Atlanta, GA: 26.15% locality with a 106.8 cost of living.\n\nOverpriced locations (locality doesn't fully compensate):\n• New York: 36.14% locality sounds generous, but the 187.2 cost of living index means your purchasing power is actually lower than most cities.\n• San Francisco: 44.72% is the highest rate in the nation, but with a 179.9 cost of living, much of that premium goes to housing.\n\nUse our Cost of Living Calculator to see the real purchasing power of your salary in any city.",
+      },
+      {
+        heading: "Strategic Considerations for Your Career",
+        content:
+          "Location decisions affect more than just your current paycheck:\n\n• Retirement calculation: Your FERS pension is based on your highest-3 average salary, which includes locality pay. Working your final years in a high-locality area permanently increases your retirement benefit.\n• Remote work: Many agencies now allow remote work from a different locality area. Your pay adjusts to your official duty station, so a remote worker in Kansas earning San Francisco-area rates is not possible — but working remotely from a moderate-cost city while maintaining a DC duty station may be.\n• Transfers: Moving from a high-locality to a low-locality area reduces your pay immediately. However, your GS grade and step are preserved, so you could negotiate a higher step to offset some of the reduction.\n\nThe most financially advantageous career strategy often involves building experience in a high-locality area (for higher retirement calculations) while planning to live in a moderate-cost area during retirement.",
+      },
+    ],
+    relatedLinks: [
+      { label: "GS Pay Scale with Locality", href: "/pay-scales/gs" },
+      { label: "Cost of Living Calculator", href: "/tools/cost-of-living" },
+      { label: "Salary Comparison Tool", href: "/tools/compare" },
+      { label: "Browse by State", href: "/states" },
+    ],
+  },
+  {
+    slug: "gs-grade-levels-explained",
+    title: "GS Grade Levels Explained: From Entry to Senior",
+    description:
+      "Understand all 15 GS grade levels — entry (GS-1 to GS-5), mid-level (GS-7 to GS-11), senior (GS-12 to GS-13), and expert (GS-14 to GS-15). Salaries, typical jobs, and career timelines.",
+    publishedAt: "2026-02-25",
+    updatedAt: "2026-02-25",
+    readingTime: "8 min read",
+    category: "Career",
+    sections: [
+      {
+        heading: "The Federal Career Ladder at a Glance",
+        content:
+          "The General Schedule divides federal positions into 15 grade levels, each representing a different tier of responsibility, expertise, and compensation. Understanding this structure is essential whether you're entering federal service, planning a promotion, or evaluating a job offer.\n\nThe grades break down into four broad tiers:\n• Entry Level (GS-1 to GS-5): Support roles, new graduates, and trainees\n• Mid-Level (GS-7 to GS-11): Journey-level professionals building expertise\n• Senior Level (GS-12 to GS-13): Experienced professionals and team leads\n• Expert/Executive Level (GS-14 to GS-15): Division leaders, senior advisors, and top experts",
+      },
+      {
+        heading: "Entry Level: GS-1 Through GS-5",
+        content:
+          "The entry tier covers positions requiring little to no specialized experience:\n\n• GS-1 ($21,986 base): The lowest grade. Rare in practice — most agencies start hiring at GS-2 or above. Positions include messengers and basic clerks.\n• GS-2 ($24,727 base): Clerical and support positions. Mail clerks, data transcribers, and filing assistants.\n• GS-3 ($26,979 base): Office assistants and accounting clerks. Some technical training may be required.\n• GS-4 ($30,282 base): Administrative assistants and paralegal specialists. Typically requires an associate degree or 1 year of general experience.\n• GS-5 ($33,878 base): The most common entry point for bachelor's degree holders. Positions include program assistants, HR assistants, and trainee IT specialists.\n\nMost career ladders start at GS-5 or GS-7 and provide automatic (non-competitive) promotions every 1-2 years until reaching the full performance level, which is typically GS-11 or GS-12.",
+      },
+      {
+        heading: "Mid-Level: GS-7 Through GS-11",
+        content:
+          "The mid-level tier is where most professionals spend their early career building expertise:\n\n• GS-7 ($41,925 base): Entry-level professional positions for candidates with a master's degree, superior academic achievement, or one year of specialized experience. Typical roles include entry-level auditors, engineers, and program analysts.\n• GS-8 ($46,370 base): Less common than other grades. Primarily supervisory technician and specialized technical positions.\n• GS-9 ($51,115 base): Full-performance level for many technical series. Contract specialists, social workers, and mid-level analysts. Candidates typically need a master's degree or 2+ years of professional experience.\n• GS-10 ($56,297 base): Another relatively uncommon grade. Patent examiners and certain specialized positions.\n• GS-11 ($61,764 base): The top of many career ladders. Management analysts, IT specialists, and entry-level attorneys. Requires significant experience or a PhD.\n\nEmployees on structured career ladders (e.g., GS-5/7/9/11) are typically promoted every 52 weeks if performance is satisfactory. This means a GS-5 hire can reach GS-11 in about 3-4 years.",
+      },
+      {
+        heading: "Senior Level: GS-12 and GS-13",
+        content:
+          "GS-12 and GS-13 are the workhorses of the federal government — the grades where the most experienced individual contributors, project managers, and first-line supervisors operate:\n\n• GS-12 ($74,009 – $96,212 base): Senior program analysts, project managers, supervisory IT specialists, and team leads. GS-12 is the full performance level for many professional series and the ceiling for many career ladders. It's the most common grade for experienced federal professionals.\n• GS-13 ($88,012 – $114,418 base): Supervisory analysts, senior attorneys, and senior technical managers. Promotion from GS-12 to GS-13 is typically competitive (not automatic) and is considered one of the most significant career milestones in federal service.\n\nThe jump from GS-12 to GS-13 often requires supervisory experience, advanced project management skills, or deep technical expertise. Many employees remain at GS-12 for their entire career and still earn over $96,000 at Step 10 (before locality). With DC locality pay, a GS-12 Step 10 earns $127,721.",
+      },
+      {
+        heading: "Expert/Executive Level: GS-14 and GS-15",
+        content:
+          "The top of the General Schedule represents senior leadership and the highest levels of technical expertise:\n\n• GS-14 ($103,994 – $135,197 base): Branch chiefs, division directors, and senior policy advisors. These positions require demonstrated leadership ability and extensive subject-matter expertise. In many agencies, GS-14 is the highest grade available without moving into the Senior Executive Service.\n• GS-15 ($122,319 – $159,012 base): The highest GS grade. Division directors, chief scientists, and senior strategic advisors. With San Francisco locality pay, a GS-15 Step 10 earns approximately $230,074 — near the SES pay cap.\n\nPromotion to GS-14 and GS-15 is always competitive and highly selective. Candidates typically need 10-20 years of progressively responsible federal experience, though private-sector professionals with equivalent backgrounds can enter at these levels.\n\nBeyond GS-15, the next step is the Senior Executive Service (SES), which operates under a separate pay system with salaries ranging from approximately $145,000 to $230,000.",
+      },
+      {
+        heading: "How Long Does the Full Career Take?",
+        content:
+          "A typical federal career progression timeline might look like this:\n\n• Year 0: Hired at GS-5 Step 1 ($33,878 base)\n• Year 1: Promoted to GS-7 ($41,925)\n• Year 2: Promoted to GS-9 ($51,115)\n• Year 3: Promoted to GS-11 ($61,764)\n• Year 4: Promoted to GS-12 ($74,009) — career ladder ceiling\n• Years 5-8: Competitive promotion to GS-13 ($88,012)\n• Years 8-12: Competitive promotion to GS-14 ($103,994)\n• Years 12-20: Competitive promotion to GS-15 ($122,319)\n\nThis is an optimistic but realistic timeline for a high-performing employee. Many professionals reach GS-12 or GS-13 and remain there, earning raises through step increases. Remember: a GS-13 Step 10 in Washington, DC earns over $151,890 — a very competitive salary by any standard.\n\nVisit our grade-specific pay pages to see detailed salary tables, locality adjustments, and typical positions for each level.",
+      },
+    ],
+    relatedLinks: [
+      { label: "GS Pay Scale Table", href: "/pay-scales/gs" },
+      { label: "Salary Comparison Tool", href: "/tools/compare" },
+      { label: "How Step Increases Work", href: "/insights/federal-employee-step-increases" },
+      { label: "Search Federal Employees", href: "/search" },
+    ],
+  },
 ];
 
 export function getArticleBySlug(slug: string): Article | undefined {

@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title: "Federal Agencies — Employee Salary Data",
   description:
     "Browse salary data across 450+ federal government agencies. View employee counts, average salaries, and top earners for each agency.",
-  alternates: { canonical: "https://govpay.directory/agencies" },
+  alternates: { canonical: "https://www.govpay.directory/agencies" },
 };
 
 export default async function AgenciesPage() {
@@ -27,7 +27,7 @@ export default async function AgenciesPage() {
       "@type": "ListItem",
       position: i + 1,
       name: a.name,
-      url: `https://govpay.directory/agencies/${a.slug}`,
+      url: `https://www.govpay.directory/agencies/${a.slug}`,
     })),
   };
 

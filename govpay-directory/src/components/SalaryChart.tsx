@@ -67,7 +67,7 @@ export function SalaryChart({ data, highlightIndex }: SalaryChartProps) {
               {data.map((entry, index) => (
                 <Cell
                   key={entry.range}
-                  fill={index === highlightIndex ? "#3B82F6" : "#334155"}
+                  fill={index === highlightIndex ? "#60A5FA" : "#334155"}
                 />
               ))}
             </Bar>

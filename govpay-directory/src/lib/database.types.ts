@@ -142,6 +142,25 @@ export interface Database {
         Args: Record<string, never>;
         Returns: void;
       };
+      search_employees_fuzzy: {
+        Args: { search_term: string; result_limit?: number };
+        Returns: Array<{
+          slug: string;
+          first_name: string;
+          last_name: string;
+          full_name: string;
+          agency_name: string | null;
+          similarity: number;
+        }>;
+      };
+      get_agency_salary_distribution: {
+        Args: { agency_id_param: number };
+        Returns: Array<{ range: string; count: number }>;
+      };
+      get_state_salary_distribution: {
+        Args: { state_id_param: number };
+        Returns: Array<{ range: string; count: number }>;
+      };
     };
   };
 }
@@ -175,12 +194,16 @@ export interface EmployeeWithRelations {
   occupations: { code: string; title: string } | null;
 }
 
-// Type for suggestion query results
+// Type for suggestion query results (from ilike query)
 export interface EmployeeSuggestionRow {
   slug: string;
   first_name: string;
   last_name: string;
+  full_name?: string;
   agencies: { name: string } | null;
+  // From fuzzy search RPC
+  agency_name?: string;
+  similarity?: number;
 }
 
 export interface AgencySuggestionRow {

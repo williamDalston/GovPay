@@ -26,10 +26,10 @@ import {
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "GovPay.Directory — Federal & State Government Employee Salaries",
+  title: "GovPay.Directory — Search 1.8M+ Government Employee Salaries",
   description:
-    "Search and compare salaries for federal and state government employees. Explore GS pay scales, agency compensation data, and cost-of-living tools.",
-  alternates: { canonical: "https://govpay.directory" },
+    "Search and compare salaries for 1.8 million+ federal and state government employees across 8 states. Explore pay data by agency, state, job title, and more.",
+  alternates: { canonical: "https://www.govpay.directory" },
 };
 
 export default async function Home() {
@@ -49,14 +49,14 @@ export default async function Home() {
       "@context": "https://schema.org",
       "@type": "WebSite",
       name: "GovPay.Directory",
-      url: "https://govpay.directory",
+      url: "https://www.govpay.directory",
       description: `Search and compare compensation data for ${employeeLabel} federal, state, and local government employees.`,
       potentialAction: {
         "@type": "SearchAction",
         target: {
           "@type": "EntryPoint",
           urlTemplate:
-            "https://govpay.directory/search?q={search_term_string}",
+            "https://www.govpay.directory/search?q={search_term_string}",
         },
         "query-input": "required name=search_term_string",
       },
@@ -65,8 +65,8 @@ export default async function Home() {
       "@context": "https://schema.org",
       "@type": "Organization",
       name: "GovPay.Directory",
-      url: "https://govpay.directory",
-      logo: "https://govpay.directory/opengraph-image",
+      url: "https://www.govpay.directory",
+      logo: "https://www.govpay.directory/opengraph-image",
     },
   ];
 

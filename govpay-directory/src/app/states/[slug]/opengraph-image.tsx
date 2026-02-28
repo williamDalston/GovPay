@@ -73,7 +73,7 @@ export default async function Image({
               width: "40px",
               height: "40px",
               borderRadius: "8px",
-              background: "#3B82F6",
+              background: "#60A5FA",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -96,13 +96,13 @@ export default async function Image({
               width: "80px",
               height: "80px",
               borderRadius: "16px",
-              background: "rgba(59, 130, 246, 0.2)",
+              background: "rgba(96, 165, 250, 0.2)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               fontSize: "36px",
               fontWeight: 700,
-              color: "#3B82F6",
+              color: "#60A5FA",
             }}
           >
             {state.abbreviation}
@@ -137,7 +137,7 @@ export default async function Image({
               Federal Employees
             </div>
             <div
-              style={{ fontSize: "42px", fontWeight: 700, color: "#3B82F6" }}
+              style={{ fontSize: "42px", fontWeight: 700, color: "#60A5FA" }}
             >
               {formatNumber(state.employeeCount)}
             </div>
@@ -147,7 +147,7 @@ export default async function Image({
               Avg Salary
             </div>
             <div
-              style={{ fontSize: "42px", fontWeight: 700, color: "#10B981" }}
+              style={{ fontSize: "42px", fontWeight: 700, color: "#34D399" }}
             >
               {formatCurrency(state.averageSalary)}
             </div>

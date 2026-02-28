@@ -54,6 +54,7 @@ export async function searchEmployees(
 
 /**
  * Get autocomplete suggestions for search.
+ * Uses trigram similarity for fuzzy matching (handles typos/alternate spellings).
  */
 export async function getSuggestions(
   prefix: string
@@ -67,13 +68,22 @@ export async function getSuggestions(
 
   const sanitized = sanitizeForLike(term);
 
+  // Use trigram similarity search via RPC for fuzzy matching on employees
+  // Falls back to ilike if RPC fails
   const [empResult, agencyResult] = await Promise.all([
-    supabase
-      .from("employees")
-      .select("slug, first_name, last_name, agencies(name)")
-      .or(`first_name.ilike.${sanitized}%,last_name.ilike.${sanitized}%`)
-      .order("total_compensation", { ascending: false })
-      .limit(5),
+    supabase.rpc("search_employees_fuzzy", { search_term: term, result_limit: 5 })
+      .then(res => {
+        if (res.error || !res.data?.length) {
+          // Fallback to ilike search
+          return supabase
+            .from("employees")
+            .select("slug, first_name, last_name, agencies(name)")
+            .or(`first_name.ilike.%${sanitized}%,last_name.ilike.%${sanitized}%,full_name.ilike.%${sanitized}%`)
+            .order("total_compensation", { ascending: false })
+            .limit(5);
+        }
+        return res;
+      }),
     supabase
       .from("agencies")
       .select("slug, name, abbreviation")
@@ -86,9 +96,9 @@ export async function getSuggestions(
     employees: (empResult.data ?? []).map((e) => {
       const emp = e as unknown as EmployeeSuggestionRow;
       return {
-        name: `${emp.first_name} ${emp.last_name}`,
+        name: emp.full_name ?? `${emp.first_name} ${emp.last_name}`,
         slug: emp.slug,
-        agency: emp.agencies?.name ?? "",
+        agency: emp.agencies?.name ?? emp.agency_name ?? "",
       };
     }),
     agencies: (agencyResult.data ?? []).map((a) => {

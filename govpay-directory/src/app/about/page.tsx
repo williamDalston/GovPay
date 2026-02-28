@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   title: "About GovPay.Directory",
   description:
     "Learn about GovPay.Directory, our data sources, methodology, and commitment to transparency in government employee compensation data.",
-  alternates: { canonical: "https://govpay.directory/about" },
+  alternates: { canonical: "https://www.govpay.directory/about" },
 };
 
 export default async function AboutPage() {
@@ -49,7 +49,7 @@ export default async function AboutPage() {
       mainEntity: {
         "@type": "Organization",
         name: "GovPay.Directory",
-        url: "https://govpay.directory",
+        url: "https://www.govpay.directory",
       },
     },
     {

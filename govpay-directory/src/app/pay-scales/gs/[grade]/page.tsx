@@ -6,8 +6,8 @@ import { EmployeeCard } from "@/components/EmployeeCard";
 import { AnimateOnScroll } from "@/components/AnimateOnScroll";
 import { getEmployeesByGrade } from "@/lib/db";
 import { formatCurrency } from "@/lib/format";
-import { GS_BASE_PAY_2026, GS_GRADES, GS_STEPS, LOCALITY_AREAS } from "@/lib/reference-data";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { GS_BASE_PAY_2026, GS_GRADES, GS_STEPS, LOCALITY_AREAS, GRADE_CONTEXT } from "@/lib/reference-data";
+import { ArrowLeft, ArrowRight, Briefcase } from "lucide-react";
 
 export const revalidate = 86400;
 
@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: `GS-${gradeNum} Pay Scale 2026 — ${formatCurrency(basePay[0])} to ${formatCurrency(basePay[9])}`,
     description: `GS-${gradeNum} federal pay scale for 2026. Step 1: ${formatCurrency(basePay[0])}. Step 10: ${formatCurrency(basePay[9])}. View locality-adjusted rates and employees at this grade.`,
     alternates: {
-      canonical: `https://govpay.directory/pay-scales/gs/${gradeNum}`,
+      canonical: `https://www.govpay.directory/pay-scales/gs/${gradeNum}`,
     },
   };
 }
@@ -45,27 +45,46 @@ export default async function GSGradePage({ params }: PageProps) {
   const prevGrade = gradeNum > 1 ? gradeNum - 1 : null;
   const nextGrade = gradeNum < 15 ? gradeNum + 1 : null;
 
+  const ctx = GRADE_CONTEXT[gradeNum];
+  const dcAdj = LOCALITY_AREAS.find((a) => a.slug === "washington-dc")?.adjustment ?? 1;
+  const prevBasePay = prevGrade ? GS_BASE_PAY_2026[prevGrade] : null;
+  const diffFromPrev = prevBasePay ? basePay[0] - prevBasePay[0] : null;
+
+  const faqItems = [
+    {
+      q: `What is the GS-${gradeNum} salary in 2026?`,
+      a: `The GS-${gradeNum} base salary ranges from ${formatCurrency(basePay[0])} (Step 1) to ${formatCurrency(basePay[9])} (Step 10) before locality adjustments.`,
+    },
+    {
+      q: `How much does a GS-${gradeNum} make with locality pay?`,
+      a: `With locality adjustments, GS-${gradeNum} salaries can range significantly. In Washington, DC, a GS-${gradeNum} Step 1 earns approximately ${formatCurrency(Math.round(basePay[0] * dcAdj))}. In San Francisco, that figure rises to ${formatCurrency(Math.round(basePay[0] * 1.4472))}.`,
+    },
+    {
+      q: `What jobs are GS-${gradeNum}?`,
+      a: `Typical GS-${gradeNum} positions include ${ctx.typicalJobs.join(", ")}. GS-${gradeNum} is classified as ${ctx.level} in the federal pay system.`,
+    },
+    {
+      q: `How long does it take to reach GS-${gradeNum} Step 10?`,
+      a: `It takes 18 years of continuous satisfactory performance to advance from Step 1 to Step 10 within GS-${gradeNum}. Steps 1-4 advance annually, Steps 4-7 every two years, and Steps 7-10 every three years. At Step 10, you would earn ${formatCurrency(basePay[9])} in base pay.`,
+    },
+    ...(prevBasePay
+      ? [
+          {
+            q: `How much more does GS-${gradeNum} pay than GS-${prevGrade}?`,
+            a: `GS-${gradeNum} Step 1 (${formatCurrency(basePay[0])}) pays ${formatCurrency(diffFromPrev!)} more than GS-${prevGrade} Step 1 (${formatCurrency(prevBasePay[0])}), a ${((diffFromPrev! / prevBasePay[0]) * 100).toFixed(1)}% increase before locality adjustments.`,
+          },
+        ]
+      : []),
+  ];
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: [
-      {
-        "@type": "Question",
-        name: `What is the GS-${gradeNum} salary in 2026?`,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: `The GS-${gradeNum} base salary ranges from ${formatCurrency(basePay[0])} (Step 1) to ${formatCurrency(basePay[9])} (Step 10) before locality adjustments.`,
-        },
-      },
-      {
-        "@type": "Question",
-        name: `How much does a GS-${gradeNum} make with locality pay?`,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: `With locality adjustments, GS-${gradeNum} salaries can range significantly. In Washington, DC, a GS-${gradeNum} Step 1 earns approximately ${formatCurrency(Math.round(basePay[0] * (LOCALITY_AREAS.find((a) => a.slug === "washington-dc")?.adjustment ?? 1)))}.`,
-        },
-      },
-    ],
+    mainEntity: faqItems.map((faq) => ({
+      "@type": "Question",
+      name: faq.q,
+      acceptedAnswer: { "@type": "Answer", text: faq.a },
+    })),
   };
 
   return (
@@ -176,6 +195,78 @@ export default async function GSGradePage({ params }: PageProps) {
           </div>
         </div>
 
+        {/* Typical Jobs */}
+        <div className="mt-6 rounded-xl border border-navy-700 bg-navy-900 p-6">
+          <h2 className="font-heading text-sm font-bold uppercase tracking-wider text-navy-400">
+            Typical Jobs at GS-{gradeNum}
+          </h2>
+          <p className="mt-2 text-xs text-navy-500">{ctx.level}</p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {ctx.typicalJobs.map((job) => (
+              <span
+                key={job}
+                className="inline-flex items-center gap-1.5 rounded-lg bg-navy-800 px-3 py-1.5 text-sm text-navy-200"
+              >
+                <Briefcase size={12} className="text-navy-500" />
+                {job}
+              </span>
+            ))}
+          </div>
+          <p className="mt-3 text-sm leading-relaxed text-navy-400">
+            GS-{gradeNum} positions are classified as <strong className="text-navy-300">{ctx.level}</strong> in
+            the federal workforce. {gradeNum <= 7
+              ? "These roles typically require a high school diploma or bachelor's degree, depending on the series."
+              : gradeNum <= 11
+                ? "These positions usually require a bachelor's or master's degree, or equivalent professional experience."
+                : gradeNum <= 13
+                  ? "Candidates typically need extensive specialized experience, an advanced degree, or both."
+                  : "These are leadership and senior expert positions that require deep expertise and significant management experience."}
+          </p>
+        </div>
+
+        {/* Career Path */}
+        <div className="mt-6 rounded-xl border border-navy-700 bg-navy-900 p-6">
+          <h2 className="font-heading text-sm font-bold uppercase tracking-wider text-navy-400">
+            Career Path
+          </h2>
+          <div className="mt-4 flex items-center gap-4">
+            {prevGrade && prevBasePay && (
+              <Link
+                href={`/pay-scales/gs/${prevGrade}`}
+                className="flex-1 rounded-lg border border-navy-700 p-3 text-center transition-colors hover:border-accent-blue/50 hover:bg-navy-800"
+              >
+                <p className="text-xs text-navy-500">From</p>
+                <p className="mt-1 font-heading text-sm font-bold text-navy-200">GS-{prevGrade}</p>
+                <p className="mt-0.5 font-data text-xs text-navy-400">{formatCurrency(prevBasePay[0])}</p>
+                <p className="mt-1 text-[11px] text-navy-500">{ctx.timeFromPrev}</p>
+              </Link>
+            )}
+            <div className="flex-1 rounded-lg border border-accent-blue/30 bg-accent-blue/5 p-3 text-center">
+              <p className="text-xs text-accent-blue">Current</p>
+              <p className="mt-1 font-heading text-sm font-bold text-navy-100">GS-{gradeNum}</p>
+              <p className="mt-0.5 font-data text-xs text-accent-green">{formatCurrency(basePay[0])}</p>
+              <p className="mt-1 text-[11px] text-navy-400">{ctx.level}</p>
+            </div>
+            {nextGrade && (
+              <Link
+                href={`/pay-scales/gs/${nextGrade}`}
+                className="flex-1 rounded-lg border border-navy-700 p-3 text-center transition-colors hover:border-accent-blue/50 hover:bg-navy-800"
+              >
+                <p className="text-xs text-navy-500">To</p>
+                <p className="mt-1 font-heading text-sm font-bold text-navy-200">GS-{nextGrade}</p>
+                <p className="mt-0.5 font-data text-xs text-navy-400">{formatCurrency(GS_BASE_PAY_2026[nextGrade][0])}</p>
+                <p className="mt-1 text-[11px] text-navy-500">{ctx.timeToNext}</p>
+              </Link>
+            )}
+          </div>
+          <p className="mt-4 text-sm leading-relaxed text-navy-400">
+            Within GS-{gradeNum}, it takes <strong className="text-navy-300">18 years</strong> to progress from
+            Step 1 ({formatCurrency(basePay[0])}) to Step 10 ({formatCurrency(basePay[9])}) — a cumulative increase
+            of {formatCurrency(basePay[9] - basePay[0])} ({((basePay[9] / basePay[0] - 1) * 100).toFixed(1)}%).
+            Steps 1-4 advance annually, Steps 4-7 every two years, and Steps 7-10 every three years.
+          </p>
+        </div>
+
         {/* Employees at this grade */}
         {employeesAtGrade.length > 0 && (
           <div className="mt-8">
@@ -219,6 +310,26 @@ export default async function GSGradePage({ params }: PageProps) {
               with locality pay adjustments increasing total compensation by
               up to 44.7% in the highest-cost areas.
             </p>
+          </div>
+        </div>
+
+        {/* FAQ */}
+        <div className="mt-6 rounded-xl border border-navy-700 bg-navy-900 p-6">
+          <h2 className="font-heading text-sm font-bold uppercase tracking-wider text-navy-400">
+            Frequently Asked Questions
+          </h2>
+          <div className="mt-4 divide-y divide-navy-800">
+            {faqItems.map((faq) => (
+              <details key={faq.q} className="group py-4 first:pt-0 last:pb-0">
+                <summary className="flex cursor-pointer items-center justify-between text-sm font-medium text-navy-200 group-open:text-accent-blue">
+                  {faq.q}
+                  <ArrowRight size={14} className="shrink-0 transition-transform group-open:rotate-90" />
+                </summary>
+                <p className="mt-2 text-sm leading-relaxed text-navy-400">
+                  {faq.a}
+                </p>
+              </details>
+            ))}
           </div>
         </div>
       </div>

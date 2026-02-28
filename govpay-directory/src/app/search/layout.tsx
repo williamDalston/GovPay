@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   description:
     "Search and explore federal and state government employee salary data. Find compensation details by name, job title, agency, or location.",
   alternates: {
-    canonical: "https://govpay.directory/search",
+    canonical: "https://www.govpay.directory/search",
   },
   robots: {
     index: false,

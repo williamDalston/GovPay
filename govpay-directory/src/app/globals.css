@@ -6,15 +6,15 @@
   --color-navy-800: #1a2332;
   --color-navy-700: #334155;
   --color-navy-600: #475569;
-  --color-navy-500: #728197;
+  --color-navy-500: #8494A7;
   --color-navy-400: #94A3B8;
   --color-navy-300: #CBD5E1;
   --color-navy-200: #E2E8F0;
   --color-navy-100: #F1F5F9;
 
-  --color-accent-blue: #3B82F6;
-  --color-accent-blue-hover: #2563EB;
-  --color-accent-green: #10B981;
+  --color-accent-blue: #60A5FA;
+  --color-accent-blue-hover: #3B82F6;
+  --color-accent-green: #34D399;
   --color-accent-amber: #F59E0B;
   --color-accent-red: #EF4444;
 
@@ -53,9 +53,9 @@
 }
 
 @keyframes focus-glow {
-  0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
-  70% { box-shadow: 0 0 0 8px rgba(59, 130, 246, 0); }
-  100% { box-shadow: 0 0 0 8px rgba(59, 130, 246, 0); }
+  0% { box-shadow: 0 0 0 0 rgba(96, 165, 250, 0.4); }
+  70% { box-shadow: 0 0 0 8px rgba(96, 165, 250, 0); }
+  100% { box-shadow: 0 0 0 8px rgba(96, 165, 250, 0); }
 }
 
 @keyframes icon-bounce {

@@ -32,10 +32,10 @@ const footerLinks = {
   ],
   Resources: [
     { label: "About", href: "/about" },
-    { label: "Data Sources", href: "/about#data-sources" },
+    { label: "Cite This Data", href: "/cite" },
+    { label: "Contact", href: "/contact" },
     { label: "Privacy Policy", href: "/privacy" },
     { label: "Terms of Service", href: "/terms" },
-    { label: "Contact", href: "mailto:info@alstonanalytics.com" },
   ],
 };
 

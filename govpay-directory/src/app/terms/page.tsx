@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: "Terms of Service",
   description:
     "Terms and conditions governing use of the GovPay.Directory federal employee salary database.",
-  alternates: { canonical: "https://govpay.directory/terms" },
+  alternates: { canonical: "https://www.govpay.directory/terms" },
 };
 
 export default function TermsPage() {

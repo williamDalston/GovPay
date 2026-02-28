@@ -43,7 +43,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
               width: "40px",
               height: "40px",
               borderRadius: "8px",
-              background: "#3B82F6",
+              background: "#60A5FA",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -68,8 +68,8 @@ export default async function Image({ params }: { params: Promise<{ slug: string
         >
           <div
             style={{
-              background: "rgba(59, 130, 246, 0.15)",
-              color: "#3B82F6",
+              background: "rgba(96, 165, 250, 0.15)",
+              color: "#60A5FA",
               padding: "6px 16px",
               borderRadius: "20px",
               fontSize: "16px",
@@ -108,7 +108,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
             style={{
               width: "4px",
               height: "24px",
-              background: "#3B82F6",
+              background: "#60A5FA",
               borderRadius: "4px",
             }}
           />

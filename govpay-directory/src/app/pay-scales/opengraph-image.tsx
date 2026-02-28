@@ -33,7 +33,7 @@ export default function Image() {
               width: "48px",
               height: "48px",
               borderRadius: "10px",
-              background: "#3B82F6",
+              background: "#60A5FA",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -45,7 +45,7 @@ export default function Image() {
             GP
           </div>
           <div style={{ fontSize: "32px", fontWeight: 700, color: "#94A3B8" }}>
-            GovPay<span style={{ color: "#3B82F6" }}>.Directory</span>
+            GovPay<span style={{ color: "#60A5FA" }}>.Directory</span>
           </div>
         </div>
         <div
@@ -95,7 +95,7 @@ export default function Image() {
               }}
             >
               <div
-                style={{ fontSize: "28px", fontWeight: 700, color: "#10B981" }}
+                style={{ fontSize: "28px", fontWeight: 700, color: "#34D399" }}
               >
                 {stat.value}
               </div>

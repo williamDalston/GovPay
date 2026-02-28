@@ -10,6 +10,7 @@ import { getAgencyBySlug, getEmployeesByAgency, getAgencySlugs, getSalaryDistrib
 import { formatCurrency, formatNumber } from "@/lib/format";
 import { AdSlot } from "@/components/AdSlot";
 import { JobsCTA } from "@/components/JobsCTA";
+import { ShareButton } from "@/components/ShareButton";
 import { MapPin, Briefcase, Users, ArrowRight } from "lucide-react";
 
 export const revalidate = 3600;
@@ -27,7 +28,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {
       title: `${agency.name} Employee Salaries`,
       description: `Explore salary data for ${formatNumber(agency.employeeCount)} employees at the ${agency.name}. Average salary: ${formatCurrency(agency.averageSalary)}. View top earners and occupation breakdown.`,
-      alternates: { canonical: `https://govpay.directory/agencies/${slug}` },
+      alternates: { canonical: `https://www.govpay.directory/agencies/${slug}` },
     };
   } catch {
     return { title: "Agency Not Found" };
@@ -75,7 +76,7 @@ export default async function AgencyPage({ params }: PageProps) {
         "@type": "QuantitativeValue",
         value: agency.employeeCount,
       },
-      url: `https://govpay.directory/agencies/${slug}`,
+      url: `https://www.govpay.directory/agencies/${slug}`,
     },
     {
       "@context": "https://schema.org",
@@ -116,18 +117,25 @@ export default async function AgencyPage({ params }: PageProps) {
           ]}
         />
 
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-start">
-          {agency.abbreviation && (
-            <span className="inline-block w-fit rounded bg-accent-blue/20 px-3 py-1 font-data text-sm font-bold text-accent-blue">
-              {agency.abbreviation}
-            </span>
-          )}
-          <div className="min-w-0">
-            <h1 className="font-heading text-2xl font-bold text-navy-100 sm:text-3xl">
-              {agency.name}
-            </h1>
-            <p className="mt-1 text-sm text-navy-400">Employee Salary Data</p>
+        <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-start">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start">
+            {agency.abbreviation && (
+              <span className="inline-block w-fit rounded bg-accent-blue/20 px-3 py-1 font-data text-sm font-bold text-accent-blue">
+                {agency.abbreviation}
+              </span>
+            )}
+            <div className="min-w-0">
+              <h1 className="font-heading text-2xl font-bold text-navy-100 sm:text-3xl">
+                {agency.name}
+              </h1>
+              <p className="mt-1 text-sm text-navy-400">Employee Salary Data</p>
+            </div>
           </div>
+          <ShareButton
+            title={`${agency.name} Employee Salaries`}
+            text={`Explore salary data for ${formatNumber(agency.employeeCount)} employees at the ${agency.name}. Average salary: ${formatCurrency(agency.averageSalary)}.`}
+            url={`/agencies/${slug}`}
+          />
         </div>
 
         <div className="mt-8">

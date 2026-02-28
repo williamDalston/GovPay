@@ -19,9 +19,20 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-/** Thin records lack critical data — noindex to avoid thin-content penalties at scale. */
-function isThinRecord(emp: NonNullable<Awaited<ReturnType<typeof getEmployeeBySlug>>>) {
-  return !emp.jobTitle || emp.totalCompensation <= 0 || !emp.dutyStation;
+/**
+ * With 1.8M+ records, we're selective about which employee pages get indexed.
+ * Only index "rich" records that provide genuine value and can rank.
+ * This prevents index bloat and focuses crawl budget on high-value pages.
+ */
+function shouldIndex(emp: NonNullable<Awaited<ReturnType<typeof getEmployeeBySlug>>>) {
+  // Must have complete data
+  if (!emp.jobTitle || emp.totalCompensation <= 0) return false;
+  
+  // Only index higher earners (more search interest)
+  // $80K+ captures GS-12+ and equivalent state positions
+  if (emp.totalCompensation < 80000) return false;
+  
+  return true;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -32,8 +43,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `${employee.name} — ${employee.jobTitle || "Federal Employee"} at ${employee.agency}`,
     description: `${employee.name} earns ${formatCurrency(employee.totalCompensation)} as a ${employee.jobTitle || "federal employee"} at the ${employee.agency} in ${employee.dutyStation || "the United States"}. View full compensation details.`,
-    alternates: { canonical: `https://govpay.directory/employees/${slug}` },
-    ...(isThinRecord(employee) && { robots: "noindex, follow" }),
+    alternates: { canonical: `https://www.govpay.directory/employees/${slug}` },
+    robots: shouldIndex(employee) ? "index, follow" : "noindex, follow",
   };
 }
 

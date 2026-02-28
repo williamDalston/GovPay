@@ -17,7 +17,7 @@ export function Breadcrumb({ items }: BreadcrumbProps) {
       "@type": "ListItem",
       position: index + 1,
       name: item.label,
-      ...(item.href ? { item: `https://govpay.directory${item.href}` } : {}),
+      ...(item.href ? { item: `https://www.govpay.directory${item.href}` } : {}),
     })),
   };
 

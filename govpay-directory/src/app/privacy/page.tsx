@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
     "Privacy policy for GovPay.Directory. Learn how we handle data and protect your privacy.",
-  alternates: { canonical: "https://govpay.directory/privacy" },
+  alternates: { canonical: "https://www.govpay.directory/privacy" },
 };
 
 export default function PrivacyPage() {

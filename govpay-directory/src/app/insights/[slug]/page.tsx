@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: article.title,
     description: article.description,
-    alternates: { canonical: `https://govpay.directory/insights/${slug}` },
+    alternates: { canonical: `https://www.govpay.directory/insights/${slug}` },
     openGraph: {
       type: "article",
       publishedTime: article.publishedAt,
@@ -55,19 +55,19 @@ export default async function ArticlePage({ params }: PageProps) {
     author: {
       "@type": "Organization",
       name: "GovPay.Directory",
-      url: "https://govpay.directory",
+      url: "https://www.govpay.directory",
     },
     publisher: {
       "@type": "Organization",
       name: "GovPay.Directory",
-      url: "https://govpay.directory",
+      url: "https://www.govpay.directory",
       logo: {
         "@type": "ImageObject",
-        url: "https://govpay.directory/opengraph-image",
+        url: "https://www.govpay.directory/opengraph-image",
       },
     },
-    image: `https://govpay.directory/insights/${slug}/opengraph-image`,
-    mainEntityOfPage: `https://govpay.directory/insights/${slug}`,
+    image: `https://www.govpay.directory/insights/${slug}/opengraph-image`,
+    mainEntityOfPage: `https://www.govpay.directory/insights/${slug}`,
   };
 
   return (

@@ -32,7 +32,7 @@ export default function Image() {
               width: "40px",
               height: "40px",
               borderRadius: "8px",
-              background: "#3B82F6",
+              background: "#60A5FA",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -89,7 +89,7 @@ export default function Image() {
                 {stat.label}
               </div>
               <div
-                style={{ fontSize: "36px", fontWeight: 700, color: "#10B981" }}
+                style={{ fontSize: "36px", fontWeight: 700, color: "#34D399" }}
               >
                 {stat.value}
               </div>

@@ -28,6 +28,49 @@ RETURNS TABLE(range TEXT, count BIGINT) AS $$
   ) AS t(range, count);
 $$ LANGUAGE sql STABLE;
 
+-- Fuzzy search for employees using trigram similarity
+-- Handles typos, alternate spellings, and missing middle names
+-- e.g., "John Smith" matches "John Michael Smith"
+CREATE OR REPLACE FUNCTION search_employees_fuzzy(search_term TEXT, result_limit INT DEFAULT 5)
+RETURNS TABLE(
+  slug TEXT,
+  first_name TEXT,
+  last_name TEXT,
+  full_name TEXT,
+  agency_name TEXT,
+  similarity REAL
+) AS $$
+  SELECT 
+    e.slug,
+    e.first_name,
+    e.last_name,
+    e.full_name,
+    a.name AS agency_name,
+    -- Use best similarity score from full_name or first+last combo
+    GREATEST(
+      similarity(e.full_name, search_term),
+      similarity(e.first_name || ' ' || e.last_name, search_term)
+    ) AS similarity
+  FROM employees e
+  LEFT JOIN agencies a ON a.id = e.agency_id
+  WHERE 
+    -- Match against full name (includes middle name)
+    e.full_name % search_term
+    OR e.full_name ILIKE '%' || search_term || '%'
+    -- Match against first + last only (ignores middle name)
+    OR (e.first_name || ' ' || e.last_name) % search_term
+    -- Match first name OR last name separately (for single-word searches)
+    OR e.first_name % search_term
+    OR e.last_name % search_term
+  ORDER BY 
+    GREATEST(
+      similarity(e.full_name, search_term),
+      similarity(e.first_name || ' ' || e.last_name, search_term)
+    ) DESC,
+    e.total_compensation DESC
+  LIMIT result_limit;
+$$ LANGUAGE sql STABLE;
+
 -- Salary distribution for a specific state (by state_id)
 CREATE OR REPLACE FUNCTION get_state_salary_distribution(state_id_param BIGINT)
 RETURNS TABLE(range TEXT, count BIGINT) AS $$

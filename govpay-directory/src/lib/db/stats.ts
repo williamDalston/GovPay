@@ -73,27 +73,35 @@ export async function getGlobalStats(): Promise<{
 }> {
   const supabase = createServerClient();
 
-  const [empResult, agencyResult] = await Promise.all([
-    supabase.from("employees").select("total_compensation", { count: "exact", head: true }),
-    supabase.from("agencies").select("id", { count: "exact", head: true }),
-  ]);
+  try {
+    const [empResult, agencyResult] = await Promise.all([
+      supabase.from("employees").select("total_compensation", { count: "exact", head: true }),
+      supabase.from("agencies").select("id", { count: "exact", head: true }),
+    ]);
 
-  const { data: avgData } = await supabase.rpc("get_avg_salary");
+    if (empResult.error) throw empResult.error;
+    if (agencyResult.error) throw agencyResult.error;
 
-  const { data: latestFY } = await supabase
-    .from("employees")
-    .select("fiscal_year")
-    .order("fiscal_year", { ascending: false })
-    .limit(1);
-  const fy = latestFY?.[0]?.fiscal_year;
-  const lastUpdated = fy ? `FY ${fy}` : "FY 2025";
+    const { data: avgData } = await supabase.rpc("get_avg_salary");
 
-  return {
-    totalEmployees: empResult.count ?? 0,
-    totalAgencies: agencyResult.count ?? 0,
-    avgSalary: Number(avgData) || 0,
-    lastUpdated,
-  };
+    const { data: latestFY } = await supabase
+      .from("employees")
+      .select("fiscal_year")
+      .order("fiscal_year", { ascending: false })
+      .limit(1);
+    const fy = latestFY?.[0]?.fiscal_year;
+    const lastUpdated = fy ? `FY ${fy}` : "FY 2025";
+
+    return {
+      totalEmployees: empResult.count ?? 0,
+      totalAgencies: agencyResult.count ?? 0,
+      avgSalary: Number(avgData) || 0,
+      lastUpdated,
+    };
+  } catch (error) {
+    console.error("getGlobalStats error:", error);
+    return { totalEmployees: 0, totalAgencies: 0, avgSalary: 0, lastUpdated: "FY 2025" };
+  }
 }
 
 /**

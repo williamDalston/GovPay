@@ -32,7 +32,7 @@ export default function Image() {
               width: "40px",
               height: "40px",
               borderRadius: "8px",
-              background: "#3B82F6",
+              background: "#60A5FA",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -92,7 +92,7 @@ export default function Image() {
                 style={{
                   fontSize: "36px",
                   fontWeight: 700,
-                  color: parseInt(item.index) > 100 ? "#F59E0B" : "#10B981",
+                  color: parseInt(item.index) > 100 ? "#F59E0B" : "#34D399",
                 }}
               >
                 {item.index}
