@@ -1,0 +1,10 @@
+# ETL data files (too large for deploy)
+data/
+*.csv
+
+# Scripts (not needed in production)
+scripts/
+
+# Development files
+.env.local
+*.log
