@@ -20,14 +20,18 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const agency = await getAgencyBySlug(slug);
-  if (!agency) return { title: "Agency Not Found" };
+  try {
+    const agency = await getAgencyBySlug(slug);
+    if (!agency) return { title: "Agency Not Found" };
 
-  return {
-    title: `${agency.name} Employee Salaries`,
-    description: `Explore salary data for ${formatNumber(agency.employeeCount)} employees at the ${agency.name}. Average salary: ${formatCurrency(agency.averageSalary)}. View top earners and occupation breakdown.`,
-    alternates: { canonical: `https://govpay.directory/agencies/${slug}` },
-  };
+    return {
+      title: `${agency.name} Employee Salaries`,
+      description: `Explore salary data for ${formatNumber(agency.employeeCount)} employees at the ${agency.name}. Average salary: ${formatCurrency(agency.averageSalary)}. View top earners and occupation breakdown.`,
+      alternates: { canonical: `https://govpay.directory/agencies/${slug}` },
+    };
+  } catch {
+    return { title: "Agency Not Found" };
+  }
 }
 
 export async function generateStaticParams() {
@@ -39,13 +43,27 @@ export async function generateStaticParams() {
 
 export default async function AgencyPage({ params }: PageProps) {
   const { slug } = await params;
-  const agency = await getAgencyBySlug(slug);
+
+  let agency;
+  try {
+    agency = await getAgencyBySlug(slug);
+  } catch {
+    notFound();
+  }
   if (!agency) notFound();
 
-  const [{ employees }, distributionData] = await Promise.all([
-    getEmployeesByAgency(slug, 6),
-    getSalaryDistributionForAgency(slug),
-  ]);
+  let employees: Awaited<ReturnType<typeof getEmployeesByAgency>>["employees"] = [];
+  let distributionData: Awaited<ReturnType<typeof getSalaryDistributionForAgency>> = [];
+  try {
+    const [empResult, distResult] = await Promise.all([
+      getEmployeesByAgency(slug, 6),
+      getSalaryDistributionForAgency(slug),
+    ]);
+    employees = empResult.employees;
+    distributionData = distResult;
+  } catch {
+    // Non-critical — page still renders with empty employees/distribution
+  }
 
   const jsonLd = [
     {
