@@ -28,13 +28,17 @@ export function SalaryChart({ data, highlightIndex }: SalaryChartProps) {
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={data}
-            margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
+            margin={{ top: 0, right: 0, left: 0, bottom: 4 }}
           >
             <XAxis
               dataKey="range"
-              tick={{ fill: "#94A3B8", fontSize: 11 }}
+              tick={{ fill: "#94A3B8", fontSize: 10 }}
               axisLine={false}
               tickLine={false}
+              angle={-35}
+              textAnchor="end"
+              height={50}
+              interval={0}
             />
             <YAxis
               tick={{ fill: "#94A3B8", fontSize: 11 }}

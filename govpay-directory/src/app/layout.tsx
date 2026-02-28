@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Space_Mono, DM_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
@@ -24,6 +24,14 @@ const jetbrainsMono = JetBrains_Mono({
   weight: ["400", "500", "700"],
 });
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  viewportFit: "cover",
+  themeColor: "#0F1B2D",
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://govpay.directory"),
   title: {
@@ -46,8 +54,6 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    site: "@GovPayDir",
-    creator: "@GovPayDir",
   },
 };
 
@@ -59,9 +65,11 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <head>
-        <link rel="dns-prefetch" href="https://supabase.co" />
         {process.env.NEXT_PUBLIC_SUPABASE_URL && (
-          <link rel="preconnect" href={process.env.NEXT_PUBLIC_SUPABASE_URL} />
+          <>
+            <link rel="dns-prefetch" href={process.env.NEXT_PUBLIC_SUPABASE_URL} />
+            <link rel="preconnect" href={process.env.NEXT_PUBLIC_SUPABASE_URL} crossOrigin="" />
+          </>
         )}
       </head>
       <body
@@ -74,7 +82,7 @@ export default function RootLayout({
           Skip to content
         </a>
         <Header />
-        <main id="main-content" className="min-h-screen">{children}</main>
+        <main id="main-content" className="min-h-screen overflow-x-clip">{children}</main>
         <Footer />
         <BackToTop />
         <Analytics />

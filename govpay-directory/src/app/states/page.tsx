@@ -46,12 +46,12 @@ export default function StatesPage() {
             <AnimateOnScroll key={state.slug} delay={index * 20}>
               <Link
                 href={`/states/${state.slug}`}
-                className="group flex items-center gap-3 rounded-xl border border-navy-700 bg-navy-900 p-4 transition-all hover:-translate-y-0.5 hover:border-accent-blue/50 hover:bg-navy-800 hover:shadow-lg hover:shadow-accent-blue/5"
+                className="group flex items-center gap-2.5 rounded-xl border border-navy-700 bg-navy-900 p-3 transition-all hover:-translate-y-0.5 hover:border-accent-blue/50 hover:bg-navy-800 hover:shadow-lg hover:shadow-accent-blue/5 sm:gap-3 sm:p-4"
               >
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-navy-800 font-[family-name:var(--font-data)] text-sm font-bold text-accent-blue group-hover:bg-accent-blue group-hover:text-white">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-navy-800 font-[family-name:var(--font-data)] text-xs font-bold text-accent-blue group-hover:bg-accent-blue group-hover:text-white sm:h-10 sm:w-10 sm:text-sm">
                   {state.abbreviation}
                 </span>
-                <span className="text-sm text-navy-200 group-hover:text-navy-100">
+                <span className="truncate text-sm text-navy-200 group-hover:text-navy-100">
                   {state.name}
                 </span>
               </Link>

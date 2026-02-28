@@ -8,6 +8,7 @@ import { StatsBar } from "@/components/StatsBar";
 import { getStateBySlug } from "@/lib/db";
 import { formatCurrency, formatNumber } from "@/lib/format";
 import { US_STATES, STATE_NEIGHBORS } from "@/lib/reference-data";
+import { AdSlot } from "@/components/AdSlot";
 import { Building2, Users, ArrowRight } from "lucide-react";
 
 export const revalidate = 3600;
@@ -112,15 +113,15 @@ export default async function StatePage({ params }: PageProps) {
                   <Link
                     key={agency.slug}
                     href={`/agencies/${agency.slug}`}
-                    className="flex items-center justify-between py-3 transition-colors hover:text-accent-blue"
+                    className="flex items-center justify-between gap-3 py-3 transition-colors hover:text-accent-blue"
                   >
-                    <span className="flex items-center gap-2 text-sm text-navy-200">
-                      <Building2 size={14} className="text-navy-500" />
-                      {agency.name}
+                    <span className="flex min-w-0 items-center gap-2 text-sm text-navy-200">
+                      <Building2 size={14} className="shrink-0 text-navy-500" />
+                      <span className="truncate">{agency.name}</span>
                     </span>
-                    <span className="flex items-center gap-2">
-                      <span className="font-[family-name:var(--font-data)] text-xs text-navy-400">
-                        {formatNumber(agency.count)} employees
+                    <span className="flex shrink-0 items-center gap-2">
+                      <span className="whitespace-nowrap font-[family-name:var(--font-data)] text-xs text-navy-400">
+                        {formatNumber(agency.count)}
                       </span>
                       <ArrowRight size={12} className="text-navy-600" />
                     </span>
@@ -167,6 +168,13 @@ export default async function StatePage({ params }: PageProps) {
                 <ArrowRight size={14} />
                 Compare state salaries
               </Link>
+              <Link
+                href="/tools/cost-of-living"
+                className="flex items-center gap-2 text-sm text-navy-400 hover:text-accent-blue"
+              >
+                <ArrowRight size={14} />
+                Cost of living calculator
+              </Link>
             </div>
           </div>
 
@@ -174,7 +182,7 @@ export default async function StatePage({ params }: PageProps) {
             <h3 className="font-[family-name:var(--font-heading)] text-sm font-bold text-navy-100">
               Nearby States
             </h3>
-            <div className="mt-3 grid grid-cols-2 gap-2">
+            <div className="mt-3 grid grid-cols-3 gap-2">
               {(() => {
                 const abbrevs = STATE_NEIGHBORS[state.abbreviation] ?? [];
                 const neighbors = US_STATES.filter(
@@ -187,14 +195,71 @@ export default async function StatePage({ params }: PageProps) {
                   <Link
                     key={s.slug}
                     href={`/states/${s.slug}`}
-                    className="rounded-lg border border-navy-700 bg-navy-800 px-2 py-1.5 text-center text-xs text-navy-400 hover:border-accent-blue/50 hover:text-accent-blue"
+                    className="rounded-lg border border-navy-700 bg-navy-800 px-2 py-2 text-center text-xs font-medium text-navy-400 transition-colors hover:border-accent-blue/50 hover:text-accent-blue"
                   >
-                    {s.abbreviation}
+                    {s.name}
                   </Link>
                 ))}
             </div>
           </div>
+
+          <AdSlot slot="rectangle" />
         </div>
+      </div>
+
+      {/* Related Guides */}
+      <div className="mt-8">
+        <h2 className="font-[family-name:var(--font-heading)] text-lg font-bold text-navy-100">
+          Related Guides
+        </h2>
+        <div className="mt-4 grid gap-4 sm:grid-cols-3">
+          <Link
+            href="/insights/federal-locality-pay-explained"
+            className="group rounded-xl border border-navy-700 bg-navy-900 p-5 transition-all hover:-translate-y-0.5 hover:border-accent-blue/50 hover:bg-navy-800"
+          >
+            <span className="text-[10px] font-bold uppercase tracking-wider text-accent-blue">Guide</span>
+            <p className="mt-1 font-[family-name:var(--font-heading)] text-sm font-bold text-navy-100 group-hover:text-accent-blue">
+              Locality Pay Explained
+            </p>
+            <p className="mt-1 text-xs text-navy-400">How location affects your salary and which areas pay the most.</p>
+          </Link>
+          <Link
+            href="/insights/federal-vs-private-sector-pay"
+            className="group rounded-xl border border-navy-700 bg-navy-900 p-5 transition-all hover:-translate-y-0.5 hover:border-accent-blue/50 hover:bg-navy-800"
+          >
+            <span className="text-[10px] font-bold uppercase tracking-wider text-accent-blue">Guide</span>
+            <p className="mt-1 font-[family-name:var(--font-heading)] text-sm font-bold text-navy-100 group-hover:text-accent-blue">
+              Federal vs. Private Sector Pay
+            </p>
+            <p className="mt-1 text-xs text-navy-400">Compare total compensation across sectors.</p>
+          </Link>
+          <Link
+            href="/insights/gs-pay-scale-guide-2025"
+            className="group rounded-xl border border-navy-700 bg-navy-900 p-5 transition-all hover:-translate-y-0.5 hover:border-accent-blue/50 hover:bg-navy-800"
+          >
+            <span className="text-[10px] font-bold uppercase tracking-wider text-accent-blue">Guide</span>
+            <p className="mt-1 font-[family-name:var(--font-heading)] text-sm font-bold text-navy-100 group-hover:text-accent-blue">
+              GS Pay Scale Guide 2025
+            </p>
+            <p className="mt-1 text-xs text-navy-400">Grades, steps, locality adjustments, and salary calculations.</p>
+          </Link>
+        </div>
+      </div>
+
+      {/* Data Source Attribution */}
+      <div className="mt-8 border-t border-navy-700 pt-4">
+        <p className="text-xs text-navy-500">
+          <strong className="text-navy-400">Data Source:</strong>{" "}
+          <a
+            href="https://www.opm.gov/data/datasets/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-accent-blue hover:underline"
+          >
+            U.S. Office of Personnel Management (OPM FedScope)
+          </a>{" "}
+          | Public records obtained under the Freedom of Information Act (FOIA).
+        </p>
       </div>
     </div>
     </>

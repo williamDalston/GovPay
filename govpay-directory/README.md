@@ -2,6 +2,8 @@
 
 Programmatic SEO site for government employee salary data. Search, explore, and compare compensation data across federal and state government agencies.
 
+**A project by [Alston Analytics](https://alstonanalytics.com)**
+
 ## Tech Stack
 
 - **Framework:** Next.js 16 (App Router, React 19)
@@ -16,66 +18,185 @@ Programmatic SEO site for government employee salary data. Search, explore, and 
 - Node.js 18+
 - A Supabase project (free tier works)
 
-## Setup
+## Quick Start
 
 ```bash
-# Install dependencies
+# 1. Install dependencies
 npm install
 
-# Copy environment template
+# 2. Copy environment template
 cp .env.example .env.local
+
+# 3. Edit .env.local with your Supabase credentials (see below)
+
+# 4. Run database migration in Supabase SQL Editor
+#    Copy contents of: supabase/migrations/001_schema.sql
+
+# 5. Seed reference data
+npm run db:seed
+
+# 6. Start development server
+npm run dev
 ```
 
-Edit `.env.local` with your Supabase credentials:
+## Environment Variables
 
-```
+Create a `.env.local` file with:
+
+```bash
+# Required - Supabase Configuration
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 ```
 
+Find these values in your [Supabase Dashboard](https://supabase.com/dashboard) under Project Settings → API.
+
 ## Database Setup
 
-Run the migration against your Supabase project to create tables, indexes, and RPC functions:
+1. Create a new Supabase project at [supabase.com](https://supabase.com)
+2. Go to SQL Editor in your Supabase dashboard
+3. Paste and run the contents of `supabase/migrations/001_schema.sql`
+4. This creates all tables, indexes, RPC functions, and RLS policies
 
-```bash
-# Via Supabase Dashboard: SQL Editor → paste contents of:
-supabase/migrations/001_schema.sql
-```
+### Tables Created
+
+| Table | Description |
+|-------|-------------|
+| `agencies` | Federal and state agencies with employee counts |
+| `states` | US states and territories |
+| `employees` | Individual employee salary records |
+| `occupations` | Job classification codes |
+| `gs_pay_scales` | GS pay rates by grade/step/year |
+| `locality_areas` | Locality pay adjustment rates |
+| `etl_runs` | Data pipeline audit log |
 
 ## Data Pipeline
 
 Seed reference data and run ETL scripts to populate the database:
 
 ```bash
-npm run db:seed        # Seed states, occupations, GS pay scale
-npm run etl:opm        # Federal employee data from OPM FedScope
+npm run db:seed        # Seed states, GS pay scale, locality areas
+npm run etl:opm        # Federal agency statistics from OPM FedScope
 npm run etl:tx         # Texas state employee data
 npm run etl:ca         # California state employee data
 npm run etl:all        # Run all of the above in sequence
 ```
 
+### Data Sources
+
+| Source | Data Type | URL |
+|--------|-----------|-----|
+| OPM FedScope | Federal agency statistics (aggregated) | [fedscope.opm.gov](https://www.fedscope.opm.gov/) |
+| Texas Comptroller | Individual state employee records | [data.texas.gov](https://data.texas.gov/) |
+| California State Controller | Individual state employee records | [publicpay.ca.gov](https://publicpay.ca.gov/) |
+| OPM Pay Tables | GS pay scale rates | [opm.gov](https://www.opm.gov/policy-data-oversight/pay-leave/salaries-wages/) |
+
+### Important Data Limitations
+
+**Federal Employee Data:**
+- OPM FedScope provides **aggregated/anonymized** data only
+- Individual federal employee names are **NOT available** from FedScope
+- We display agency-level statistics (headcounts, average salaries)
+- Individual employee records come from state transparency portals only
+
+**State Data:**
+- Currently includes Texas and California
+- Each state ETL is limited to 50,000 records per run
+- Data freshness varies by state release schedule
+
+**Reference Data:**
+- GS Pay Scale: Updated annually (currently 2025)
+- Locality adjustments: Updated annually
+- Cost of living indices: Updated quarterly
+
 ## Development
 
 ```bash
 npm run dev            # Start dev server at localhost:3000
+npm run build          # Production build
+npm run start          # Start production server
+npm run lint           # Run ESLint
+npm run type-check     # TypeScript type checking
+npm run test           # Run Vitest test suite
+npm run validate       # Run type-check + lint + tests
 ```
 
-## Scripts
+## Deployment
 
-| Script | Description |
-|--------|-------------|
-| `npm run dev` | Start development server |
-| `npm run build` | Production build |
-| `npm run start` | Start production server |
-| `npm run lint` | Run ESLint |
-| `npm run type-check` | TypeScript type checking |
-| `npm run validate` | Run type-check + lint |
-| `npm run db:seed` | Seed reference data |
-| `npm run etl:opm` | Run OPM federal ETL |
-| `npm run etl:tx` | Run Texas state ETL |
-| `npm run etl:ca` | Run California state ETL |
-| `npm run etl:all` | Run full data pipeline |
+### Vercel (Recommended)
+
+1. Push your code to GitHub
+2. Import the repository in [Vercel](https://vercel.com)
+3. Add environment variables in Vercel project settings:
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - `SUPABASE_SERVICE_ROLE_KEY`
+4. Deploy
+
+### Other Platforms
+
+The app is a standard Next.js application and can be deployed to any platform supporting Next.js:
+- AWS Amplify
+- Netlify
+- Railway
+- Self-hosted with `npm run build && npm run start`
+
+## API Reference
+
+### Search API
+
+#### `GET /api/search`
+
+Search for employees by name, job title, or agency.
+
+**Query Parameters:**
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `q` | string | required | Search query (max 200 chars) |
+| `page` | number | 1 | Page number (max 500) |
+| `limit` | number | 20 | Results per page (max 100) |
+
+**Response:**
+```json
+{
+  "results": [
+    {
+      "id": 123,
+      "slug": "john-smith-department-of-defense",
+      "fullName": "John Smith",
+      "jobTitle": "Program Analyst",
+      "agency": "Department of Defense",
+      "totalCompensation": 95000
+    }
+  ],
+  "total": 150,
+  "page": 1,
+  "totalPages": 8
+}
+```
+
+**Rate Limit:** 30 requests per minute per IP
+
+#### `GET /api/search/suggest`
+
+Get autocomplete suggestions for search.
+
+**Query Parameters:**
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `q` | string | required | Search query (min 2 chars) |
+
+**Response:**
+```json
+{
+  "suggestions": [
+    { "slug": "john-smith-dod", "fullName": "John Smith", "agency": "DOD" }
+  ]
+}
+```
+
+**Rate Limit:** 30 requests per minute per IP
 
 ## Project Structure
 
@@ -92,7 +213,6 @@ src/
     about/                # About page
     privacy/              # Privacy policy
     terms/                # Terms of service
-    insights/             # Insights landing
   components/             # Shared React components
   lib/
     db.ts                 # Supabase data access layer
@@ -105,9 +225,14 @@ scripts/                  # ETL and seed scripts
 supabase/migrations/      # Database schema SQL
 ```
 
-## Data Sources
+## Legal
 
-- [OPM FedScope](https://www.fedscope.opm.gov/) — Federal workforce statistics
-- [Texas Comptroller](https://data.texas.gov/) — Texas state employee records
-- [California State Controller](https://publicpay.ca.gov/) — California state employee records
-- [OPM Pay Tables](https://www.opm.gov/policy-data-oversight/pay-leave/salaries-wages/) — GS pay scale data
+All employee compensation data displayed on this site is derived from publicly available government records, published under the Freedom of Information Act (FOIA) and state open records laws.
+
+## Contact
+
+For questions or concerns, email [info@alstonanalytics.com](mailto:info@alstonanalytics.com).
+
+## License
+
+Copyright © 2025-2026 Alston Analytics. All rights reserved.

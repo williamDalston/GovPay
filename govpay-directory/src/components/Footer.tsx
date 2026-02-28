@@ -23,13 +23,19 @@ const footerLinks = {
     { label: "Cost of Living", href: "/tools/cost-of-living" },
     { label: "Search Employees", href: "/search" },
   ],
+  Guides: [
+    { label: "GS Pay Scale Guide", href: "/insights/gs-pay-scale-guide-2025" },
+    { label: "Locality Pay Explained", href: "/insights/federal-locality-pay-explained" },
+    { label: "Step Increases", href: "/insights/federal-employee-step-increases" },
+    { label: "Fed vs. Private Pay", href: "/insights/federal-vs-private-sector-pay" },
+    { label: "All Insights", href: "/insights" },
+  ],
   Resources: [
-    { label: "Blog & Insights", href: "/insights" },
     { label: "About", href: "/about" },
     { label: "Data Sources", href: "/about#data-sources" },
     { label: "Privacy Policy", href: "/privacy" },
     { label: "Terms of Service", href: "/terms" },
-    { label: "Contact", href: "mailto:contact@govpay.directory" },
+    { label: "Contact", href: "mailto:info@alstonanalytics.com" },
   ],
 };
 
@@ -37,18 +43,18 @@ export function Footer() {
   return (
     <footer className="border-t border-navy-700 bg-navy-950">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <nav aria-label="Footer navigation" className="grid grid-cols-2 gap-8 md:grid-cols-4">
+        <nav aria-label="Footer navigation" className="grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-5">
           {Object.entries(footerLinks).map(([category, links]) => (
             <div key={category}>
               <h3 className="font-[family-name:var(--font-heading)] text-sm font-bold text-navy-100">
                 {category}
               </h3>
-              <ul className="mt-3 space-y-2">
+              <ul className="mt-3 space-y-3 sm:space-y-2">
                 {links.map((link) => (
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-sm text-navy-400 transition-colors hover:text-accent-blue"
+                      className="inline-block py-0.5 text-sm text-navy-400 transition-colors hover:text-accent-blue"
                     >
                       {link.label}
                     </Link>
@@ -75,7 +81,15 @@ export function Footer() {
             records laws.
           </p>
           <p className="text-xs text-navy-500">
-            &copy; {new Date().getFullYear()} GovPay.Directory
+            &copy; {new Date().getFullYear()} GovPay.Directory — A project by{" "}
+            <a
+              href="https://alstonanalytics.com"
+              className="text-navy-400 hover:text-accent-blue"
+              target="_blank"
+              rel="noopener noreferrer nofollow"
+            >
+              Alston Analytics
+            </a>
           </p>
         </div>
       </div>

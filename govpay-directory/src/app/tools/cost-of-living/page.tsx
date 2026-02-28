@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { formatCurrency } from "@/lib/format";
 import { COST_INDICES } from "@/lib/reference-data";
+import { AdSlot } from "@/components/AdSlot";
 import { ArrowRight } from "lucide-react";
 
 
@@ -96,20 +98,20 @@ export default function CostOfLivingPage() {
             Results
           </h2>
           <div className="mt-4 space-y-4">
-            <div className="flex items-center gap-4">
-              <div className="flex-1 rounded-lg bg-navy-800 p-4 text-center">
+            <div className="flex flex-col items-center gap-3 sm:flex-row sm:gap-4">
+              <div className="w-full flex-1 rounded-lg bg-navy-800 p-4 text-center">
                 <p className="text-xs text-navy-500">{fromCity}</p>
-                <p className="mt-1 font-[family-name:var(--font-data)] text-xl font-bold text-navy-100">
+                <p className="mt-1 font-[family-name:var(--font-data)] text-lg font-bold text-navy-100 sm:text-xl">
                   {formatCurrency(salary)}
                 </p>
                 <p className="mt-1 text-xs text-navy-500">
                   COL Index: {fromIndex}
                 </p>
               </div>
-              <ArrowRight size={20} className="shrink-0 text-accent-blue" />
-              <div className="flex-1 rounded-lg bg-navy-800 p-4 text-center">
+              <ArrowRight size={20} className="shrink-0 rotate-90 text-accent-blue sm:rotate-0" />
+              <div className="w-full flex-1 rounded-lg bg-navy-800 p-4 text-center">
                 <p className="text-xs text-navy-500">{toCity}</p>
-                <p className="mt-1 font-[family-name:var(--font-data)] text-xl font-bold text-accent-green">
+                <p className="mt-1 font-[family-name:var(--font-data)] text-lg font-bold text-accent-green sm:text-xl">
                   {formatCurrency(adjustedSalary)}
                 </p>
                 <p className="mt-1 text-xs text-navy-500">
@@ -141,7 +143,7 @@ export default function CostOfLivingPage() {
                 Your salary equivalent across cities
               </h3>
               <div className="mt-2 max-h-48 space-y-1 overflow-y-auto" role="region" aria-label="Salary equivalents by city" aria-live="polite">
-                {COST_INDICES.sort((a, b) => b.index - a.index).map((c) => {
+                {[...COST_INDICES].sort((a, b) => b.index - a.index).map((c) => {
                   const equiv = Math.round((salary / fromIndex) * c.index);
                   return (
                     <div
@@ -158,6 +160,35 @@ export default function CostOfLivingPage() {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      <div className="mt-8"><AdSlot slot="leaderboard" /></div>
+
+      {/* Related Guides */}
+      <div className="mt-8">
+        <h2 className="font-[family-name:var(--font-heading)] text-lg font-bold text-navy-100">
+          Related Guides
+        </h2>
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          {[
+            { title: "Locality Pay Explained", href: "/insights/federal-locality-pay-explained", desc: "How your work location affects your federal salary." },
+            { title: "Federal vs. Private Sector Pay", href: "/insights/federal-vs-private-sector-pay", desc: "Compare total compensation across sectors." },
+          ].map((guide) => (
+            <Link
+              key={guide.href}
+              href={guide.href}
+              className="group rounded-xl border border-navy-700 bg-navy-900 p-5 transition-all hover:-translate-y-0.5 hover:border-accent-blue/50 hover:bg-navy-800"
+            >
+              <p className="font-[family-name:var(--font-heading)] text-sm font-bold text-navy-100 group-hover:text-accent-blue">
+                {guide.title}
+              </p>
+              <p className="mt-1 text-xs text-navy-400">{guide.desc}</p>
+              <span className="mt-2 inline-flex items-center gap-1 text-xs text-accent-blue">
+                Read guide <ArrowRight size={10} />
+              </span>
+            </Link>
+          ))}
         </div>
       </div>
     </div>

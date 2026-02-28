@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import {
   GS_BASE_PAY_2025,
@@ -9,7 +10,8 @@ import {
   LOCALITY_AREAS,
 } from "@/lib/reference-data";
 import { formatCurrency } from "@/lib/format";
-import { ArrowLeftRight } from "lucide-react";
+import { AdSlot } from "@/components/AdSlot";
+import { ArrowLeftRight, ArrowRight } from "lucide-react";
 
 interface SalaryConfig {
   grade: number;
@@ -89,7 +91,7 @@ function SalarySelector({
       </div>
       <div className="mt-4 rounded-lg bg-navy-800 p-4 text-center">
         <p className="text-xs text-navy-500">Adjusted Salary</p>
-        <p className="mt-1 font-[family-name:var(--font-data)] text-3xl font-bold text-accent-green">
+        <p className="mt-1 font-[family-name:var(--font-data)] text-2xl font-bold text-accent-green sm:text-3xl">
           {formatCurrency(calculateSalary(config))}
         </p>
         <p className="mt-1 text-xs text-navy-500">
@@ -134,15 +136,20 @@ export default function ComparePage() {
         Compare GS pay grades side by side with locality adjustments.
       </p>
 
-      <div className="mt-8 grid gap-6 lg:grid-cols-3">
-        <SalarySelector label="Position A" config={configA} onChange={setConfigA} />
+      <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="lg:order-1">
+          <SalarySelector label="Position A" config={configA} onChange={setConfigA} />
+        </div>
+        <div className="lg:order-3">
+          <SalarySelector label="Position B" config={configB} onChange={setConfigB} />
+        </div>
 
-        <div className="flex flex-col items-center justify-center">
-          <div className="rounded-xl border border-navy-700 bg-navy-900 p-6 text-center">
+        <div className="flex flex-col items-center justify-center sm:col-span-2 lg:order-2 lg:col-span-1">
+          <div className="w-full rounded-xl border border-navy-700 bg-navy-900 p-6 text-center">
             <ArrowLeftRight size={24} className="mx-auto text-accent-blue" />
             <p className="mt-3 text-xs text-navy-500">Difference</p>
             <p
-              className={`mt-1 font-[family-name:var(--font-data)] text-2xl font-bold ${diff > 0 ? "text-accent-green" : diff < 0 ? "text-accent-red" : "text-navy-400"}`}
+              className={`mt-1 font-[family-name:var(--font-data)] text-xl font-bold sm:text-2xl ${diff > 0 ? "text-accent-green" : diff < 0 ? "text-accent-red" : "text-navy-400"}`}
             >
               {diff > 0 ? "+" : ""}
               {formatCurrency(diff)}
@@ -155,7 +162,7 @@ export default function ComparePage() {
             </p>
 
             {/* Visual comparison bar */}
-            <div className="mt-4 space-y-2">
+            <div className="mx-auto mt-4 max-w-sm space-y-2">
               <div>
                 <div className="flex items-center justify-between text-xs text-navy-500">
                   <span>Position A</span>
@@ -165,7 +172,7 @@ export default function ComparePage() {
                 </div>
                 <div className="mt-1 h-3 overflow-hidden rounded-full bg-navy-800">
                   <div
-                    className="h-3 rounded-full bg-accent-blue"
+                    className="h-3 rounded-full bg-accent-blue transition-all duration-300"
                     style={{
                       width: `${(salaryA / Math.max(salaryA, salaryB)) * 100}%`,
                     }}
@@ -181,7 +188,7 @@ export default function ComparePage() {
                 </div>
                 <div className="mt-1 h-3 overflow-hidden rounded-full bg-navy-800">
                   <div
-                    className="h-3 rounded-full bg-accent-green"
+                    className="h-3 rounded-full bg-accent-green transition-all duration-300"
                     style={{
                       width: `${(salaryB / Math.max(salaryA, salaryB)) * 100}%`,
                     }}
@@ -191,9 +198,9 @@ export default function ComparePage() {
             </div>
           </div>
         </div>
-
-        <SalarySelector label="Position B" config={configB} onChange={setConfigB} />
       </div>
+
+      <div className="mt-8"><AdSlot slot="leaderboard" /></div>
 
       {/* Info */}
       <div className="mt-8 rounded-xl border border-navy-700 bg-navy-900 p-6">
@@ -208,6 +215,34 @@ export default function ComparePage() {
           grade in a non-locality area. Use this tool to understand how
           promotions, step increases, or geographic moves affect your pay.
         </p>
+      </div>
+
+      {/* Related Guides — keep users on site */}
+      <div className="mt-8">
+        <h2 className="font-[family-name:var(--font-heading)] text-lg font-bold text-navy-100">
+          Related Guides
+        </h2>
+        <div className="mt-4 grid gap-4 sm:grid-cols-3">
+          {[
+            { title: "GS Pay Scale Guide 2025", href: "/insights/gs-pay-scale-guide-2025", desc: "Grades, steps, and how to calculate your salary." },
+            { title: "Locality Pay Explained", href: "/insights/federal-locality-pay-explained", desc: "How your work location affects total compensation." },
+            { title: "How Step Increases Work", href: "/insights/federal-employee-step-increases", desc: "Waiting periods, eligibility, and faster progression." },
+          ].map((guide) => (
+            <Link
+              key={guide.href}
+              href={guide.href}
+              className="group rounded-xl border border-navy-700 bg-navy-900 p-5 transition-all hover:-translate-y-0.5 hover:border-accent-blue/50 hover:bg-navy-800"
+            >
+              <p className="font-[family-name:var(--font-heading)] text-sm font-bold text-navy-100 group-hover:text-accent-blue">
+                {guide.title}
+              </p>
+              <p className="mt-1 text-xs text-navy-400">{guide.desc}</p>
+              <span className="mt-2 inline-flex items-center gap-1 text-xs text-accent-blue">
+                Read guide <ArrowRight size={10} />
+              </span>
+            </Link>
+          ))}
+        </div>
       </div>
     </div>
   );

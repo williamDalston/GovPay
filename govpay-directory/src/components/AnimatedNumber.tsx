@@ -60,5 +60,5 @@ export function AnimatedNumber({ value }: AnimatedNumberProps) {
     return () => observer.disconnect();
   }, [value]);
 
-  return <span ref={ref}>{display}</span>;
+  return <span ref={ref} aria-live="polite">{display}</span>;
 }

@@ -4,6 +4,7 @@ export const metadata: Metadata = {
   title: "GS Pay Scale 2025 — Federal Employee Pay Grades",
   description:
     "Interactive 2025 General Schedule pay table for all 15 GS grades and 10 steps. View locality-adjusted rates for 50+ pay areas.",
+  alternates: { canonical: "https://govpay.directory/pay-scales/gs" },
 };
 
 const jsonLd = {

@@ -2,6 +2,8 @@
 
 Programmatic SEO site for government employee salary data.
 
+**A project by Alston Analytics** — Contact: info@alstonanalytics.com
+
 ## Tech Stack
 
 - **Framework:** Next.js 16 (App Router, React 19)
@@ -78,3 +80,9 @@ Required in `.env.local`:
 - `NEXT_PUBLIC_SUPABASE_URL` — Supabase project URL
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY` — Supabase anon/public key
 - `SUPABASE_SERVICE_ROLE_KEY` — Service role key (ETL scripts only)
+
+## Data Limitations
+
+**Important:** Federal employee data from OPM FedScope is aggregated/anonymized — individual names are NOT available. Individual employee records come from state transparency portals (TX, CA) only.
+
+See `scripts/etl-opm.ts` header comments for details on data sources and update schedule.

@@ -6,7 +6,9 @@ const BLOCKED_BOTS = [
   "CCBot",
   "anthropic-ai",
   "Google-Extended",
-  "FacebookExternalHit",
+  "ClaudeBot",
+  "Bytespider",
+  "Amazonbot",
 ];
 
 export function middleware(request: NextRequest) {
@@ -16,6 +18,14 @@ export function middleware(request: NextRequest) {
   // Block AI scraper bots with 403
   if (BLOCKED_BOTS.some((bot) => ua.includes(bot))) {
     return new NextResponse("Forbidden", { status: 403 });
+  }
+
+  // Normalize uppercase paths to lowercase canonical form (308 Permanent Redirect)
+  const lowered = pathname.toLowerCase();
+  if (pathname !== lowered) {
+    const url = request.nextUrl.clone();
+    url.pathname = lowered;
+    return NextResponse.redirect(url, 308);
   }
 
   // Strip trailing slashes (except root)

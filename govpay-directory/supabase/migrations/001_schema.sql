@@ -199,3 +199,57 @@ CREATE POLICY "Public read access" ON agencies FOR SELECT USING (true);
 CREATE POLICY "Public read access" ON states FOR SELECT USING (true);
 CREATE POLICY "Public read access" ON occupations FOR SELECT USING (true);
 CREATE POLICY "Public read access" ON employees FOR SELECT USING (true);
+
+-- =========================================================================
+-- Additional Reference Tables
+-- =========================================================================
+
+-- GS Pay Scale table for storing annual pay rates
+CREATE TABLE IF NOT EXISTS gs_pay_scales (
+  id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  fiscal_year   INTEGER NOT NULL,
+  grade         INTEGER NOT NULL CHECK (grade >= 1 AND grade <= 15),
+  step          INTEGER NOT NULL CHECK (step >= 1 AND step <= 10),
+  base_pay      NUMERIC(12, 2) NOT NULL,
+  created_at    TIMESTAMPTZ DEFAULT now(),
+  UNIQUE (fiscal_year, grade, step)
+);
+
+-- Locality pay areas with adjustment rates
+CREATE TABLE IF NOT EXISTS locality_areas (
+  id              BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  slug            TEXT NOT NULL,
+  name            TEXT NOT NULL,
+  adjustment_rate NUMERIC(6, 4) NOT NULL DEFAULT 1.0,
+  fiscal_year     INTEGER NOT NULL,
+  created_at      TIMESTAMPTZ DEFAULT now(),
+  UNIQUE (slug, fiscal_year)
+);
+
+-- ETL run tracking for data pipeline auditing
+CREATE TABLE IF NOT EXISTS etl_runs (
+  id                BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  source            TEXT NOT NULL,
+  status            TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'running', 'completed', 'failed')),
+  records_processed INTEGER DEFAULT 0,
+  records_inserted  INTEGER DEFAULT 0,
+  records_updated   INTEGER DEFAULT 0,
+  error_message     TEXT,
+  started_at        TIMESTAMPTZ DEFAULT now(),
+  completed_at      TIMESTAMPTZ
+);
+
+-- Indexes for reference tables
+CREATE INDEX IF NOT EXISTS idx_gs_pay_scales_year_grade ON gs_pay_scales (fiscal_year, grade);
+CREATE INDEX IF NOT EXISTS idx_locality_areas_slug ON locality_areas (slug);
+CREATE INDEX IF NOT EXISTS idx_etl_runs_source ON etl_runs (source);
+CREATE INDEX IF NOT EXISTS idx_etl_runs_status ON etl_runs (status);
+
+-- RLS for reference tables
+ALTER TABLE gs_pay_scales ENABLE ROW LEVEL SECURITY;
+ALTER TABLE locality_areas ENABLE ROW LEVEL SECURITY;
+ALTER TABLE etl_runs ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Public read access" ON gs_pay_scales FOR SELECT USING (true);
+CREATE POLICY "Public read access" ON locality_areas FOR SELECT USING (true);
+CREATE POLICY "Public read access" ON etl_runs FOR SELECT USING (true);

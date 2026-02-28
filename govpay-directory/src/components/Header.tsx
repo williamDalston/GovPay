@@ -8,7 +8,7 @@ import { Menu, X, Search } from "lucide-react";
 const navLinks = [
   { href: "/states", label: "States" },
   { href: "/agencies", label: "Agencies" },
-  { href: "/pay-scales/gs", label: "Pay Scales", match: "/pay-scales" },
+  { href: "/pay-scales", label: "Pay Scales" },
   { href: "/tools/compare", label: "Tools", match: "/tools" },
   { href: "/insights", label: "Insights" },
 ];
@@ -70,7 +70,7 @@ export function Header() {
 
           {/* Mobile menu button */}
           <button
-            className="md:hidden"
+            className="flex h-11 w-11 items-center justify-center rounded-lg md:hidden"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileMenuOpen}
@@ -101,7 +101,7 @@ export function Header() {
                     <Link
                       key={link.href}
                       href={link.href}
-                      className={`rounded-lg px-3 py-2.5 text-sm transition-colors ${
+                      className={`rounded-lg px-3 py-3.5 text-base transition-colors ${
                         isActive(link)
                           ? "bg-accent-blue/10 font-medium text-accent-blue"
                           : "text-navy-400 hover:bg-navy-900 hover:text-navy-100"

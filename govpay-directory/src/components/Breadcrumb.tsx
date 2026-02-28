@@ -27,22 +27,22 @@ export function Breadcrumb({ items }: BreadcrumbProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <nav aria-label="Breadcrumb" className="mb-6">
-        <ol className="flex flex-wrap items-center gap-1 text-sm text-navy-400">
+      <nav aria-label="Breadcrumb" className="mb-6 overflow-hidden">
+        <ol className="flex items-center gap-1 overflow-x-auto text-sm text-navy-400 scrollbar-none">
           {items.map((item, index) => (
-            <li key={index} className="flex items-center gap-1">
+            <li key={index} className="flex shrink-0 items-center gap-1">
               {index > 0 && (
                 <span className="mx-1 text-navy-600">&rsaquo;</span>
               )}
               {item.href ? (
                 <Link
                   href={item.href}
-                  className="transition-colors hover:text-accent-blue hover:underline"
+                  className="whitespace-nowrap transition-colors hover:text-accent-blue hover:underline"
                 >
                   {item.label}
                 </Link>
               ) : (
-                <span className="text-navy-200">{item.label}</span>
+                <span className="max-w-[200px] truncate text-navy-200 sm:max-w-none">{item.label}</span>
               )}
             </li>
           ))}

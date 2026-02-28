@@ -4,6 +4,7 @@ export const metadata: Metadata = {
   title: "Cost of Living Calculator — Salary Adjustment Tool",
   description:
     "Calculate how far your federal salary goes in different cities. Adjust for housing, food, transportation, and other cost-of-living factors.",
+  alternates: { canonical: "https://govpay.directory/tools/cost-of-living" },
 };
 
 const jsonLd = {

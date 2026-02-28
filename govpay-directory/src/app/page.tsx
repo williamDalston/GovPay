@@ -1,11 +1,16 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { SearchBar } from "@/components/SearchBar";
 import { EmployeeCard } from "@/components/EmployeeCard";
 import { GlobalStatsBar } from "@/components/StatsBar";
 import { AnimateOnScroll } from "@/components/AnimateOnScroll";
+import { AdSlot } from "@/components/AdSlot";
+import { NewsletterCTA } from "@/components/NewsletterCTA";
 import { getAgencies, getTopEarners, getGlobalStats } from "@/lib/db";
 import { formatCurrency, formatNumber } from "@/lib/format";
 import { US_STATES } from "@/lib/reference-data";
+import { ARTICLES } from "@/lib/articles";
+import { DATA_LAST_UPDATED } from "@/lib/reference-data";
 import {
   Building2,
   MapPin,
@@ -13,9 +18,16 @@ import {
   Calculator,
   ArrowRight,
   Users,
+  BookOpen,
+  Clock,
+  Database,
 } from "lucide-react";
 
 export const revalidate = 3600;
+
+export const metadata: Metadata = {
+  alternates: { canonical: "https://govpay.directory" },
+};
 
 export default async function Home() {
   const [agencies, topEarners, stats] = await Promise.all([
@@ -65,20 +77,30 @@ export default async function Home() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--color-accent-blue)_0%,_transparent_50%)] opacity-10" />
         <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
           <div className="text-center">
-            <h1 className="animate-fade-in-up font-[family-name:var(--font-heading)] text-3xl font-bold leading-tight text-navy-100 sm:text-4xl md:text-5xl">
+            <h1 className="font-[family-name:var(--font-heading)] text-3xl font-bold leading-tight text-navy-100 sm:text-4xl md:text-5xl">
               Explore Public Employee
               <br />
               <span className="bg-gradient-to-r from-accent-blue to-accent-green bg-clip-text text-transparent">Salaries Across America</span>
             </h1>
-            <p className="animate-fade-in-up stagger-1 mx-auto mt-4 max-w-2xl text-lg text-navy-400">
+            <p className="animate-fade-in-up stagger-1 mx-auto mt-4 max-w-2xl text-base text-navy-300 sm:text-lg">
               Search and compare compensation data for {employeeLabel} federal,
               state, and local government employees. All data is publicly
               available.
             </p>
-            <div className="animate-fade-in-up stagger-2 mx-auto mt-8 max-w-2xl">
+            <div className="animate-fade-in-up stagger-2 mt-3 flex flex-wrap items-center justify-center gap-2">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-navy-700 bg-navy-900/80 px-3 py-1 text-xs text-navy-500">
+                <Database size={10} className="text-accent-blue" />
+                {employeeLabel} records indexed
+              </span>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-navy-700 bg-navy-900/80 px-3 py-1 text-xs text-navy-500">
+                <Clock size={10} className="text-accent-green" />
+                Pay data updated {DATA_LAST_UPDATED.gsPayScale}
+              </span>
+            </div>
+            <div className="animate-fade-in-up stagger-3 mx-auto mt-8 max-w-2xl">
               <SearchBar size="large" />
             </div>
-            <div className="animate-fade-in-up stagger-3 mt-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-navy-500">
+            <div className="animate-fade-in-up stagger-4 mt-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-navy-500">
               <span>Popular:</span>
               {[
                 "FBI Agent",
@@ -104,6 +126,13 @@ export default async function Home() {
       <section className="border-b border-navy-700 bg-navy-950 py-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <GlobalStatsBar />
+        </div>
+      </section>
+
+      {/* Ad Slot */}
+      <section className="border-b border-navy-700 bg-navy-950 py-4">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <AdSlot slot="leaderboard" />
         </div>
       </section>
 
@@ -225,6 +254,54 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* Latest Insights + Newsletter */}
+      <section className="border-b border-navy-700 bg-navy-950 py-12">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-8 lg:grid-cols-3">
+            <div className="lg:col-span-2">
+              <div className="flex items-center justify-between">
+                <h2 className="font-[family-name:var(--font-heading)] text-xl font-bold text-navy-100">
+                  Latest Insights
+                </h2>
+                <Link
+                  href="/insights"
+                  className="flex items-center gap-1 text-sm text-accent-blue hover:underline"
+                >
+                  View all <ArrowRight size={14} />
+                </Link>
+              </div>
+              <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                {ARTICLES.slice(0, 4).map((article, index) => (
+                  <AnimateOnScroll key={article.slug} delay={index * 60}>
+                    <Link
+                      href={`/insights/${article.slug}`}
+                      className="group rounded-xl border border-navy-700 bg-navy-900 p-5 transition-all hover:-translate-y-0.5 hover:border-accent-blue/50 hover:bg-navy-800"
+                    >
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-accent-blue">
+                        {article.category}
+                      </span>
+                      <h3 className="mt-1.5 font-[family-name:var(--font-heading)] text-sm font-bold leading-tight text-navy-100 group-hover:text-accent-blue">
+                        {article.title}
+                      </h3>
+                      <p className="mt-1 text-xs text-navy-400 line-clamp-2">
+                        {article.description}
+                      </p>
+                      <span className="mt-2 inline-flex items-center gap-1 text-[10px] text-navy-500">
+                        <BookOpen size={10} />
+                        {article.readingTime}
+                      </span>
+                    </Link>
+                  </AnimateOnScroll>
+                ))}
+              </div>
+            </div>
+            <div>
+              <NewsletterCTA />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* States Grid */}
       <section className="bg-navy-950 py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -239,18 +316,18 @@ export default async function Home() {
               View all <ArrowRight size={14} />
             </Link>
           </div>
-          <div className="mt-6 grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8">
+          <div className="mt-6 grid grid-cols-3 gap-2 min-[400px]:grid-cols-4 md:grid-cols-6 lg:grid-cols-8">
             {US_STATES.slice(0, 24).map((state, index) => (
               <AnimateOnScroll key={state.slug} delay={index * 30}>
                 <Link
                   href={`/states/${state.slug}`}
-                  className="block rounded-lg border border-navy-700 bg-navy-900 px-3 py-2 text-center text-xs text-navy-300 transition-all hover:-translate-y-0.5 hover:border-accent-blue/50 hover:bg-navy-800 hover:text-accent-blue hover:shadow-lg hover:shadow-accent-blue/5"
+                  className="block rounded-lg border border-navy-700 bg-navy-900 px-2 py-2.5 text-center text-xs text-navy-300 transition-all hover:-translate-y-0.5 hover:border-accent-blue/50 hover:bg-navy-800 hover:text-accent-blue hover:shadow-lg hover:shadow-accent-blue/5 sm:px-3"
                 >
                   <span className="font-[family-name:var(--font-data)] text-sm font-bold">
                     {state.abbreviation}
                   </span>
                   <br />
-                  <span className="text-navy-500">{state.name}</span>
+                  <span className="truncate text-[11px] text-navy-500 sm:text-xs">{state.name}</span>
                 </Link>
               </AnimateOnScroll>
             ))}

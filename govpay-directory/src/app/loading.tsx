@@ -9,8 +9,8 @@ export default function Loading() {
       </div>
 
       {/* Title skeleton */}
-      <div className="h-9 w-80 animate-shimmer rounded-lg" />
-      <div className="mt-3 h-5 w-96 animate-shimmer rounded" />
+      <div className="h-9 w-full max-w-80 animate-shimmer rounded-lg" />
+      <div className="mt-3 h-5 w-full max-w-96 animate-shimmer rounded" />
 
       {/* Card grid skeleton */}
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

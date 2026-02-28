@@ -7,6 +7,9 @@ import { AnimatedBar } from "@/components/AnimatedBar";
 import { getEmployeeBySlug, getEmployeesByAgency, getAgencyAvgSalary, getNationalAvgSalary } from "@/lib/db";
 import { formatCurrency } from "@/lib/format";
 import { GS_BASE_PAY_2025 } from "@/lib/reference-data";
+import { AdSlot } from "@/components/AdSlot";
+import { JobsCTA } from "@/components/JobsCTA";
+import { ShareButton } from "@/components/ShareButton";
 import { Building2, MapPin, Briefcase, Calendar, TrendingUp, ArrowRight } from "lucide-react";
 
 export const revalidate = 86400;
@@ -16,15 +19,21 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
+/** Thin records lack critical data — noindex to avoid thin-content penalties at scale. */
+function isThinRecord(emp: NonNullable<Awaited<ReturnType<typeof getEmployeeBySlug>>>) {
+  return !emp.jobTitle || emp.totalCompensation <= 0 || !emp.dutyStation;
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const employee = await getEmployeeBySlug(slug);
   if (!employee) return { title: "Employee Not Found" };
 
   return {
-    title: `${employee.name} — ${employee.jobTitle} at ${employee.agency}`,
-    description: `${employee.name} earns ${formatCurrency(employee.totalCompensation)} as a ${employee.jobTitle} at the ${employee.agency} in ${employee.dutyStation}. View full compensation details.`,
+    title: `${employee.name} — ${employee.jobTitle || "Federal Employee"} at ${employee.agency}`,
+    description: `${employee.name} earns ${formatCurrency(employee.totalCompensation)} as a ${employee.jobTitle || "federal employee"} at the ${employee.agency} in ${employee.dutyStation || "the United States"}. View full compensation details.`,
     alternates: { canonical: `https://govpay.directory/employees/${slug}` },
+    ...(isThinRecord(employee) && { robots: "noindex, follow" }),
   };
 }
 
@@ -99,7 +108,12 @@ export default async function EmployeePage({ params }: PageProps) {
               </span>
               <span className="flex items-center gap-1.5">
                 <MapPin size={14} className="text-accent-green" />
-                {employee.dutyStation}
+                <Link
+                  href={`/states/${employee.stateSlug}`}
+                  className="hover:text-accent-blue"
+                >
+                  {employee.dutyStation}
+                </Link>
               </span>
               <span className="flex items-center gap-1.5">
                 <Briefcase size={14} className="text-accent-amber" />
@@ -111,6 +125,11 @@ export default async function EmployeePage({ params }: PageProps) {
               </span>
             </div>
           </div>
+          <ShareButton
+            title={`${employee.name} — ${employee.jobTitle} at ${employee.agency}`}
+            text={`${employee.name} earns ${formatCurrency(employee.totalCompensation)} as a ${employee.jobTitle} at ${employee.agency}`}
+            url={`/employees/${slug}`}
+          />
         </div>
 
         {/* Compensation Card */}
@@ -123,7 +142,7 @@ export default async function EmployeePage({ params }: PageProps) {
               <div className="mt-4 grid gap-4 sm:grid-cols-2">
                 <div className="rounded-lg bg-navy-800 p-4">
                   <p className="text-xs text-navy-500">Total Compensation</p>
-                  <p className="mt-1 font-[family-name:var(--font-data)] text-3xl font-bold text-accent-green">
+                  <p className="mt-1 font-[family-name:var(--font-data)] text-2xl font-bold text-accent-green sm:text-3xl">
                     {formatCurrency(employee.totalCompensation)}
                   </p>
                   <p className="mt-1 text-xs text-navy-500">
@@ -132,7 +151,7 @@ export default async function EmployeePage({ params }: PageProps) {
                 </div>
                 <div className="rounded-lg bg-navy-800 p-4">
                   <p className="text-xs text-navy-500">Base Salary</p>
-                  <p className="mt-1 font-[family-name:var(--font-data)] text-3xl font-bold text-navy-100">
+                  <p className="mt-1 font-[family-name:var(--font-data)] text-2xl font-bold text-navy-100 sm:text-3xl">
                     {formatCurrency(employee.baseSalary)}
                   </p>
                   <p className="mt-1 text-xs text-navy-500">
@@ -141,7 +160,7 @@ export default async function EmployeePage({ params }: PageProps) {
                 </div>
               </div>
 
-              <div className="mt-4 grid gap-4 sm:grid-cols-3">
+              <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3">
                 <div className="rounded-lg bg-navy-800 p-4">
                   <p className="text-xs text-navy-500">Pay Plan</p>
                   <p className="mt-1 font-[family-name:var(--font-data)] text-lg font-bold text-navy-100">
@@ -154,12 +173,12 @@ export default async function EmployeePage({ params }: PageProps) {
                     {employee.grade} / {employee.step}
                   </p>
                 </div>
-                <div className="rounded-lg bg-navy-800 p-4">
+                <div className="col-span-2 rounded-lg bg-navy-800 p-4 sm:col-span-1">
                   <p className="text-xs text-navy-500">Occupation</p>
                   <p className="mt-1 font-[family-name:var(--font-data)] text-lg font-bold text-navy-100">
                     {employee.occupationCode}
                   </p>
-                  <p className="text-xs text-navy-500">
+                  <p className="truncate text-xs text-navy-500">
                     {employee.occupationTitle}
                   </p>
                 </div>
@@ -305,6 +324,13 @@ export default async function EmployeePage({ params }: PageProps) {
                 </Link>
               </div>
             </div>
+
+            <JobsCTA
+              agencyName={employee.agency}
+              keyword={employee.jobTitle}
+            />
+
+            <AdSlot slot="rectangle" />
           </div>
         </div>
 
@@ -321,6 +347,65 @@ export default async function EmployeePage({ params }: PageProps) {
             </div>
           </div>
         )}
+
+        {/* Related Guides — drives pageviews to editorial content */}
+        {employee.payPlan === "GS" && (
+          <div className="mt-8 rounded-xl border border-navy-700 bg-navy-900 p-6">
+            <h2 className="font-[family-name:var(--font-heading)] text-sm font-bold uppercase tracking-wider text-navy-400">
+              Related Guides
+            </h2>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              <Link
+                href="/insights/gs-pay-scale-guide-2025"
+                className="rounded-lg border border-navy-700 bg-navy-800 px-4 py-3 text-sm text-navy-300 transition-all hover:border-accent-blue/50 hover:text-accent-blue"
+              >
+                <ArrowRight size={12} className="mr-1 inline text-accent-blue" />
+                Complete GS Pay Scale Guide
+              </Link>
+              <Link
+                href="/insights/federal-employee-step-increases"
+                className="rounded-lg border border-navy-700 bg-navy-800 px-4 py-3 text-sm text-navy-300 transition-all hover:border-accent-blue/50 hover:text-accent-blue"
+              >
+                <ArrowRight size={12} className="mr-1 inline text-accent-blue" />
+                How Step Increases Work
+              </Link>
+              <Link
+                href="/insights/federal-locality-pay-explained"
+                className="rounded-lg border border-navy-700 bg-navy-800 px-4 py-3 text-sm text-navy-300 transition-all hover:border-accent-blue/50 hover:text-accent-blue"
+              >
+                <ArrowRight size={12} className="mr-1 inline text-accent-blue" />
+                Locality Pay Explained
+              </Link>
+            </div>
+          </div>
+        )}
+
+        {/* Public Records Notice + Source */}
+        <div className="mt-8 rounded-lg border border-navy-700 bg-navy-900/50 p-4">
+          <p className="text-xs leading-relaxed text-navy-500">
+            <strong className="text-navy-400">Public Records Notice:</strong>{" "}
+            This compensation data is a public record obtained from the{" "}
+            <a
+              href="https://www.opm.gov/data/datasets/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-accent-blue hover:underline"
+            >
+              U.S. Office of Personnel Management (OPM)
+            </a>{" "}
+            under the Freedom of Information Act (FOIA). Federal employee salary
+            information is published as part of government transparency
+            requirements. Data reflects FY {employee.year} compensation records.
+            If you believe any information is inaccurate, please{" "}
+            <a
+              href="mailto:info@alstonanalytics.com?subject=Data%20Correction%20Request"
+              className="text-accent-blue hover:underline"
+            >
+              contact us
+            </a>
+            .
+          </p>
+        </div>
       </div>
     </>
   );

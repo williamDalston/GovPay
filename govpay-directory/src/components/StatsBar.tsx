@@ -17,12 +17,12 @@ export function StatsBar({ stats }: StatsBarProps) {
       {stats.map((stat) => (
         <div
           key={stat.label}
-          className="rounded-xl border border-navy-700 bg-navy-900 px-4 py-3"
+          className="overflow-hidden rounded-xl border border-navy-700 bg-navy-900 px-3 py-3 sm:px-4"
         >
-          <p className="font-[family-name:var(--font-data)] text-xl font-bold text-navy-100 md:text-2xl">
+          <p className="truncate font-[family-name:var(--font-data)] text-lg font-bold text-navy-100 sm:text-xl md:text-2xl">
             <AnimatedNumber value={stat.value} />
           </p>
-          <p className="mt-0.5 text-xs text-navy-400">{stat.label}</p>
+          <p className="mt-0.5 truncate text-[11px] text-navy-400 sm:text-xs">{stat.label}</p>
         </div>
       ))}
     </div>

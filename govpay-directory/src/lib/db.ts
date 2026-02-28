@@ -513,7 +513,10 @@ export async function getEmployeeCount(): Promise<number> {
   const supabase = createServerClient();
   const { count } = await supabase
     .from("employees")
-    .select("id", { count: "exact", head: true });
+    .select("id", { count: "exact", head: true })
+    .not("job_title", "is", null)
+    .not("duty_station", "is", null)
+    .gt("total_compensation", 0);
   return count ?? 0;
 }
 
@@ -525,9 +528,12 @@ export async function getEmployeeSlugs(
   const { data } = await supabase
     .from("employees")
     .select("slug")
+    .not("job_title", "is", null)
+    .not("duty_station", "is", null)
+    .gt("total_compensation", 0)
     .order("id")
     .range(offset, offset + limit - 1);
-  return (data ?? []).map((r) => r.slug);
+  return (data ?? []).map((r: { slug: string }) => r.slug);
 }
 
 // ---------------------------------------------------------------------------

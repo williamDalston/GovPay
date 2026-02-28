@@ -78,7 +78,8 @@ export default async function GSGradePage({ params }: PageProps) {
         <Breadcrumb
           items={[
             { label: "Home", href: "/" },
-            { label: "Pay Scales", href: "/pay-scales/gs" },
+            { label: "Pay Scales", href: "/pay-scales" },
+            { label: "GS Pay Scale", href: "/pay-scales/gs" },
             { label: `GS-${gradeNum}` },
           ]}
         />
@@ -120,14 +121,14 @@ export default async function GSGradePage({ params }: PageProps) {
           <h2 className="font-[family-name:var(--font-heading)] text-sm font-bold uppercase tracking-wider text-navy-400">
             Base Pay by Step
           </h2>
-          <div className="mt-4 grid grid-cols-5 gap-3 sm:grid-cols-10">
+          <div className="mt-4 grid grid-cols-2 gap-2 min-[400px]:grid-cols-3 sm:grid-cols-5 lg:grid-cols-10">
             {GS_STEPS.map((step) => (
               <div
                 key={step}
-                className="rounded-lg bg-navy-800 p-3 text-center"
+                className="rounded-lg bg-navy-800 px-2 py-3 text-center sm:px-3"
               >
-                <p className="text-xs text-navy-500">Step {step}</p>
-                <p className="mt-1 font-[family-name:var(--font-data)] text-sm font-bold text-navy-100">
+                <p className="text-[11px] text-navy-500 sm:text-xs">Step {step}</p>
+                <p className="mt-1 font-[family-name:var(--font-data)] text-xs font-bold text-navy-100 sm:text-sm">
                   {formatCurrency(basePay[step - 1])}
                 </p>
               </div>
@@ -140,33 +141,31 @@ export default async function GSGradePage({ params }: PageProps) {
           <h2 className="font-[family-name:var(--font-heading)] text-sm font-bold uppercase tracking-wider text-navy-400">
             Locality-Adjusted Pay (Step 1 & Step 10)
           </h2>
-          <div className="mt-4 overflow-x-auto">
-            <table className="w-full" aria-label={`GS-${gradeNum} locality-adjusted pay rates`}>
+          <div className="-mx-6 mt-4 overflow-x-auto px-6">
+            <table className="w-full min-w-[500px]" aria-label={`GS-${gradeNum} locality-adjusted pay rates`}>
               <thead>
                 <tr className="border-b border-navy-700 text-left text-xs text-navy-500">
                   <th className="pb-2 font-medium">Locality Area</th>
-                  <th className="pb-2 text-right font-medium">Adjustment</th>
-                  <th className="pb-2 text-right font-medium">Step 1</th>
-                  <th className="pb-2 text-right font-medium">Step 10</th>
+                  <th className="whitespace-nowrap pb-2 text-right font-medium">Adj.</th>
+                  <th className="whitespace-nowrap pb-2 text-right font-medium">Step 1</th>
+                  <th className="whitespace-nowrap pb-2 text-right font-medium">Step 10</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-navy-800">
                 {LOCALITY_AREAS.map((area) => (
                   <tr key={area.slug} className="text-sm transition-colors hover:bg-navy-800/50">
-                    <td className="py-2.5 text-navy-200">
-                      {area.area.length > 40
-                        ? area.area.substring(0, 40) + "..."
-                        : area.area}
+                    <td className="max-w-[180px] truncate py-2.5 text-navy-200 sm:max-w-none sm:whitespace-normal">
+                      {area.area}
                     </td>
-                    <td className="py-2.5 text-right font-[family-name:var(--font-data)] text-navy-400">
+                    <td className="whitespace-nowrap py-2.5 text-right font-[family-name:var(--font-data)] text-xs text-navy-400">
                       {area.adjustment === 1.0
                         ? "Base"
                         : `+${((area.adjustment - 1) * 100).toFixed(1)}%`}
                     </td>
-                    <td className="py-2.5 text-right font-[family-name:var(--font-data)] text-navy-100">
+                    <td className="whitespace-nowrap py-2.5 text-right font-[family-name:var(--font-data)] text-xs text-navy-100 sm:text-sm">
                       {formatCurrency(Math.round(basePay[0] * area.adjustment))}
                     </td>
-                    <td className="py-2.5 text-right font-[family-name:var(--font-data)] text-accent-green">
+                    <td className="whitespace-nowrap py-2.5 text-right font-[family-name:var(--font-data)] text-xs text-accent-green sm:text-sm">
                       {formatCurrency(Math.round(basePay[9] * area.adjustment))}
                     </td>
                   </tr>

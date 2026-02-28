@@ -67,33 +67,31 @@ export default async function AgenciesPage() {
                 </span>
               )}
             </div>
-            <h2 className="mt-2 font-[family-name:var(--font-heading)] text-base font-bold text-navy-100 group-hover:text-accent-blue">
+            <h2 className="mt-2 font-[family-name:var(--font-heading)] text-sm font-bold text-navy-100 group-hover:text-accent-blue sm:text-base line-clamp-2">
               {agency.name}
             </h2>
             <div className="mt-4 grid grid-cols-2 gap-3">
-              <div>
-                <p className="font-[family-name:var(--font-data)] text-lg font-bold text-navy-100">
+              <div className="min-w-0">
+                <p className="truncate font-[family-name:var(--font-data)] text-base font-bold text-navy-100 sm:text-lg">
                   {formatNumber(agency.employeeCount)}
                 </p>
                 <p className="flex items-center gap-1 text-xs text-navy-500">
-                  <Users size={10} /> Employees
+                  <Users size={10} className="shrink-0" /> Employees
                 </p>
               </div>
-              <div>
-                <p className="font-[family-name:var(--font-data)] text-lg font-bold text-accent-green">
+              <div className="min-w-0">
+                <p className="truncate font-[family-name:var(--font-data)] text-base font-bold text-accent-green sm:text-lg">
                   {formatCurrency(agency.averageSalary)}
                 </p>
                 <p className="flex items-center gap-1 text-xs text-navy-500">
-                  <TrendingUp size={10} /> Avg Salary
+                  <TrendingUp size={10} className="shrink-0" /> Avg Salary
                 </p>
               </div>
             </div>
-            <div className="mt-3 flex items-center justify-between text-xs text-navy-500">
-              <span>
-                Range: {formatCurrency(agency.lowestSalary)} -{" "}
-                {formatCurrency(agency.highestSalary)}
-              </span>
-            </div>
+            <p className="mt-3 truncate text-xs text-navy-500">
+              Range: {formatCurrency(agency.lowestSalary)} –{" "}
+              {formatCurrency(agency.highestSalary)}
+            </p>
           </Link>
         ))}
       </div>

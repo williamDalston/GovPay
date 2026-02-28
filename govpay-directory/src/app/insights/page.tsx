@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { AnimateOnScroll } from "@/components/AnimateOnScroll";
+import { ARTICLES } from "@/lib/articles";
 import {
   TrendingUp,
   Building2,
@@ -9,12 +10,15 @@ import {
   Calculator,
   BarChart3,
   DollarSign,
+  BookOpen,
+  Clock,
 } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Insights — Government Salary Trends & Analysis",
   description:
     "Explore trends and analysis of government employee compensation data. Federal salary insights, agency comparisons, and pay scale analysis.",
+  alternates: { canonical: "https://govpay.directory/insights" },
 };
 
 const insights = [
@@ -78,12 +82,24 @@ export default function InsightsPage() {
     url: "https://govpay.directory/insights",
     mainEntity: {
       "@type": "ItemList",
-      itemListElement: insights.map((insight, index) => ({
-        "@type": "ListItem",
-        position: index + 1,
-        name: insight.title,
-        url: `https://govpay.directory${insight.href}`,
-      })),
+      itemListElement: [
+        ...ARTICLES.map((article, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          item: {
+            "@type": "Article",
+            headline: article.title,
+            url: `https://govpay.directory/insights/${article.slug}`,
+            datePublished: article.publishedAt,
+          },
+        })),
+        ...insights.map((insight, index) => ({
+          "@type": "ListItem",
+          position: ARTICLES.length + index + 1,
+          name: insight.title,
+          url: `https://govpay.directory${insight.href}`,
+        })),
+      ],
     },
   };
 
@@ -106,26 +122,72 @@ export default function InsightsPage() {
         data across America.
       </p>
 
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {insights.map((insight, index) => (
-          <AnimateOnScroll key={insight.title} delay={index * 60}>
-          <Link
-            href={insight.href}
-            className="group rounded-xl border border-navy-700 bg-navy-900 p-6 transition-all hover:-translate-y-0.5 hover:border-accent-blue/50 hover:bg-navy-800 hover:shadow-lg hover:shadow-accent-blue/5"
-          >
-            <insight.icon
-              size={24}
-              className={`${insight.color} transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:scale-110`}
-            />
-            <h2 className="mt-4 font-[family-name:var(--font-heading)] text-base font-bold text-navy-100 group-hover:text-accent-blue">
-              {insight.title}
-            </h2>
-            <p className="mt-2 text-xs leading-relaxed text-navy-400">
-              {insight.description}
-            </p>
-          </Link>
-          </AnimateOnScroll>
-        ))}
+      {/* Articles */}
+      <div className="mt-8">
+        <h2 className="font-[family-name:var(--font-heading)] text-lg font-bold text-navy-100">
+          <BookOpen size={18} className="mr-2 inline text-accent-blue" />
+          Articles & Guides
+        </h2>
+        <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {ARTICLES.map((article, index) => (
+            <AnimateOnScroll key={article.slug} delay={index * 60}>
+              <Link
+                href={`/insights/${article.slug}`}
+                className="group flex flex-col rounded-xl border border-navy-700 bg-navy-900 p-6 transition-all hover:-translate-y-0.5 hover:border-accent-blue/50 hover:bg-navy-800 hover:shadow-lg hover:shadow-accent-blue/5"
+              >
+                <span className="text-[10px] font-bold uppercase tracking-wider text-accent-blue">
+                  {article.category}
+                </span>
+                <h3 className="mt-2 font-[family-name:var(--font-heading)] text-base font-bold leading-tight text-navy-100 group-hover:text-accent-blue">
+                  {article.title}
+                </h3>
+                <p className="mt-2 flex-1 text-xs leading-relaxed text-navy-400">
+                  {article.description}
+                </p>
+                <div className="mt-3 flex items-center gap-3 text-[10px] text-navy-500">
+                  <span className="flex items-center gap-1">
+                    <Clock size={10} />
+                    {article.readingTime}
+                  </span>
+                  <span>
+                    {new Date(article.publishedAt).toLocaleDateString("en-US", {
+                      month: "short",
+                      year: "numeric",
+                    })}
+                  </span>
+                </div>
+              </Link>
+            </AnimateOnScroll>
+          ))}
+        </div>
+      </div>
+
+      {/* Data Tools */}
+      <div className="mt-10">
+        <h2 className="font-[family-name:var(--font-heading)] text-lg font-bold text-navy-100">
+          Interactive Tools
+        </h2>
+        <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {insights.map((insight, index) => (
+            <AnimateOnScroll key={insight.title} delay={index * 60}>
+            <Link
+              href={insight.href}
+              className="group rounded-xl border border-navy-700 bg-navy-900 p-6 transition-all hover:-translate-y-0.5 hover:border-accent-blue/50 hover:bg-navy-800 hover:shadow-lg hover:shadow-accent-blue/5"
+            >
+              <insight.icon
+                size={24}
+                className={`${insight.color} transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:scale-110`}
+              />
+              <h3 className="mt-4 font-[family-name:var(--font-heading)] text-base font-bold text-navy-100 group-hover:text-accent-blue">
+                {insight.title}
+              </h3>
+              <p className="mt-2 text-xs leading-relaxed text-navy-400">
+                {insight.description}
+              </p>
+            </Link>
+            </AnimateOnScroll>
+          ))}
+        </div>
       </div>
 
     </div>

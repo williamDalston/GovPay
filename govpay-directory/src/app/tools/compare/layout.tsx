@@ -4,6 +4,7 @@ export const metadata: Metadata = {
   title: "Compare Federal Salaries — Side-by-Side Tool",
   description:
     "Compare GS pay grades, steps, and locality areas side by side. See how location and grade affect federal employee compensation.",
+  alternates: { canonical: "https://govpay.directory/tools/compare" },
 };
 
 const jsonLd = {

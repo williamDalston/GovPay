@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   title: "About GovPay.Directory",
   description:
     "Learn about GovPay.Directory, our data sources, methodology, and commitment to transparency in government employee compensation data.",
+  alternates: { canonical: "https://govpay.directory/about" },
 };
 
 export default async function AboutPage() {
@@ -178,7 +179,7 @@ export default async function AboutPage() {
               },
               {
                 q: "Can I request removal of my data?",
-                a: "This data is publicly available under FOIA and state open records laws. We display the same information available from official government sources. If you have concerns, email us at contact@govpay.directory.",
+                a: "This data is publicly available under FOIA and state open records laws. We display the same information available from official government sources. If you have concerns, email us at info@alstonanalytics.com.",
               },
             ].map((faq) => (
               <div
@@ -197,23 +198,23 @@ export default async function AboutPage() {
         </section>
 
         {/* CTA */}
-        <section className="mt-10 rounded-xl border border-navy-700 bg-navy-900 p-8 text-center">
+        <section className="mt-10 rounded-xl border border-navy-700 bg-navy-900 p-6 text-center sm:p-8">
           <h2 className="font-[family-name:var(--font-heading)] text-lg font-bold text-navy-100">
             Start Exploring
           </h2>
           <p className="mt-2 text-sm text-navy-400">
             Search {employeeLabel} government employee salary records.
           </p>
-          <div className="mt-4 flex items-center justify-center gap-3">
+          <div className="mt-4 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link
               href="/search"
-              className="rounded-xl bg-accent-blue px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-accent-blue/80"
+              className="w-full rounded-xl bg-accent-blue px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-accent-blue/80 active:scale-[0.98] sm:w-auto"
             >
               Search Salaries
             </Link>
             <Link
               href="/agencies"
-              className="rounded-xl border border-navy-700 px-6 py-2.5 text-sm font-medium text-navy-300 transition-colors hover:bg-navy-800"
+              className="w-full rounded-xl border border-navy-700 px-6 py-3 text-sm font-medium text-navy-300 transition-colors hover:bg-navy-800 active:scale-[0.98] sm:w-auto"
             >
               Browse Agencies
             </Link>
