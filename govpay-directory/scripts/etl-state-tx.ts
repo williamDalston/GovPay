@@ -2,10 +2,16 @@
  * GovPay.Directory — Texas State Employee Salary ETL
  *
  * Downloads and processes Texas state employee compensation data
- * from the Texas Comptroller's Open Data portal.
+ * from the Texas Tribune Government Salaries Explorer.
  *
- * Data source: https://data.texas.gov/ (Texas Open Data Portal)
- * Dataset: State Employee Compensation
+ * Data source: https://salaries.texastribune.org/
+ * CSV: https://s3.amazonaws.com/raw.texastribune.org/state_of_texas/salaries/02_non_duplicated_employees/{date}.csv
+ *
+ * CSV Columns:
+ *   AGENCY, AGENCY NAME, LAST NAME, FIRST NAME, MI, CLASS CODE, CLASS TITLE,
+ *   ETHNICITY, GENDER, EMPLOYEE TYPE, HIRE DATE, RATE, HRSWKD, MONTHLY, ANNUAL,
+ *   STATENUM, duplicated, multiple_full_time_jobs, combined_multiple_jobs,
+ *   hide_from_search, summed_annual_salary
  *
  * Usage: npx tsx scripts/etl-state-tx.ts
  * Requires: NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in .env.local
@@ -17,6 +23,7 @@ import { resolve } from "path";
 import { parse } from "csv-parse/sync";
 import { writeFile, readFile, mkdir } from "fs/promises";
 import { existsSync } from "fs";
+import { slugify } from "../src/lib/slugify";
 
 config({ path: resolve(process.cwd(), ".env.local") });
 
@@ -28,17 +35,10 @@ const supabase = createClient(
 const DATA_DIR = resolve(process.cwd(), "data");
 const TX_DATA_FILE = resolve(DATA_DIR, "tx_employees.csv");
 
-// Texas Comptroller Socrata Open Data API
-// Public dataset — no API key required for small requests
-const TX_SOCRATA_URL =
-  "https://data.texas.gov/resource/mzg3-ywn2.csv?$limit=50000&$order=annual_salary DESC";
-
-function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
-}
+// Texas Tribune Government Salaries Explorer
+// Updated January 2026 — ~155,000 state employees
+const TX_CSV_URL =
+  "https://s3.amazonaws.com/raw.texastribune.org/state_of_texas/salaries/02_non_duplicated_employees/2026-01-01.csv";
 
 async function downloadTexasData(): Promise<string> {
   await mkdir(DATA_DIR, { recursive: true });
@@ -48,8 +48,8 @@ async function downloadTexasData(): Promise<string> {
     return await readFile(TX_DATA_FILE, "utf-8");
   }
 
-  console.log("  Downloading from Texas Open Data Portal...");
-  const response = await fetch(TX_SOCRATA_URL);
+  console.log("  Downloading from Texas Tribune...");
+  const response = await fetch(TX_CSV_URL);
   if (!response.ok) {
     throw new Error(`TX download failed: ${response.status} ${response.statusText}`);
   }
@@ -61,13 +61,17 @@ async function downloadTexasData(): Promise<string> {
 }
 
 interface TXRecord {
-  first_name?: string;
-  last_name?: string;
-  agency_name?: string;
-  class_title?: string;
-  annual_salary?: string;
-  ethnicity?: string;
-  gender?: string;
+  "FIRST NAME"?: string;
+  "LAST NAME"?: string;
+  "AGENCY NAME"?: string;
+  "CLASS TITLE"?: string;
+  ANNUAL?: string;
+  ETHNICITY?: string;
+  GENDER?: string;
+  AGENCY?: string;
+  hide_from_search?: string;
+  duplicated?: string;
+  summed_annual_salary?: string;
   [key: string]: string | undefined;
 }
 
@@ -140,33 +144,39 @@ async function processRecords(csvData: string) {
     const batch = records.slice(i, i + batchSize);
     const rows = [];
 
-    for (const rec of batch) {
-      const firstName = (rec.first_name ?? "").trim();
-      const lastName = (rec.last_name ?? "").trim();
-      const agencyName = (rec.agency_name ?? "").trim();
-      const salary = parseFloat(rec.annual_salary ?? "0");
+    for (let j = 0; j < batch.length; j++) {
+      const rec = batch[j];
+      const firstName = (rec["FIRST NAME"] ?? "").trim();
+      const lastName = (rec["LAST NAME"] ?? "").trim();
+      const agencyName = (rec["AGENCY NAME"] ?? "").trim();
+      const salary = parseFloat(rec.ANNUAL ?? "0");
 
+      // Skip hidden/duplicate rows and invalid records
+      if (rec.hide_from_search === "True") {
+        skipped++;
+        continue;
+      }
       if (!firstName || !lastName || !agencyName || salary <= 0) {
         skipped++;
         continue;
       }
 
       const agencyId = await ensureAgency(agencyName, agencyCache);
-      const externalId = `tx-${slugify(firstName)}-${slugify(lastName)}-${i}`;
+      const fullName = `${firstName} ${lastName}`;
+      const uniqueIndex = i + j;
 
       rows.push({
-        external_id: externalId,
-        slug: `${slugify(firstName)}-${slugify(lastName)}-${externalId}`,
+        slug: `${slugify(firstName)}-${slugify(lastName)}-tx-${uniqueIndex}`,
         first_name: firstName,
         last_name: lastName,
-        job_title: (rec.class_title ?? "").trim() || null,
+        full_name: fullName,
+        job_title: (rec["CLASS TITLE"] ?? "").trim() || null,
         agency_id: agencyId,
         state_id: texasState.id,
         pay_plan: "STATE",
         base_salary: salary,
         total_compensation: salary,
         fiscal_year: 2025,
-        data_source: "STATE_TX",
         duty_station: "Texas",
       });
     }

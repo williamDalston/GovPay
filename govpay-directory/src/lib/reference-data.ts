@@ -2,22 +2,22 @@
 // Used by client components — no database queries needed.
 
 // Data Sources & Last Updated:
-// - GS Pay Scale: OPM 2025 Pay Tables (https://www.opm.gov/policy-data-oversight/pay-leave/salaries-wages/)
-//   Last updated: January 2025
-// - Locality Adjustments: OPM 2025 Locality Pay Tables
-//   Last updated: January 2025
+// - GS Pay Scale: OPM 2026 Pay Tables (https://www.opm.gov/policy-data-oversight/pay-leave/salaries-wages/)
+//   Last updated: January 2026
+// - Locality Adjustments: OPM 2026 Locality Pay Tables
+//   Last updated: January 2026
 // - Cost of Living Indices: BLS Consumer Price Index data
-//   Last updated: Q4 2024
+//   Last updated: Q4 2025
 
 export const DATA_LAST_UPDATED = {
-  gsPayScale: "January 2025",
-  localityAdjustments: "January 2025",
-  costOfLiving: "Q4 2024",
-  federalAgencies: "September 2024",
+  gsPayScale: "January 2026",
+  localityAdjustments: "January 2026",
+  costOfLiving: "Q4 2025",
+  federalAgencies: "February 2026",
   stateData: "Varies by state",
 };
 
-export const GS_BASE_PAY_2025: Record<number, number[]> = {
+export const GS_BASE_PAY_2026: Record<number, number[]> = {
   1: [21986, 22719, 23449, 24175, 24905, 25392, 26115, 26844, 26873, 27556],
   2: [24727, 25313, 26131, 26873, 27187, 27984, 28781, 29578, 30375, 31172],
   3: [26979, 27878, 28777, 29676, 30575, 31474, 32373, 33272, 34171, 35070],

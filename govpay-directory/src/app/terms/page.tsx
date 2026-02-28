@@ -2,28 +2,29 @@ import { Metadata } from "next";
 import { Breadcrumb } from "@/components/Breadcrumb";
 
 export const metadata: Metadata = {
-  title: "Terms of Service — GovPay.Directory",
+  title: "Terms of Service",
   description:
     "Terms and conditions governing use of the GovPay.Directory federal employee salary database.",
+  alternates: { canonical: "https://govpay.directory/terms" },
 };
 
 export default function TermsPage() {
   return (
-    <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
       <Breadcrumb
         items={[{ label: "Home", href: "/" }, { label: "Terms of Service" }]}
       />
 
-      <h1 className="font-[family-name:var(--font-heading)] text-2xl font-bold text-navy-100 sm:text-3xl">
+      <h1 className="font-heading text-2xl font-bold text-navy-100 sm:text-3xl">
         Terms of Service
       </h1>
-      <p className="mt-2 text-sm text-navy-400">
-        Last updated: January 1, 2025
+      <p className="mt-2 text-sm text-navy-500">
+        Last updated: February 2026
       </p>
 
       <div className="mt-8 space-y-8 text-sm leading-relaxed text-navy-300">
         <section>
-          <h2 className="font-[family-name:var(--font-heading)] text-lg font-bold text-navy-100">
+          <h2 className="font-heading text-lg font-bold text-navy-100">
             1. Public Records Disclaimer
           </h2>
           <p className="mt-3">
@@ -38,7 +39,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="font-[family-name:var(--font-heading)] text-lg font-bold text-navy-100">
+          <h2 className="font-heading text-lg font-bold text-navy-100">
             2. Data Accuracy
           </h2>
           <p className="mt-3">
@@ -53,7 +54,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="font-[family-name:var(--font-heading)] text-lg font-bold text-navy-100">
+          <h2 className="font-heading text-lg font-bold text-navy-100">
             3. Acceptable Use
           </h2>
           <p className="mt-3">You agree not to:</p>
@@ -82,7 +83,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="font-[family-name:var(--font-heading)] text-lg font-bold text-navy-100">
+          <h2 className="font-heading text-lg font-bold text-navy-100">
             4. Limitation of Liability
           </h2>
           <p className="mt-3">
@@ -96,7 +97,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="font-[family-name:var(--font-heading)] text-lg font-bold text-navy-100">
+          <h2 className="font-heading text-lg font-bold text-navy-100">
             5. Intellectual Property
           </h2>
           <p className="mt-3">
@@ -109,7 +110,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="font-[family-name:var(--font-heading)] text-lg font-bold text-navy-100">
+          <h2 className="font-heading text-lg font-bold text-navy-100">
             6. DMCA & Content Removal
           </h2>
           <p className="mt-3">
@@ -121,7 +122,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="font-[family-name:var(--font-heading)] text-lg font-bold text-navy-100">
+          <h2 className="font-heading text-lg font-bold text-navy-100">
             7. Changes to These Terms
           </h2>
           <p className="mt-3">

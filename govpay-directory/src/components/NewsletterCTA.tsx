@@ -19,26 +19,37 @@ export function NewsletterCTA() {
 
     // TODO: Wire to email service (Mailchimp, ConvertKit, or Supabase table)
     // For now, store in localStorage so signups aren't lost
-    const signups = JSON.parse(
-      localStorage.getItem("govpay_signups") || "[]"
-    ) as string[];
+    let signups: string[] = [];
+    try {
+      const parsed = JSON.parse(localStorage.getItem("govpay_signups") || "[]");
+      signups = Array.isArray(parsed) ? parsed.filter((s): s is string => typeof s === "string") : [];
+    } catch {
+      signups = [];
+    }
     if (!signups.includes(email)) {
       signups.push(email);
       localStorage.setItem("govpay_signups", JSON.stringify(signups));
     }
 
+    setEmail("");
     setSubmitted(true);
   }
 
   if (submitted) {
     return (
-      <div className="rounded-xl border border-accent-green/30 bg-accent-green/5 p-6 text-center">
-        <CheckCircle size={24} className="mx-auto text-accent-green" />
-        <p className="mt-2 font-[family-name:var(--font-heading)] text-sm font-bold text-navy-100">
-          You&apos;re on the list!
+      <div className="animate-success-fade rounded-xl border border-accent-green/30 bg-accent-green/5 p-6 text-center">
+        <div className="relative mx-auto w-fit">
+          <CheckCircle size={24} className="animate-scale-bounce text-accent-green" />
+          <span className="absolute left-1/2 top-1/2 h-1.5 w-1.5 rounded-full bg-accent-green" style={{ "--dx": "-12px", "--dy": "-16px", animation: "confetti-dot 0.6s 0.2s ease-out both" } as React.CSSProperties} />
+          <span className="absolute left-1/2 top-1/2 h-1.5 w-1.5 rounded-full bg-accent-blue" style={{ "--dx": "14px", "--dy": "-10px", animation: "confetti-dot 0.6s 0.25s ease-out both" } as React.CSSProperties} />
+          <span className="absolute left-1/2 top-1/2 h-1.5 w-1.5 rounded-full bg-accent-amber" style={{ "--dx": "-8px", "--dy": "14px", animation: "confetti-dot 0.6s 0.3s ease-out both" } as React.CSSProperties} />
+        </div>
+        <p className="mt-2 font-heading text-sm font-bold text-navy-100">
+          Thanks for your interest!
         </p>
         <p className="mt-1 text-xs text-navy-400">
-          We&apos;ll send you federal salary updates and insights.
+          We&apos;re setting up our newsletter. We&apos;ll notify you when
+          it&apos;s ready.
         </p>
       </div>
     );
@@ -48,7 +59,7 @@ export function NewsletterCTA() {
     <div className="rounded-xl border border-navy-700 bg-navy-900 p-6">
       <div className="flex items-center gap-2">
         <Mail size={18} className="text-accent-blue" />
-        <h3 className="font-[family-name:var(--font-heading)] text-sm font-bold text-navy-100">
+        <h3 className="font-heading text-sm font-bold text-navy-100">
           Federal Pay Updates
         </h3>
       </div>
@@ -73,7 +84,7 @@ export function NewsletterCTA() {
         </button>
       </form>
       <p className="mt-2 text-[10px] text-navy-600">
-        Free, no spam. Unsubscribe anytime.
+        Coming soon — sign up to be notified at launch.
       </p>
     </div>
   );

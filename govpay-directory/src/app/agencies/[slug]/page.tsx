@@ -31,8 +31,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export async function generateStaticParams() {
+  // Only pre-render top 20 agencies at build time to avoid timeout
+  // Other pages will be generated on-demand with ISR (revalidate = 3600)
   const slugs = await getAgencySlugs();
-  return slugs.map((slug) => ({ slug }));
+  return slugs.slice(0, 20).map((slug) => ({ slug }));
 }
 
 export default async function AgencyPage({ params }: PageProps) {
@@ -98,12 +100,12 @@ export default async function AgencyPage({ params }: PageProps) {
 
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start">
           {agency.abbreviation && (
-            <span className="inline-block w-fit rounded bg-accent-blue/20 px-3 py-1 font-[family-name:var(--font-data)] text-sm font-bold text-accent-blue">
+            <span className="inline-block w-fit rounded bg-accent-blue/20 px-3 py-1 font-data text-sm font-bold text-accent-blue">
               {agency.abbreviation}
             </span>
           )}
           <div className="min-w-0">
-            <h1 className="font-[family-name:var(--font-heading)] text-2xl font-bold text-navy-100 sm:text-3xl">
+            <h1 className="font-heading text-2xl font-bold text-navy-100 sm:text-3xl">
               {agency.name}
             </h1>
             <p className="mt-1 text-sm text-navy-400">Employee Salary Data</p>
@@ -125,7 +127,7 @@ export default async function AgencyPage({ params }: PageProps) {
           <div className="lg:col-span-2">
             {/* Salary Distribution */}
             <div className="rounded-xl border border-navy-700 bg-navy-900 p-6">
-              <h2 className="font-[family-name:var(--font-heading)] text-sm font-bold uppercase tracking-wider text-navy-400">
+              <h2 className="font-heading text-sm font-bold uppercase tracking-wider text-navy-400">
                 Salary Distribution
               </h2>
               <div className="mt-4">
@@ -137,10 +139,11 @@ export default async function AgencyPage({ params }: PageProps) {
 
             {/* Top Occupations */}
             <div className="mt-6 rounded-xl border border-navy-700 bg-navy-900 p-6">
-              <h2 className="font-[family-name:var(--font-heading)] text-sm font-bold uppercase tracking-wider text-navy-400">
+              <h2 className="font-heading text-sm font-bold uppercase tracking-wider text-navy-400">
                 Top Occupations
               </h2>
-              <div className="mt-4 -mx-6 overflow-x-auto px-6">
+              <p className="mt-2 text-xs text-navy-500 sm:hidden">Swipe to see all columns &rarr;</p>
+              <div className="mt-2 -mx-6 overflow-x-auto px-6 sm:mt-4">
                 <table className="w-full min-w-[400px]" aria-label={`Top occupations at ${agency.name}`}>
                   <thead>
                     <tr className="border-b border-navy-700 text-left text-xs text-navy-500">
@@ -158,10 +161,10 @@ export default async function AgencyPage({ params }: PageProps) {
                             <span className="truncate sm:whitespace-normal">{occ.title}</span>
                           </span>
                         </td>
-                        <td className="whitespace-nowrap py-3 text-right font-[family-name:var(--font-data)] text-navy-400">
+                        <td className="whitespace-nowrap py-3 text-right font-data text-navy-400">
                           {formatNumber(occ.count)}
                         </td>
-                        <td className="whitespace-nowrap py-3 text-right font-[family-name:var(--font-data)] text-accent-green">
+                        <td className="whitespace-nowrap py-3 text-right font-data text-accent-green">
                           {formatCurrency(occ.avgSalary)}
                         </td>
                       </tr>
@@ -174,7 +177,7 @@ export default async function AgencyPage({ params }: PageProps) {
             {/* Employees */}
             {employees.length > 0 && (
               <div className="mt-6">
-                <h2 className="font-[family-name:var(--font-heading)] text-lg font-bold text-navy-100">
+                <h2 className="font-heading text-lg font-bold text-navy-100">
                   Featured Employees
                 </h2>
                 <div className="mt-4 grid gap-4 sm:grid-cols-2">
@@ -192,7 +195,7 @@ export default async function AgencyPage({ params }: PageProps) {
           <div className="space-y-6">
             {/* State Breakdown */}
             <div className="rounded-xl border border-navy-700 bg-navy-900 p-5">
-              <h3 className="font-[family-name:var(--font-heading)] text-sm font-bold text-navy-100">
+              <h3 className="font-heading text-sm font-bold text-navy-100">
                 Employees by State
               </h3>
               <div className="mt-3 space-y-2">
@@ -206,7 +209,7 @@ export default async function AgencyPage({ params }: PageProps) {
                       <MapPin size={12} className="text-navy-500" />
                       {sb.state}
                     </span>
-                    <span className="font-[family-name:var(--font-data)] text-xs text-navy-400">
+                    <span className="font-data text-xs text-navy-400">
                       {formatNumber(sb.count)}
                     </span>
                   </Link>
@@ -219,7 +222,7 @@ export default async function AgencyPage({ params }: PageProps) {
 
             {/* Quick Actions */}
             <div className="rounded-xl border border-navy-700 bg-navy-900 p-5">
-              <h3 className="font-[family-name:var(--font-heading)] text-sm font-bold text-navy-100">
+              <h3 className="font-heading text-sm font-bold text-navy-100">
                 Explore More
               </h3>
               <div className="mt-3 space-y-2">
@@ -246,7 +249,7 @@ export default async function AgencyPage({ params }: PageProps) {
 
         {/* Related Guides */}
         <div className="mt-8">
-          <h2 className="font-[family-name:var(--font-heading)] text-lg font-bold text-navy-100">
+          <h2 className="font-heading text-lg font-bold text-navy-100">
             Related Guides
           </h2>
           <div className="mt-4 grid gap-4 sm:grid-cols-3">
@@ -255,18 +258,18 @@ export default async function AgencyPage({ params }: PageProps) {
               className="group rounded-xl border border-navy-700 bg-navy-900 p-5 transition-all hover:-translate-y-0.5 hover:border-accent-blue/50 hover:bg-navy-800"
             >
               <span className="text-[10px] font-bold uppercase tracking-wider text-accent-blue">Guide</span>
-              <p className="mt-1 font-[family-name:var(--font-heading)] text-sm font-bold text-navy-100 group-hover:text-accent-blue">
+              <p className="mt-1 font-heading text-sm font-bold text-navy-100 group-hover:text-accent-blue">
                 Highest Paying Federal Agencies
               </p>
               <p className="mt-1 text-xs text-navy-400">See which agencies offer the most competitive compensation.</p>
             </Link>
             <Link
-              href="/insights/gs-pay-scale-guide-2025"
+              href="/insights/gs-pay-scale-guide-2026"
               className="group rounded-xl border border-navy-700 bg-navy-900 p-5 transition-all hover:-translate-y-0.5 hover:border-accent-blue/50 hover:bg-navy-800"
             >
               <span className="text-[10px] font-bold uppercase tracking-wider text-accent-blue">Guide</span>
-              <p className="mt-1 font-[family-name:var(--font-heading)] text-sm font-bold text-navy-100 group-hover:text-accent-blue">
-                GS Pay Scale Guide 2025
+              <p className="mt-1 font-heading text-sm font-bold text-navy-100 group-hover:text-accent-blue">
+                GS Pay Scale Guide 2026
               </p>
               <p className="mt-1 text-xs text-navy-400">Grades, steps, locality adjustments, and salary calculations.</p>
             </Link>
@@ -275,7 +278,7 @@ export default async function AgencyPage({ params }: PageProps) {
               className="group rounded-xl border border-navy-700 bg-navy-900 p-5 transition-all hover:-translate-y-0.5 hover:border-accent-blue/50 hover:bg-navy-800"
             >
               <span className="text-[10px] font-bold uppercase tracking-wider text-accent-blue">Guide</span>
-              <p className="mt-1 font-[family-name:var(--font-heading)] text-sm font-bold text-navy-100 group-hover:text-accent-blue">
+              <p className="mt-1 font-heading text-sm font-bold text-navy-100 group-hover:text-accent-blue">
                 Locality Pay Explained
               </p>
               <p className="mt-1 text-xs text-navy-400">How location affects your salary and which areas pay the most.</p>

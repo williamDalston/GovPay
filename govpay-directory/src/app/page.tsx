@@ -26,15 +26,19 @@ import {
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
+  title: "GovPay.Directory — Federal & State Government Employee Salaries",
+  description:
+    "Search and compare salaries for federal and state government employees. Explore GS pay scales, agency compensation data, and cost-of-living tools.",
   alternates: { canonical: "https://govpay.directory" },
 };
 
 export default async function Home() {
-  const [agencies, topEarners, stats] = await Promise.all([
-    getAgencies(),
+  const [agenciesResult, topEarners, stats] = await Promise.all([
+    getAgencies({ limit: 12 }),
     getTopEarners(6),
     getGlobalStats(),
   ]);
+  const agencies = agenciesResult.agencies;
 
   const employeeLabel = stats.totalEmployees > 0
     ? formatNumber(stats.totalEmployees)
@@ -74,13 +78,13 @@ export default async function Home() {
       />
       {/* Hero */}
       <section className="relative overflow-hidden border-b border-navy-700 bg-navy-950">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--color-accent-blue)_0%,_transparent_50%)] opacity-10" />
+        <div className="absolute inset-0 animate-gradient-drift bg-[radial-gradient(ellipse_at_top,_var(--color-accent-blue)_0%,_transparent_50%)] opacity-10" />
         <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
           <div className="text-center">
-            <h1 className="font-[family-name:var(--font-heading)] text-3xl font-bold leading-tight text-navy-100 sm:text-4xl md:text-5xl">
+            <h1 className="font-heading text-3xl font-bold leading-tight text-navy-100 sm:text-4xl md:text-5xl">
               Explore Public Employee
               <br />
-              <span className="bg-gradient-to-r from-accent-blue to-accent-green bg-clip-text text-transparent">Salaries Across America</span>
+              <span className="animate-gradient-text bg-gradient-to-r from-accent-blue to-accent-green bg-clip-text text-transparent">Salaries Across America</span>
             </h1>
             <p className="animate-fade-in-up stagger-1 mx-auto mt-4 max-w-2xl text-base text-navy-300 sm:text-lg">
               Search and compare compensation data for {employeeLabel} federal,
@@ -97,10 +101,10 @@ export default async function Home() {
                 Pay data updated {DATA_LAST_UPDATED.gsPayScale}
               </span>
             </div>
-            <div className="animate-fade-in-up stagger-3 mx-auto mt-8 max-w-2xl">
+            <div className="mx-auto mt-8 max-w-2xl">
               <SearchBar size="large" />
             </div>
-            <div className="animate-fade-in-up stagger-4 mt-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-navy-500">
+            <div className="animate-fade-in-up stagger-3 mt-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-navy-500">
               <span>Popular:</span>
               {[
                 "FBI Agent",
@@ -112,7 +116,7 @@ export default async function Home() {
                 <Link
                   key={term}
                   href={`/search?q=${encodeURIComponent(term)}`}
-                  className="text-navy-400 transition-colors hover:text-accent-blue"
+                  className="text-navy-400 transition-colors hover:text-accent-blue animated-underline"
                 >
                   {term}
                 </Link>
@@ -126,13 +130,6 @@ export default async function Home() {
       <section className="border-b border-navy-700 bg-navy-950 py-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <GlobalStatsBar />
-        </div>
-      </section>
-
-      {/* Ad Slot */}
-      <section className="border-b border-navy-700 bg-navy-950 py-4">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <AdSlot slot="leaderboard" />
         </div>
       </section>
 
@@ -175,9 +172,9 @@ export default async function Home() {
                 href={item.href}
                 className="group flex items-start gap-4 rounded-xl border border-navy-700 bg-navy-900 p-5 transition-all hover:-translate-y-0.5 hover:border-accent-blue/50 hover:bg-navy-800 hover:shadow-lg hover:shadow-accent-blue/5"
               >
-                <item.icon size={24} className={item.color} />
+                <item.icon size={24} className={`${item.color} group-hover-bounce`} />
                 <div>
-                  <h3 className="font-[family-name:var(--font-heading)] text-sm font-bold text-navy-100">
+                  <h3 className="font-heading text-sm font-bold text-navy-100">
                     {item.title}
                   </h3>
                   <p className="mt-1 text-xs text-navy-400">{item.desc}</p>
@@ -192,14 +189,14 @@ export default async function Home() {
       <section className="border-b border-navy-700 bg-navy-950 py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
-            <h2 className="font-[family-name:var(--font-heading)] text-xl font-bold text-navy-100">
+            <h2 className="font-heading text-xl font-bold text-navy-100">
               Top Federal Agencies
             </h2>
             <Link
               href="/agencies"
-              className="flex items-center gap-1 text-sm text-accent-blue hover:underline"
+              className="group flex items-center gap-1 text-sm text-accent-blue hover:underline"
             >
-              View all <ArrowRight size={14} />
+              View all <ArrowRight size={14} className="transition-transform duration-200 group-hover:translate-x-1" />
             </Link>
           </div>
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -211,12 +208,12 @@ export default async function Home() {
               >
                 <div className="flex items-center gap-2">
                   {agency.abbreviation && (
-                    <span className="rounded bg-navy-700 px-2 py-0.5 font-[family-name:var(--font-data)] text-xs font-bold text-accent-blue">
+                    <span className="rounded bg-navy-700 px-2 py-0.5 font-data text-xs font-bold text-accent-blue">
                       {agency.abbreviation}
                     </span>
                   )}
                 </div>
-                <h3 className="mt-2 font-[family-name:var(--font-heading)] text-sm font-bold leading-tight text-navy-100 group-hover:text-accent-blue">
+                <h3 className="mt-2 font-heading text-sm font-bold leading-tight text-navy-100 group-hover:text-accent-blue">
                   {agency.name}
                 </h3>
                 <div className="mt-3 flex items-center justify-between text-xs text-navy-400">
@@ -224,7 +221,7 @@ export default async function Home() {
                     <Users size={12} />
                     {formatNumber(agency.employeeCount)}
                   </span>
-                  <span className="font-[family-name:var(--font-data)] text-accent-green">
+                  <span className="font-data text-accent-green">
                     Avg {formatCurrency(agency.averageSalary)}
                   </span>
                 </div>
@@ -235,10 +232,17 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* Ad Slot */}
+      <section className="border-b border-navy-700 bg-navy-950 py-4">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <AdSlot slot="leaderboard" />
+        </div>
+      </section>
+
       {/* Top Earners */}
       <section className="border-b border-navy-700 bg-navy-950 py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="font-[family-name:var(--font-heading)] text-xl font-bold text-navy-100">
+          <h2 className="font-heading text-xl font-bold text-navy-100">
             Highest Paid Federal Employees
           </h2>
           <p className="mt-1 text-sm text-navy-400">
@@ -260,14 +264,14 @@ export default async function Home() {
           <div className="grid gap-8 lg:grid-cols-3">
             <div className="lg:col-span-2">
               <div className="flex items-center justify-between">
-                <h2 className="font-[family-name:var(--font-heading)] text-xl font-bold text-navy-100">
+                <h2 className="font-heading text-xl font-bold text-navy-100">
                   Latest Insights
                 </h2>
                 <Link
                   href="/insights"
-                  className="flex items-center gap-1 text-sm text-accent-blue hover:underline"
+                  className="group flex items-center gap-1 text-sm text-accent-blue hover:underline"
                 >
-                  View all <ArrowRight size={14} />
+                  View all <ArrowRight size={14} className="transition-transform duration-200 group-hover:translate-x-1" />
                 </Link>
               </div>
               <div className="mt-4 grid gap-4 sm:grid-cols-2">
@@ -280,7 +284,7 @@ export default async function Home() {
                       <span className="text-[10px] font-bold uppercase tracking-wider text-accent-blue">
                         {article.category}
                       </span>
-                      <h3 className="mt-1.5 font-[family-name:var(--font-heading)] text-sm font-bold leading-tight text-navy-100 group-hover:text-accent-blue">
+                      <h3 className="mt-1.5 font-heading text-sm font-bold leading-tight text-navy-100 group-hover:text-accent-blue">
                         {article.title}
                       </h3>
                       <p className="mt-1 text-xs text-navy-400 line-clamp-2">
@@ -306,14 +310,14 @@ export default async function Home() {
       <section className="bg-navy-950 py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
-            <h2 className="font-[family-name:var(--font-heading)] text-xl font-bold text-navy-100">
+            <h2 className="font-heading text-xl font-bold text-navy-100">
               Browse by State
             </h2>
             <Link
               href="/states"
-              className="flex items-center gap-1 text-sm text-accent-blue hover:underline"
+              className="group flex items-center gap-1 text-sm text-accent-blue hover:underline"
             >
-              View all <ArrowRight size={14} />
+              View all <ArrowRight size={14} className="transition-transform duration-200 group-hover:translate-x-1" />
             </Link>
           </div>
           <div className="mt-6 grid grid-cols-3 gap-2 min-[400px]:grid-cols-4 md:grid-cols-6 lg:grid-cols-8">
@@ -323,7 +327,7 @@ export default async function Home() {
                   href={`/states/${state.slug}`}
                   className="block rounded-lg border border-navy-700 bg-navy-900 px-2 py-2.5 text-center text-xs text-navy-300 transition-all hover:-translate-y-0.5 hover:border-accent-blue/50 hover:bg-navy-800 hover:text-accent-blue hover:shadow-lg hover:shadow-accent-blue/5 sm:px-3"
                 >
-                  <span className="font-[family-name:var(--font-data)] text-sm font-bold">
+                  <span className="font-data text-sm font-bold">
                     {state.abbreviation}
                   </span>
                   <br />

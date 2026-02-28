@@ -6,7 +6,7 @@ import { EmployeeCard } from "@/components/EmployeeCard";
 import { AnimateOnScroll } from "@/components/AnimateOnScroll";
 import { getEmployeesByGrade } from "@/lib/db";
 import { formatCurrency } from "@/lib/format";
-import { GS_BASE_PAY_2025, GS_GRADES, GS_STEPS, LOCALITY_AREAS } from "@/lib/reference-data";
+import { GS_BASE_PAY_2026, GS_GRADES, GS_STEPS, LOCALITY_AREAS } from "@/lib/reference-data";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 export const revalidate = 86400;
@@ -18,14 +18,14 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { grade } = await params;
   const gradeNum = parseInt(grade);
-  if (!GS_BASE_PAY_2025[gradeNum]) return { title: "Grade Not Found" };
+  if (!GS_BASE_PAY_2026[gradeNum]) return { title: "Grade Not Found" };
 
-  const basePay = GS_BASE_PAY_2025[gradeNum];
+  const basePay = GS_BASE_PAY_2026[gradeNum];
   return {
-    title: `GS-${gradeNum} Pay Scale 2025 — ${formatCurrency(basePay[0])} to ${formatCurrency(basePay[9])}`,
-    description: `GS-${gradeNum} federal pay scale for 2025. Step 1: ${formatCurrency(basePay[0])}. Step 10: ${formatCurrency(basePay[9])}. View locality-adjusted rates and employees at this grade.`,
+    title: `GS-${gradeNum} Pay Scale 2026 — ${formatCurrency(basePay[0])} to ${formatCurrency(basePay[9])}`,
+    description: `GS-${gradeNum} federal pay scale for 2026. Step 1: ${formatCurrency(basePay[0])}. Step 10: ${formatCurrency(basePay[9])}. View locality-adjusted rates and employees at this grade.`,
     alternates: {
-      canonical: `/pay-scales/gs/${gradeNum}`,
+      canonical: `https://govpay.directory/pay-scales/gs/${gradeNum}`,
     },
   };
 }
@@ -37,7 +37,7 @@ export async function generateStaticParams() {
 export default async function GSGradePage({ params }: PageProps) {
   const { grade } = await params;
   const gradeNum = parseInt(grade);
-  const basePay = GS_BASE_PAY_2025[gradeNum];
+  const basePay = GS_BASE_PAY_2026[gradeNum];
   if (!basePay) notFound();
 
   const employeesAtGrade = await getEmployeesByGrade(grade, 6);
@@ -51,7 +51,7 @@ export default async function GSGradePage({ params }: PageProps) {
     mainEntity: [
       {
         "@type": "Question",
-        name: `What is the GS-${gradeNum} salary in 2025?`,
+        name: `What is the GS-${gradeNum} salary in 2026?`,
         acceptedAnswer: {
           "@type": "Answer",
           text: `The GS-${gradeNum} base salary ranges from ${formatCurrency(basePay[0])} (Step 1) to ${formatCurrency(basePay[9])} (Step 10) before locality adjustments.`,
@@ -62,7 +62,7 @@ export default async function GSGradePage({ params }: PageProps) {
         name: `How much does a GS-${gradeNum} make with locality pay?`,
         acceptedAnswer: {
           "@type": "Answer",
-          text: `With locality adjustments, GS-${gradeNum} salaries can range significantly. In Washington, DC, a GS-${gradeNum} Step 1 earns approximately ${formatCurrency(Math.round(basePay[0] * 1.3275))}.`,
+          text: `With locality adjustments, GS-${gradeNum} salaries can range significantly. In Washington, DC, a GS-${gradeNum} Step 1 earns approximately ${formatCurrency(Math.round(basePay[0] * (LOCALITY_AREAS.find((a) => a.slug === "washington-dc")?.adjustment ?? 1)))}.`,
         },
       },
     ],
@@ -108,8 +108,8 @@ export default async function GSGradePage({ params }: PageProps) {
           </div>
         </div>
 
-        <h1 className="mt-4 font-[family-name:var(--font-heading)] text-2xl font-bold text-navy-100 sm:text-3xl">
-          GS-{gradeNum} Pay Scale 2025
+        <h1 className="mt-4 font-heading text-2xl font-bold text-navy-100 sm:text-3xl">
+          GS-{gradeNum} Pay Scale 2026
         </h1>
         <p className="mt-2 text-navy-400">
           Base salary: {formatCurrency(basePay[0])} (Step 1) to{" "}
@@ -118,7 +118,7 @@ export default async function GSGradePage({ params }: PageProps) {
 
         {/* Base Pay Table */}
         <div className="mt-6 rounded-xl border border-navy-700 bg-navy-900 p-6">
-          <h2 className="font-[family-name:var(--font-heading)] text-sm font-bold uppercase tracking-wider text-navy-400">
+          <h2 className="font-heading text-sm font-bold uppercase tracking-wider text-navy-400">
             Base Pay by Step
           </h2>
           <div className="mt-4 grid grid-cols-2 gap-2 min-[400px]:grid-cols-3 sm:grid-cols-5 lg:grid-cols-10">
@@ -128,7 +128,7 @@ export default async function GSGradePage({ params }: PageProps) {
                 className="rounded-lg bg-navy-800 px-2 py-3 text-center sm:px-3"
               >
                 <p className="text-[11px] text-navy-500 sm:text-xs">Step {step}</p>
-                <p className="mt-1 font-[family-name:var(--font-data)] text-xs font-bold text-navy-100 sm:text-sm">
+                <p className="mt-1 font-data text-xs font-bold text-navy-100 sm:text-sm">
                   {formatCurrency(basePay[step - 1])}
                 </p>
               </div>
@@ -138,15 +138,16 @@ export default async function GSGradePage({ params }: PageProps) {
 
         {/* Locality Adjustments */}
         <div className="mt-6 rounded-xl border border-navy-700 bg-navy-900 p-6">
-          <h2 className="font-[family-name:var(--font-heading)] text-sm font-bold uppercase tracking-wider text-navy-400">
+          <h2 className="font-heading text-sm font-bold uppercase tracking-wider text-navy-400">
             Locality-Adjusted Pay (Step 1 & Step 10)
           </h2>
-          <div className="-mx-6 mt-4 overflow-x-auto px-6">
+          <p className="mt-2 text-xs text-navy-500 sm:hidden">Swipe to see all columns &rarr;</p>
+          <div className="-mx-6 mt-2 overflow-x-auto px-6 sm:mt-4">
             <table className="w-full min-w-[500px]" aria-label={`GS-${gradeNum} locality-adjusted pay rates`}>
               <thead>
                 <tr className="border-b border-navy-700 text-left text-xs text-navy-500">
                   <th className="pb-2 font-medium">Locality Area</th>
-                  <th className="whitespace-nowrap pb-2 text-right font-medium">Adj.</th>
+                  <th className="whitespace-nowrap pb-2 text-right font-medium">Adjustment</th>
                   <th className="whitespace-nowrap pb-2 text-right font-medium">Step 1</th>
                   <th className="whitespace-nowrap pb-2 text-right font-medium">Step 10</th>
                 </tr>
@@ -157,15 +158,15 @@ export default async function GSGradePage({ params }: PageProps) {
                     <td className="max-w-[180px] truncate py-2.5 text-navy-200 sm:max-w-none sm:whitespace-normal">
                       {area.area}
                     </td>
-                    <td className="whitespace-nowrap py-2.5 text-right font-[family-name:var(--font-data)] text-xs text-navy-400">
+                    <td className="whitespace-nowrap py-2.5 text-right font-data text-xs text-navy-400">
                       {area.adjustment === 1.0
                         ? "Base"
                         : `+${((area.adjustment - 1) * 100).toFixed(1)}%`}
                     </td>
-                    <td className="whitespace-nowrap py-2.5 text-right font-[family-name:var(--font-data)] text-xs text-navy-100 sm:text-sm">
+                    <td className="whitespace-nowrap py-2.5 text-right font-data text-xs text-navy-100 sm:text-sm">
                       {formatCurrency(Math.round(basePay[0] * area.adjustment))}
                     </td>
-                    <td className="whitespace-nowrap py-2.5 text-right font-[family-name:var(--font-data)] text-xs text-accent-green sm:text-sm">
+                    <td className="whitespace-nowrap py-2.5 text-right font-data text-xs text-accent-green sm:text-sm">
                       {formatCurrency(Math.round(basePay[9] * area.adjustment))}
                     </td>
                   </tr>
@@ -178,7 +179,7 @@ export default async function GSGradePage({ params }: PageProps) {
         {/* Employees at this grade */}
         {employeesAtGrade.length > 0 && (
           <div className="mt-8">
-            <h2 className="font-[family-name:var(--font-heading)] text-lg font-bold text-navy-100">
+            <h2 className="font-heading text-lg font-bold text-navy-100">
               Federal Employees at GS-{gradeNum}
             </h2>
             <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -193,7 +194,7 @@ export default async function GSGradePage({ params }: PageProps) {
 
         {/* About this grade */}
         <div className="mt-8 rounded-xl border border-navy-700 bg-navy-900 p-6">
-          <h2 className="font-[family-name:var(--font-heading)] text-sm font-bold uppercase tracking-wider text-navy-400">
+          <h2 className="font-heading text-sm font-bold uppercase tracking-wider text-navy-400">
             About GS-{gradeNum}
           </h2>
           <div className="mt-4 space-y-3 text-sm leading-relaxed text-navy-300">

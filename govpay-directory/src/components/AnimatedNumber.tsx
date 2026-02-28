@@ -35,8 +35,10 @@ export function AnimatedNumber({ value }: AnimatedNumberProps) {
         function tick(now: number) {
           const elapsed = now - start;
           const progress = Math.min(elapsed / duration, 1);
-          // Ease-out cubic
-          const eased = 1 - Math.pow(1 - progress, 3);
+          // Ease-out with subtle overshoot and settle
+          const c1 = 1.0;
+          const c3 = c1 + 1;
+          const eased = 1 + c3 * Math.pow(progress - 1, 3) + c1 * Math.pow(progress - 1, 2);
           const current = Math.round(target * eased);
 
           // Reconstruct the formatted string by replacing the numeric portion

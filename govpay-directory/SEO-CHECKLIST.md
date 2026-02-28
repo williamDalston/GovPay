@@ -89,13 +89,13 @@ If any one of those is weak, SEO becomes a slot machine.
 | Template | Route | Status | Canonical | Title | Description | JSON-LD | OG Tags |
 |----------|-------|--------|-----------|-------|-------------|---------|---------|
 | Homepage | `/` | [x] | PASS | Inherits default | Inherits default | PASS (WebSite + Org) | FAIL |
-| Agency index | `/agencies` | [~] | FAIL | PASS | PASS | PASS | FAIL |
+| Agency index | `/agencies` | [x] | PASS | PASS | PASS | PASS (ItemList) | FAIL |
 | Agency detail | `/agencies/[slug]` | [x] | PASS | PASS | PASS | PASS (GovOrg + FAQ) | FAIL (no OG image) |
 | Employee detail | `/employees/[slug]` | [x] | PASS | PASS | PASS | PASS (Person) | FAIL (no OG image) |
 | State detail | `/states/[slug]` | [x] | PASS | PASS | PASS | PASS (FAQPage) | FAIL (no OG image) |
-| GS Pay Scale | `/pay-scales/gs` | [x] | PASS (layout) | PASS (layout) | PASS (layout) | PASS (Dataset) | FAIL |
+| GS Pay Scale | `/pay-scales/gs` | [x] | PASS | PASS | PASS | PASS (Dataset) | FAIL |
 | GS Grade detail | `/pay-scales/gs/[grade]` | [x] | PASS | PASS | PASS | PASS (FAQPage) | FAIL |
-| Pay Scales index | `/pay-scales` | [x] | PASS | PASS | PASS | FAIL | FAIL |
+| Pay Scales index | `/pay-scales` | [x] | PASS | PASS | PASS | PASS (CollectionPage) | FAIL |
 | Compare Tool | `/tools/compare` | [x] | PASS (layout) | PASS (layout) | PASS (layout) | PASS (WebApp) | FAIL |
 | COL Tool | `/tools/cost-of-living` | [x] | PASS (layout) | PASS (layout) | PASS (layout) | PASS (WebApp) | FAIL |
 | Insights hub | `/insights` | [x] | PASS | PASS | PASS | PASS (Collection) | FAIL |
@@ -104,13 +104,13 @@ If any one of those is weak, SEO becomes a slot machine.
 
 ### Client component metadata (resolved)
 
-The GS Pay Scale, Compare Tool, and COL Tool are `"use client"` components. Metadata is provided via sibling `layout.tsx` files with canonical URLs, titles, descriptions, and JSON-LD.
+The GS Pay Scale page was refactored into a server component (`page.tsx`) wrapping a client island (`GSPayScaleClient.tsx`), so it now exports metadata directly. Compare Tool and COL Tool still use `layout.tsx` files for metadata.
 
 ### Canonical URL consistency
 
 - [x] All dynamic routes use absolute URLs (`https://govpay.directory/...`)
 - [x] All static pages have `alternates.canonical` set
-- [~] Agency index and state index pages still lack canonical (low priority — hub pages with unique content)
+- [x] Agency index and state index pages have canonicals
 
 ### OG tag gap
 
@@ -143,7 +143,7 @@ This is where GovPay's 2M+ employee pages live or die.
 
 - [x] All detail pages have a single H1
 - [x] H2s reflect user questions on most pages
-- [~] Client-component pages (GS, Compare, COL) have H1s in the client render but no server-rendered heading for crawlers without JS
+- [~] Compare and COL client-component pages have H1s in the client render but no server-rendered heading for crawlers without JS. GS page refactored to server+client split.
 
 ### Body content uniqueness (CRITICAL for 2M+ employee pages)
 
@@ -182,7 +182,7 @@ This is where GovPay's 2M+ employee pages live or die.
 | Breadcrumb | BreadcrumbList (on all deep pages) | [x] PASS |
 | Compare Tool | WebApplication (in layout.tsx) | [x] PASS |
 | COL Tool | WebApplication (in layout.tsx) | [x] PASS |
-| Pay Scales index | — | [ ] No JSON-LD |
+| Pay Scales index | CollectionPage, ItemList | [x] PASS |
 
 ### Quality checks
 
@@ -289,7 +289,8 @@ This section protects GovPay from thin-content and index bloat with 2M+ employee
 - [x] Homepage hero content is server-rendered (async server component)
 - [x] All detail pages (agency, employee, state) are server-rendered with ISR
 - [x] Homepage H1 — no animation (LCP-safe). Sub-heading animation retained (below fold threshold).
-- [ ] **3 tools pages are full `"use client"`** — entirely client-rendered, no SSR. LCP delayed until JS hydration. Refactor to server components with client islands.
+- [x] GS Pay Scale refactored to server component wrapping client island — metadata + SSR for crawlers
+- [ ] **Compare and COL tools are still full `"use client"`** — LCP delayed until JS hydration. Consider server+client split.
 - [x] Recharts lazy-loaded via `next/dynamic` with `ssr: false`
 
 ### CLS (Cumulative Layout Shift) — Target: ≤ 0.1
@@ -325,7 +326,7 @@ This section protects GovPay from thin-content and index bloat with 2M+ employee
 - [x] Recharts code-split into separate chunk (dynamic import)
 - [x] Lucide React tree-shaken via named imports
 - [x] `reference-data.ts` (~9.5KB source) imports are route-specific
-- [ ] **3 full-page client components bundle their entire tree** including reference data, format utils, Breadcrumb into client JS
+- [ ] **Compare and COL tools bundle their entire tree** including reference data, format utils, Breadcrumb into client JS (GS page fixed via server+client split)
 - [x] Dead `@next/font` package removed
 
 ---
@@ -337,8 +338,8 @@ This section protects GovPay from thin-content and index bloat with 2M+ employee
 - [x] Important detail pages (agency, employee, state) are server-rendered
 - [x] Metadata rendered in HTML source via `generateMetadata()` or layout.tsx exports
 - [x] Canonical tags present in HTML for all important pages
-- [ ] **3 tools pages depend entirely on client-side JS for content** — crawlers without JS see empty pages
-- [x] GS Pay Scale overview has metadata via `layout.tsx`
+- [x] GS Pay Scale refactored to server component — crawlers see full content + metadata
+- [ ] **Compare and COL tools depend on client-side JS for content** — crawlers without JS see empty pages
 - [x] Error/loading states do not leak into indexed pages (proper status codes)
 
 ### Status codes
@@ -505,19 +506,19 @@ Do this before every major deploy:
 
 | Section | Initial | Current | Notes |
 |---------|---------|---------|-------|
-| 1. Domain/URL hygiene | 7/10 | **9/10** | Case normalization, canonicals on all pages |
+| 1. Domain/URL hygiene | 7/10 | **10/10** | Case normalization, canonicals on ALL pages |
 | 2. Crawl/indexing controls | 6/10 | **9/10** | Staging blocking, AI bots, /search disallowed, FB unblocked |
 | 3. Sitemap architecture | 5/10 | **9/10** | Fixed lastmod, removed /search, quality filtering, /pay-scales added |
-| 4. Template indexability | 5/10 | **9/10** | All pages have metadata via layout.tsx, canonicals |
+| 4. Template indexability | 5/10 | **10/10** | All pages have metadata + canonical. GS refactored to server component. |
 | 5. On-page SEO (pSEO) | 4/10 | **6/10** | Quality gating for thin records, graceful fallbacks |
-| 6. Structured data | 8/10 | **9/10** | Comprehensive — Dataset added for GS page |
+| 6. Structured data | 8/10 | **10/10** | All page types now have JSON-LD |
 | 7. Internal linking | 7/10 | **9/10** | Related Guides, duty station links, COL tool, full state names |
 | 8. pSEO quality controls | 3/10 | **7/10** | noindex for thin records, sitemap filtering, fallback text |
-| 9. Performance/CWV | 7/10 | **9/10** | CSS hover, animation fix, sort fix, dead dep removed, dns-prefetch fixed |
-| 10. Technical rendering | 7/10 | **8/10** | Layout.tsx metadata covers client pages |
+| 9. Performance/CWV | 7/10 | **9/10** | CSS hover, animation fix, sort fix, dead dep removed, GS SSR |
+| 10. Technical rendering | 7/10 | **9/10** | GS refactored to server+client split, layout.tsx covers remaining |
 | 11. Images/OG/Media | 8/10 | **9/10** | Facebook crawler unblocked |
 | 12. GSC monitoring | 0/10 | 0/10 | Not set up yet (expected pre-launch) |
 | 13. Trust signals | 6/10 | **7/10** | Data freshness badge on homepage |
 | 14. Analytics | 3/10 | 3/10 | Only basic page views, no event tracking |
 
-**Overall: ~103/140 (74%)** — up from 67% (previous round) and 39% (initial audit). All P0, P1, and P2 items complete except content diversification (#11). Remaining work is GSC setup (launch day), event tracking, and content diversification (post-launch iteration).
+**Overall: ~107/140 (76%)** — up from 74% (previous round), 67% (second round), and 39% (initial audit). All P0, P1, and P2 items complete except content diversification (#11). Remaining work is GSC setup (launch day), event tracking, and content diversification (post-launch iteration).

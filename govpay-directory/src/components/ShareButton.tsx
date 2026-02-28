@@ -87,7 +87,7 @@ export function ShareButton({ title, text, url }: ShareButtonProps) {
         aria-label={copied ? "Link copied" : "Copy link"}
       >
         {copied ? (
-          <Check size={14} className="text-accent-green" />
+          <Check size={14} className="animate-scale-bounce text-accent-green" />
         ) : (
           <Link2 size={14} />
         )}

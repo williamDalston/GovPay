@@ -78,15 +78,17 @@ describe("EmployeeCard", () => {
     );
   });
 
-  it("truncates long agency names", () => {
+  it("shows full agency name with title attribute for long names", () => {
+    const longAgencyName =
+      "Department of Health and Human Services Office of the Inspector General";
     const longAgencyEmployee = {
       ...mockEmployee,
-      agency:
-        "Department of Health and Human Services Office of the Inspector General",
+      agency: longAgencyName,
     };
     render(<EmployeeCard employee={longAgencyEmployee} />);
-    expect(
-      screen.getByText("Department of Health and Human...")
-    ).toBeInTheDocument();
+    // Full text is in DOM (CSS handles visual truncation)
+    expect(screen.getByText(longAgencyName)).toBeInTheDocument();
+    // Title attribute provides full text on hover
+    expect(screen.getByTitle(longAgencyName)).toBeInTheDocument();
   });
 });

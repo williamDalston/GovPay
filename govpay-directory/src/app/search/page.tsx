@@ -113,7 +113,7 @@ function SearchResults() {
       {/* Agency Results */}
       {agencies.length > 0 && (
         <div className="mb-8">
-          <h2 className="flex items-center gap-2 font-[family-name:var(--font-heading)] text-lg font-bold text-navy-100">
+          <h2 className="flex items-center gap-2 font-heading text-lg font-bold text-navy-100">
             <Building2 size={18} className="text-accent-blue" />
             Agencies
             <span className="text-sm font-normal text-navy-500">
@@ -128,7 +128,7 @@ function SearchResults() {
                 className="flex items-center gap-3 rounded-xl border border-navy-700 bg-navy-900 p-4 transition-all hover:-translate-y-0.5 hover:border-accent-blue/50 hover:bg-navy-800 hover:shadow-lg hover:shadow-accent-blue/5"
               >
                 {agency.abbreviation && (
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-navy-800 font-[family-name:var(--font-data)] text-xs font-bold text-accent-blue">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-navy-800 font-data text-xs font-bold text-accent-blue">
                     {agency.abbreviation}
                   </span>
                 )}
@@ -149,7 +149,7 @@ function SearchResults() {
 
       {/* Employee Results */}
       <div>
-        <h2 className="flex items-center gap-2 font-[family-name:var(--font-heading)] text-lg font-bold text-navy-100">
+        <h2 className="flex items-center gap-2 font-heading text-lg font-bold text-navy-100">
           <Briefcase size={18} className="text-accent-green" />
           Employees
           <span className="text-sm font-normal text-navy-500">
@@ -171,23 +171,23 @@ function SearchResults() {
             </div>
             {/* Pagination */}
             {total > 20 && (
-              <nav aria-label="Search results pagination" className="mt-6 flex items-center justify-center gap-4">
+              <nav aria-label="Search results pagination" className="mt-6 flex items-center justify-center gap-2 sm:gap-4">
                 <button
                   onClick={() => doSearch(page - 1)}
                   disabled={page <= 1 || loading}
                   aria-label="Go to previous page"
-                  className="rounded-lg border border-navy-700 bg-navy-900 px-4 py-2 text-sm text-navy-400 transition-colors active:scale-[0.98] hover:bg-navy-800 disabled:cursor-not-allowed disabled:opacity-30"
+                  className="rounded-lg border border-navy-700 bg-navy-900 px-3 py-2.5 text-sm text-navy-400 transition-colors active:scale-[0.98] hover:bg-navy-800 disabled:cursor-not-allowed disabled:opacity-30 sm:px-4"
                 >
-                  Previous
+                  Prev
                 </button>
-                <span className="text-sm text-navy-500" aria-live="polite">
-                  Page {page} of {Math.ceil(total / 20)}
+                <span className="text-xs text-navy-500 sm:text-sm" aria-live="polite">
+                  {page} / {Math.ceil(total / 20)}
                 </span>
                 <button
                   onClick={() => doSearch(page + 1)}
                   disabled={page >= Math.ceil(total / 20) || loading}
                   aria-label="Go to next page"
-                  className="rounded-lg border border-navy-700 bg-navy-900 px-4 py-2 text-sm text-navy-400 transition-colors active:scale-[0.98] hover:bg-navy-800 disabled:cursor-not-allowed disabled:opacity-30"
+                  className="rounded-lg border border-navy-700 bg-navy-900 px-3 py-2.5 text-sm text-navy-400 transition-colors active:scale-[0.98] hover:bg-navy-800 disabled:cursor-not-allowed disabled:opacity-30 sm:px-4"
                 >
                   Next
                 </button>
@@ -230,7 +230,7 @@ export default function SearchPage() {
         items={[{ label: "Home", href: "/" }, { label: "Search" }]}
       />
 
-      <h1 className="font-[family-name:var(--font-heading)] text-2xl font-bold text-navy-100 sm:text-3xl">
+      <h1 className="font-heading text-2xl font-bold text-navy-100 sm:text-3xl">
         Search
       </h1>
 

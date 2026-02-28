@@ -5,10 +5,10 @@ import { Home, Building2, MapPin, Calculator } from "lucide-react";
 export default function NotFound() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6 sm:py-24 lg:px-8">
-      <p className="font-[family-name:var(--font-data)] text-5xl font-bold text-accent-blue sm:text-6xl">
+      <p className="font-data text-5xl font-bold text-accent-blue sm:text-6xl">
         404
       </p>
-      <h1 className="mt-4 font-[family-name:var(--font-heading)] text-2xl font-bold text-navy-100 sm:text-3xl">
+      <h1 className="mt-4 font-heading text-2xl font-bold text-navy-100 sm:text-3xl">
         Page Not Found
       </h1>
       <p className="mt-3 text-sm text-navy-400 sm:text-base">

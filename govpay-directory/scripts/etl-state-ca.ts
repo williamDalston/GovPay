@@ -1,12 +1,26 @@
 /**
  * GovPay.Directory — California State Employee Salary ETL
  *
- * Downloads and processes California state employee compensation data
- * from the State Controller's public pay data.
+ * Processes California state employee compensation data from the
+ * State Controller's Government Compensation in California (GCC) portal.
  *
- * Data source: https://publicpay.ca.gov/ (California State Controller)
- * Alternate: https://data.ca.gov/ (California Open Data Portal)
- * Socrata API: https://data.ca.gov/dataset/calhr-civil-service-demographics
+ * Data source: https://publicpay.ca.gov/reports/rawexport.aspx
+ * Download: "2024 State Department Data" CSV
+ *
+ * IMPORTANT: California does NOT publish employee names. Records are
+ * loaded as anonymous entries with generated identifiers. The salary,
+ * position, and department data is real.
+ *
+ * CSV Columns:
+ *   Year, EmployerType, EmployerName, DepartmentOrSubdivision, Position,
+ *   ElectedOfficial, Judicial, OtherPositions, MinPositionSalary,
+ *   MaxPositionSalary, ReportedBaseWage, RegularPay, OvertimePay,
+ *   LumpSumPay, OtherPay, TotalWages, DefinedBenefitPlanContribution,
+ *   EmployeesRetirementCostCovered, DeferredCompensationPlan,
+ *   HealthDentalVision, TotalRetirementAndHealthContribution,
+ *   PensionFormula, EmployerURL, EmployerPopulation, LastUpdatedDate,
+ *   EmployerCounty, SpecialDistrictActivities, IncludesUnfundedLiability,
+ *   SpecialDistrictType
  *
  * Usage: npx tsx scripts/etl-state-ca.ts
  * Requires: NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in .env.local
@@ -15,8 +29,10 @@
 import { createClient } from "@supabase/supabase-js";
 import { config } from "dotenv";
 import { resolve } from "path";
-import { writeFile, readFile, mkdir } from "fs/promises";
+import { parse } from "csv-parse/sync";
+import { readFile } from "fs/promises";
 import { existsSync } from "fs";
+import { slugify } from "../src/lib/slugify";
 
 config({ path: resolve(process.cwd(), ".env.local") });
 
@@ -26,54 +42,30 @@ const supabase = createClient(
 );
 
 const DATA_DIR = resolve(process.cwd(), "data");
-const CA_DATA_FILE = resolve(DATA_DIR, "ca_employees.csv");
 
-// California State Controller — Transparent California dataset
-// This is a publicly available dataset. Adjust URL to current source.
-const CA_DATA_URL =
-  "https://data.ca.gov/api/3/action/datastore_search?resource_id=57da6c9a-41a7-44b0-ab91-571c6c3d4f75&limit=50000&sort=total_wages DESC";
+// Look for the file under common naming patterns
+const CA_FILE_CANDIDATES = [
+  resolve(DATA_DIR, "2024_StateDepartment.csv"),
+  resolve(DATA_DIR, "ca_employees.csv"),
+  resolve(DATA_DIR, "StateDepartment_2024.csv"),
+];
 
-function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
+interface CARecord {
+  EmployerName?: string;
+  DepartmentOrSubdivision?: string;
+  Position?: string;
+  RegularPay?: string;
+  TotalWages?: string;
+  OvertimePay?: string;
+  Year?: string;
+  [key: string]: string | undefined;
 }
 
-async function downloadCaliforniaData(): Promise<Record<string, string>[]> {
-  await mkdir(DATA_DIR, { recursive: true });
-
-  if (existsSync(CA_DATA_FILE)) {
-    console.log("  Using cached CA data file");
-    const raw = await readFile(CA_DATA_FILE, "utf-8");
-    return JSON.parse(raw);
+function findDataFile(): string | null {
+  for (const path of CA_FILE_CANDIDATES) {
+    if (existsSync(path)) return path;
   }
-
-  console.log("  Downloading from California Open Data...");
-
-  // Try CKAN API first
-  try {
-    const response = await fetch(CA_DATA_URL);
-    if (response.ok) {
-      const json = await response.json();
-      const records = json.result?.records ?? [];
-      await writeFile(CA_DATA_FILE, JSON.stringify(records));
-      console.log(`  Downloaded ${records.length} records`);
-      return records;
-    }
-  } catch {
-    console.log("  CKAN API unavailable, trying CSV fallback...");
-  }
-
-  // Fallback: generate instructions
-  console.log("  Could not auto-download CA data.");
-  console.log("  Manual download instructions:");
-  console.log("  1. Visit https://publicpay.ca.gov/");
-  console.log("  2. Select 'State' as the entity type");
-  console.log("  3. Export the results as CSV");
-  console.log(`  4. Save as ${CA_DATA_FILE}`);
-  console.log("  5. Re-run this script");
-  return [];
+  return null;
 }
 
 async function ensureAgency(
@@ -105,7 +97,7 @@ async function ensureAgency(
   return inserted!.id;
 }
 
-async function processRecords(records: Record<string, string>[]) {
+async function processRecords(records: CARecord[]) {
   if (records.length === 0) {
     console.log("  No records to process");
     return { inserted: 0, skipped: 0 };
@@ -144,40 +136,42 @@ async function processRecords(records: Record<string, string>[]) {
     const batch = records.slice(i, i + batchSize);
     const rows = [];
 
-    for (const rec of batch) {
-      // Field names vary by dataset — common patterns:
-      const firstName = (rec.first_name ?? rec.FirstName ?? rec["First Name"] ?? "").trim();
-      const lastName = (rec.last_name ?? rec.LastName ?? rec["Last Name"] ?? "").trim();
-      const agency = (rec.department ?? rec.Department ?? rec.agency_name ?? rec["Department"] ?? "").trim();
-      const jobTitle = (rec.position ?? rec.Position ?? rec.classification ?? rec["Classification"] ?? "").trim();
-      const salary = parseFloat(
-        rec.total_wages ?? rec.TotalWages ?? rec.total_pay ?? rec["Total Wages"] ?? "0"
-      );
-      const basePay = parseFloat(
-        rec.regular_pay ?? rec.RegularPay ?? rec["Regular Pay"] ?? String(salary)
-      );
+    for (let j = 0; j < batch.length; j++) {
+      const rec = batch[j];
+      const department = (rec.EmployerName ?? "").trim();
+      const position = (rec.Position ?? "").trim();
+      const totalWages = parseFloat(rec.TotalWages ?? "0");
+      const regularPay = parseFloat(rec.RegularPay ?? "0");
+      const basePay = regularPay > 0 ? regularPay : totalWages;
 
-      if (!firstName || !lastName || !agency || salary <= 0) {
+      if (!department || totalWages <= 0) {
         skipped++;
         continue;
       }
 
-      const agencyId = await ensureAgency(agency, agencyCache);
-      const externalId = `ca-${slugify(firstName)}-${slugify(lastName)}-${i}`;
+      const agencyId = await ensureAgency(department, agencyCache);
+      const globalIndex = i + j;
+
+      // California data is anonymous — generate identifiers
+      const employeeNum = String(globalIndex + 1).padStart(6, "0");
+      const firstName = "CA";
+      const lastName = `Employee #${employeeNum}`;
+      const fullName = position
+        ? `CA Employee #${employeeNum} — ${position}`
+        : `CA Employee #${employeeNum}`;
 
       rows.push({
-        external_id: externalId,
-        slug: `${slugify(firstName)}-${slugify(lastName)}-${externalId}`,
+        slug: `ca-employee-${employeeNum}`,
         first_name: firstName,
         last_name: lastName,
-        job_title: jobTitle || null,
+        full_name: fullName,
+        job_title: position || null,
         agency_id: agencyId,
         state_id: caState.id,
         pay_plan: "STATE",
         base_salary: basePay,
-        total_compensation: salary,
-        fiscal_year: 2025,
-        data_source: "STATE_CA",
+        total_compensation: totalWages,
+        fiscal_year: parseInt(rec.Year ?? "2024", 10),
         duty_station: "California",
       });
     }
@@ -193,7 +187,7 @@ async function processRecords(records: Record<string, string>[]) {
       }
     }
 
-    if ((i + batchSize) % 5000 === 0 || i + batchSize >= records.length) {
+    if ((i + batchSize) % 10000 === 0 || i + batchSize >= records.length) {
       console.log(
         `  Progress: ${Math.min(i + batchSize, records.length)}/${records.length} (${inserted} inserted, ${skipped} skipped)`
       );
@@ -215,21 +209,52 @@ async function processRecords(records: Record<string, string>[]) {
   return { inserted, skipped };
 }
 
+async function refreshViews() {
+  console.log("  Refreshing state stats...");
+  const { error } = await supabase.rpc("refresh_state_stats");
+  if (error) {
+    console.log("  (state_stats refresh skipped:", error.message, ")");
+  }
+}
+
 async function main() {
   console.log("GovPay.Directory — California Employee Salary ETL\n");
 
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+  if (
+    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    !process.env.SUPABASE_SERVICE_ROLE_KEY
+  ) {
     console.error("Missing Supabase credentials in .env.local");
     process.exit(1);
   }
 
   const startTime = Date.now();
 
-  console.log("Step 1: Download data");
-  const records = await downloadCaliforniaData();
+  console.log("Step 1: Locate data file");
+  const dataFile = findDataFile();
+  if (!dataFile) {
+    console.error("  No CA data file found in data/ directory.");
+    console.error("  Download '2024 State Department Data' from:");
+    console.error("    https://publicpay.ca.gov/reports/rawexport.aspx");
+    console.error("  Save as: data/2024_StateDepartment.csv");
+    process.exit(1);
+  }
+  console.log(`  Using: ${dataFile}`);
 
-  console.log("\nStep 2: Process and load records");
+  console.log("\nStep 2: Parse CSV");
+  const csvData = await readFile(dataFile, "utf-8");
+  const records: CARecord[] = parse(csvData, {
+    columns: true,
+    skip_empty_lines: true,
+    relax_column_count: true,
+  });
+  console.log(`  Parsed ${records.length} records`);
+
+  console.log("\nStep 3: Process and load records");
   const { inserted, skipped } = await processRecords(records);
+
+  console.log("\nStep 4: Refresh views");
+  await refreshViews();
 
   const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
   console.log(`\nDone in ${elapsed}s`);

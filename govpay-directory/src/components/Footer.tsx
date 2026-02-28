@@ -24,7 +24,7 @@ const footerLinks = {
     { label: "Search Employees", href: "/search" },
   ],
   Guides: [
-    { label: "GS Pay Scale Guide", href: "/insights/gs-pay-scale-guide-2025" },
+    { label: "GS Pay Scale Guide", href: "/insights/gs-pay-scale-guide-2026" },
     { label: "Locality Pay Explained", href: "/insights/federal-locality-pay-explained" },
     { label: "Step Increases", href: "/insights/federal-employee-step-increases" },
     { label: "Fed vs. Private Pay", href: "/insights/federal-vs-private-sector-pay" },
@@ -46,15 +46,15 @@ export function Footer() {
         <nav aria-label="Footer navigation" className="grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-5">
           {Object.entries(footerLinks).map(([category, links]) => (
             <div key={category}>
-              <h3 className="font-[family-name:var(--font-heading)] text-sm font-bold text-navy-100">
+              <h3 className="font-heading text-sm font-bold text-navy-100">
                 {category}
               </h3>
-              <ul className="mt-3 space-y-3 sm:space-y-2">
+              <ul className="mt-3 space-y-0">
                 {links.map((link) => (
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="inline-block py-0.5 text-sm text-navy-400 transition-colors hover:text-accent-blue"
+                      className="inline-block py-2 text-sm text-navy-400 transition-all duration-200 hover:translate-x-1 hover:text-accent-blue sm:py-1"
                     >
                       {link.label}
                     </Link>
@@ -67,11 +67,11 @@ export function Footer() {
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-navy-700 pt-8 md:flex-row">
           <div className="flex items-center gap-2">
             <div className="flex h-6 w-6 items-center justify-center rounded bg-accent-blue">
-              <span className="font-[family-name:var(--font-heading)] text-xs font-bold text-white">
+              <span className="font-heading text-xs font-bold text-white">
                 GP
               </span>
             </div>
-            <span className="font-[family-name:var(--font-heading)] text-sm font-bold text-navy-100">
+            <span className="font-heading text-sm font-bold text-navy-100">
               GovPay<span className="text-accent-blue">.Directory</span>
             </span>
           </div>

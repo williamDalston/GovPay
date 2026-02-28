@@ -20,18 +20,51 @@ export default async function AboutPage() {
     ? formatNumber(stats.totalEmployees)
     : "2 million+";
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "AboutPage",
-    name: "About GovPay.Directory",
-    description:
-      "GovPay.Directory aggregates publicly available government employee compensation data from official sources.",
-    mainEntity: {
-      "@type": "Organization",
-      name: "GovPay.Directory",
-      url: "https://govpay.directory",
+  const faqs = [
+    {
+      q: "Is this data accurate?",
+      a: "All data comes directly from official government sources. We do not modify salary figures. However, data may be from a specific reporting period and may not reflect current salaries.",
     },
-  };
+    {
+      q: "How often is the data updated?",
+      a: "We refresh our data quarterly when new government datasets are published. The GS pay scale is updated annually when OPM releases new tables.",
+    },
+    {
+      q: "Why are some employees not listed?",
+      a: "Some positions are exempt from public disclosure for national security or personal safety reasons. Additionally, we only include data from sources that make individual records publicly available.",
+    },
+    {
+      q: "Can I request removal of my data?",
+      a: "This data is publicly available under FOIA and state open records laws. We display the same information available from official government sources. If you have concerns, email us at info@alstonanalytics.com.",
+    },
+  ];
+
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "AboutPage",
+      name: "About GovPay.Directory",
+      description:
+        "GovPay.Directory aggregates publicly available government employee compensation data from official sources.",
+      mainEntity: {
+        "@type": "Organization",
+        name: "GovPay.Directory",
+        url: "https://govpay.directory",
+      },
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faqs.map((faq) => ({
+        "@type": "Question",
+        name: faq.q,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: faq.a,
+        },
+      })),
+    },
+  ];
 
   return (
     <>
@@ -44,7 +77,7 @@ export default async function AboutPage() {
           items={[{ label: "Home", href: "/" }, { label: "About" }]}
         />
 
-        <h1 className="font-[family-name:var(--font-heading)] text-2xl font-bold text-navy-100 sm:text-3xl">
+        <h1 className="font-heading text-2xl font-bold text-navy-100 sm:text-3xl">
           About GovPay.Directory
         </h1>
         <p className="mt-3 text-lg text-navy-400">
@@ -54,7 +87,7 @@ export default async function AboutPage() {
 
         {/* Mission */}
         <section className="mt-10">
-          <h2 className="font-[family-name:var(--font-heading)] text-lg font-bold text-navy-100">
+          <h2 className="font-heading text-lg font-bold text-navy-100">
             Our Mission
           </h2>
           <div className="mt-4 space-y-4 text-sm leading-relaxed text-navy-300">
@@ -76,7 +109,7 @@ export default async function AboutPage() {
 
         {/* Data Sources */}
         <section id="data-sources" className="mt-10">
-          <h2 className="font-[family-name:var(--font-heading)] text-lg font-bold text-navy-100">
+          <h2 className="font-heading text-lg font-bold text-navy-100">
             Data Sources
           </h2>
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
@@ -112,7 +145,7 @@ export default async function AboutPage() {
               >
                 <div className="flex items-center gap-2">
                   <source.icon size={18} className="text-accent-blue" />
-                  <h3 className="font-[family-name:var(--font-heading)] text-sm font-bold text-navy-100">
+                  <h3 className="font-heading text-sm font-bold text-navy-100">
                     {source.title}
                   </h3>
                 </div>
@@ -134,7 +167,7 @@ export default async function AboutPage() {
 
         {/* Methodology */}
         <section className="mt-10">
-          <h2 className="font-[family-name:var(--font-heading)] text-lg font-bold text-navy-100">
+          <h2 className="font-heading text-lg font-bold text-navy-100">
             Methodology
           </h2>
           <div className="mt-4 space-y-4 text-sm leading-relaxed text-navy-300">
@@ -160,33 +193,16 @@ export default async function AboutPage() {
 
         {/* FAQ */}
         <section className="mt-10">
-          <h2 className="font-[family-name:var(--font-heading)] text-lg font-bold text-navy-100">
+          <h2 className="font-heading text-lg font-bold text-navy-100">
             Frequently Asked Questions
           </h2>
           <div className="mt-4 space-y-4">
-            {[
-              {
-                q: "Is this data accurate?",
-                a: "All data comes directly from official government sources. We do not modify salary figures. However, data may be from a specific reporting period and may not reflect current salaries.",
-              },
-              {
-                q: "How often is the data updated?",
-                a: "We refresh our data quarterly when new government datasets are published. The GS pay scale is updated annually when OPM releases new tables.",
-              },
-              {
-                q: "Why are some employees not listed?",
-                a: "Some positions are exempt from public disclosure for national security or personal safety reasons. Additionally, we only include data from sources that make individual records publicly available.",
-              },
-              {
-                q: "Can I request removal of my data?",
-                a: "This data is publicly available under FOIA and state open records laws. We display the same information available from official government sources. If you have concerns, email us at info@alstonanalytics.com.",
-              },
-            ].map((faq) => (
+            {faqs.map((faq) => (
               <div
                 key={faq.q}
                 className="rounded-xl border border-navy-700 bg-navy-900 p-5"
               >
-                <h3 className="font-[family-name:var(--font-heading)] text-sm font-bold text-navy-100">
+                <h3 className="font-heading text-sm font-bold text-navy-100">
                   {faq.q}
                 </h3>
                 <p className="mt-2 text-xs leading-relaxed text-navy-400">
@@ -199,7 +215,7 @@ export default async function AboutPage() {
 
         {/* CTA */}
         <section className="mt-10 rounded-xl border border-navy-700 bg-navy-900 p-6 text-center sm:p-8">
-          <h2 className="font-[family-name:var(--font-heading)] text-lg font-bold text-navy-100">
+          <h2 className="font-heading text-lg font-bold text-navy-100">
             Start Exploring
           </h2>
           <p className="mt-2 text-sm text-navy-400">

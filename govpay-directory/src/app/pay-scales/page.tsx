@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { Breadcrumb } from "@/components/Breadcrumb";
-import { GS_BASE_PAY_2025 } from "@/lib/reference-data";
+import { GS_BASE_PAY_2026 } from "@/lib/reference-data";
 import { formatCurrency } from "@/lib/format";
 import { ArrowRight, Calculator } from "lucide-react";
 
@@ -13,13 +13,39 @@ export const metadata: Metadata = {
 };
 
 export default function PayScalesIndex() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Federal Pay Scales",
+    description:
+      "Browse federal pay scales including the General Schedule (GS) system. Compare grades, steps, and locality adjustments for government employees.",
+    url: "https://govpay.directory/pay-scales",
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: 1,
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "General Schedule (GS) Pay Scale 2026",
+          url: "https://govpay.directory/pay-scales/gs",
+        },
+      ],
+    },
+  };
+
   return (
+    <>
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+    />
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <Breadcrumb
         items={[{ label: "Home", href: "/" }, { label: "Pay Scales" }]}
       />
 
-      <h1 className="font-[family-name:var(--font-heading)] text-2xl font-bold text-navy-100 sm:text-3xl">
+      <h1 className="font-heading text-2xl font-bold text-navy-100 sm:text-3xl">
         Federal Pay Scales
       </h1>
       <p className="mt-2 text-navy-400">
@@ -35,7 +61,7 @@ export default function PayScalesIndex() {
         >
           <div className="flex items-center gap-3">
             <Calculator size={20} className="text-accent-blue" />
-            <h2 className="font-[family-name:var(--font-heading)] text-lg font-bold text-navy-100 group-hover:text-accent-blue">
+            <h2 className="font-heading text-lg font-bold text-navy-100 group-hover:text-accent-blue">
               General Schedule (GS)
             </h2>
           </div>
@@ -45,20 +71,20 @@ export default function PayScalesIndex() {
           </p>
           <div className="mt-4 grid grid-cols-3 gap-2 text-center">
             <div className="rounded-lg bg-navy-800 p-2">
-              <p className="font-[family-name:var(--font-data)] text-xs font-bold text-accent-green">
-                {formatCurrency(GS_BASE_PAY_2025[1][0])}
+              <p className="font-data text-xs font-bold text-accent-green">
+                {formatCurrency(GS_BASE_PAY_2026[1][0])}
               </p>
               <p className="text-[10px] text-navy-500">GS-1 Min</p>
             </div>
             <div className="rounded-lg bg-navy-800 p-2">
-              <p className="font-[family-name:var(--font-data)] text-xs font-bold text-accent-green">
-                {formatCurrency(GS_BASE_PAY_2025[12][4])}
+              <p className="font-data text-xs font-bold text-accent-green">
+                {formatCurrency(GS_BASE_PAY_2026[12][4])}
               </p>
               <p className="text-[10px] text-navy-500">GS-12 Mid</p>
             </div>
             <div className="rounded-lg bg-navy-800 p-2">
-              <p className="font-[family-name:var(--font-data)] text-xs font-bold text-accent-green">
-                {formatCurrency(GS_BASE_PAY_2025[15][9])}
+              <p className="font-data text-xs font-bold text-accent-green">
+                {formatCurrency(GS_BASE_PAY_2026[15][9])}
               </p>
               <p className="text-[10px] text-navy-500">GS-15 Max</p>
             </div>
@@ -72,7 +98,7 @@ export default function PayScalesIndex() {
         <div className="rounded-xl border border-navy-700/50 bg-navy-900/50 p-6">
           <div className="flex items-center gap-3">
             <Calculator size={20} className="text-navy-600" />
-            <h2 className="font-[family-name:var(--font-heading)] text-lg font-bold text-navy-500">
+            <h2 className="font-heading text-lg font-bold text-navy-500">
               Senior Executive Service (SES)
             </h2>
           </div>
@@ -89,7 +115,7 @@ export default function PayScalesIndex() {
         <div className="rounded-xl border border-navy-700/50 bg-navy-900/50 p-6">
           <div className="flex items-center gap-3">
             <Calculator size={20} className="text-navy-600" />
-            <h2 className="font-[family-name:var(--font-heading)] text-lg font-bold text-navy-500">
+            <h2 className="font-heading text-lg font-bold text-navy-500">
               Law Enforcement Officer (LEO)
             </h2>
           </div>
@@ -105,14 +131,14 @@ export default function PayScalesIndex() {
 
       {/* Related Guides */}
       <div className="mt-12">
-        <h2 className="font-[family-name:var(--font-heading)] text-lg font-bold text-navy-100">
+        <h2 className="font-heading text-lg font-bold text-navy-100">
           Related Guides
         </h2>
         <div className="mt-4 grid gap-4 sm:grid-cols-3">
           {[
             {
               title: "Complete GS Pay Scale Guide",
-              href: "/insights/gs-pay-scale-guide-2025",
+              href: "/insights/gs-pay-scale-guide-2026",
               desc: "Grades, steps, and how to calculate your salary.",
             },
             {
@@ -131,7 +157,7 @@ export default function PayScalesIndex() {
               href={guide.href}
               className="group rounded-xl border border-navy-700 bg-navy-900 p-5 transition-all hover:-translate-y-0.5 hover:border-accent-blue/50 hover:bg-navy-800"
             >
-              <p className="font-[family-name:var(--font-heading)] text-sm font-bold text-navy-100 group-hover:text-accent-blue">
+              <p className="font-heading text-sm font-bold text-navy-100 group-hover:text-accent-blue">
                 {guide.title}
               </p>
               <p className="mt-1 text-xs text-navy-400">{guide.desc}</p>
@@ -143,5 +169,6 @@ export default function PayScalesIndex() {
         </div>
       </div>
     </div>
+    </>
   );
 }

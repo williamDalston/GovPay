@@ -1,26 +1,26 @@
 import { describe, it, expect } from "vitest";
 import {
-  GS_BASE_PAY_2025,
+  GS_BASE_PAY_2026,
   GS_GRADES,
   GS_STEPS,
   LOCALITY_AREAS,
   US_STATES,
 } from "@/lib/reference-data";
 
-describe("GS_BASE_PAY_2025", () => {
+describe("GS_BASE_PAY_2026", () => {
   it("has all 15 grades", () => {
-    expect(Object.keys(GS_BASE_PAY_2025)).toHaveLength(15);
+    expect(Object.keys(GS_BASE_PAY_2026)).toHaveLength(15);
   });
 
   it("each grade has 10 steps", () => {
     for (const grade of GS_GRADES) {
-      expect(GS_BASE_PAY_2025[grade]).toHaveLength(10);
+      expect(GS_BASE_PAY_2026[grade]).toHaveLength(10);
     }
   });
 
   it("steps are monotonically increasing within each grade", () => {
     for (const grade of GS_GRADES) {
-      const steps = GS_BASE_PAY_2025[grade];
+      const steps = GS_BASE_PAY_2026[grade];
       for (let i = 1; i < steps.length; i++) {
         expect(steps[i]).toBeGreaterThanOrEqual(steps[i - 1]);
       }
@@ -29,8 +29,8 @@ describe("GS_BASE_PAY_2025", () => {
 
   it("higher grades have higher step 1 pay", () => {
     for (let g = 2; g <= 15; g++) {
-      expect(GS_BASE_PAY_2025[g][0]).toBeGreaterThan(
-        GS_BASE_PAY_2025[g - 1][0]
+      expect(GS_BASE_PAY_2026[g][0]).toBeGreaterThan(
+        GS_BASE_PAY_2026[g - 1][0]
       );
     }
   });

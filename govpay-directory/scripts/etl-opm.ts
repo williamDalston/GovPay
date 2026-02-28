@@ -29,6 +29,7 @@ import { config } from "dotenv";
 import { resolve } from "path";
 import { writeFile, readFile, mkdir } from "fs/promises";
 import { existsSync } from "fs";
+import { slugify } from "../src/lib/slugify";
 
 config({ path: resolve(process.cwd(), ".env.local") });
 
@@ -38,13 +39,6 @@ const supabase = createClient(
 );
 
 const DATA_DIR = resolve(process.cwd(), "data");
-
-function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
-}
 
 // OPM agency code → full name mapping
 const FEDERAL_AGENCIES: Record<string, { name: string; abbreviation: string }> = {
@@ -216,10 +210,10 @@ async function loadAgencyStats(agencyMap: Map<string, number>) {
     .select("id")
     .single();
 
-  const updated = 0;
+  let updated = 0;
 
   for (const agency of stats) {
-    const agencyId = agencyMap.get(agency.code);
+    let agencyId: number | undefined = agencyMap.get(agency.code);
     if (!agencyId) {
       // Agency not in our map — seed it
       const slug = slugify(agency.name);
@@ -231,12 +225,25 @@ async function loadAgencyStats(agencyMap: Map<string, number>) {
         )
         .select("id")
         .single();
-      if (!ins) continue;
+      if (!ins?.id) continue;
+      agencyId = ins.id;
       agencyMap.set(agency.code, ins.id);
     }
+
+    // Update the agency's denormalized stats from FedScope data
+    const { error } = await supabase
+      .from("agencies")
+      .update({
+        employee_count: agency.employeeCount,
+        avg_salary: agency.avgSalary,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", agencyId as number);
+
+    if (!error) updated++;
   }
 
-  console.log(`  Updated stats for ${stats.length} federal agencies`);
+  console.log(`  Updated stats for ${updated}/${stats.length} federal agencies`);
 
   // Update ETL run
   if (etlRun) {

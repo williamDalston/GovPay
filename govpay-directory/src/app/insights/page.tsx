@@ -114,7 +114,7 @@ export default function InsightsPage() {
         items={[{ label: "Home", href: "/" }, { label: "Insights" }]}
       />
 
-      <h1 className="font-[family-name:var(--font-heading)] text-2xl font-bold text-navy-100 sm:text-3xl">
+      <h1 className="font-heading text-2xl font-bold text-navy-100 sm:text-3xl">
         Insights & Analysis
       </h1>
       <p className="mt-2 text-navy-400">
@@ -124,7 +124,7 @@ export default function InsightsPage() {
 
       {/* Articles */}
       <div className="mt-8">
-        <h2 className="font-[family-name:var(--font-heading)] text-lg font-bold text-navy-100">
+        <h2 className="font-heading text-lg font-bold text-navy-100">
           <BookOpen size={18} className="mr-2 inline text-accent-blue" />
           Articles & Guides
         </h2>
@@ -138,7 +138,7 @@ export default function InsightsPage() {
                 <span className="text-[10px] font-bold uppercase tracking-wider text-accent-blue">
                   {article.category}
                 </span>
-                <h3 className="mt-2 font-[family-name:var(--font-heading)] text-base font-bold leading-tight text-navy-100 group-hover:text-accent-blue">
+                <h3 className="mt-2 font-heading text-base font-bold leading-tight text-navy-100 group-hover:text-accent-blue">
                   {article.title}
                 </h3>
                 <p className="mt-2 flex-1 text-xs leading-relaxed text-navy-400">
@@ -164,27 +164,27 @@ export default function InsightsPage() {
 
       {/* Data Tools */}
       <div className="mt-10">
-        <h2 className="font-[family-name:var(--font-heading)] text-lg font-bold text-navy-100">
+        <h2 className="font-heading text-lg font-bold text-navy-100">
           Interactive Tools
         </h2>
         <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {insights.map((insight, index) => (
             <AnimateOnScroll key={insight.title} delay={index * 60}>
-            <Link
-              href={insight.href}
-              className="group rounded-xl border border-navy-700 bg-navy-900 p-6 transition-all hover:-translate-y-0.5 hover:border-accent-blue/50 hover:bg-navy-800 hover:shadow-lg hover:shadow-accent-blue/5"
-            >
-              <insight.icon
-                size={24}
-                className={`${insight.color} transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:scale-110`}
-              />
-              <h3 className="mt-4 font-[family-name:var(--font-heading)] text-base font-bold text-navy-100 group-hover:text-accent-blue">
-                {insight.title}
-              </h3>
-              <p className="mt-2 text-xs leading-relaxed text-navy-400">
-                {insight.description}
-              </p>
-            </Link>
+              <Link
+                href={insight.href}
+                className="group rounded-xl border border-navy-700 bg-navy-900 p-6 transition-all hover:-translate-y-0.5 hover:border-accent-blue/50 hover:bg-navy-800 hover:shadow-lg hover:shadow-accent-blue/5"
+              >
+                <insight.icon
+                  size={24}
+                  className={`${insight.color} transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:scale-110`}
+                />
+                <h3 className="mt-4 font-heading text-base font-bold text-navy-100 group-hover:text-accent-blue">
+                  {insight.title}
+                </h3>
+                <p className="mt-2 text-xs leading-relaxed text-navy-400">
+                  {insight.description}
+                </p>
+              </Link>
             </AnimateOnScroll>
           ))}
         </div>

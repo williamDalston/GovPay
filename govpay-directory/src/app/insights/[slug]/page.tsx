@@ -61,7 +61,12 @@ export default async function ArticlePage({ params }: PageProps) {
       "@type": "Organization",
       name: "GovPay.Directory",
       url: "https://govpay.directory",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://govpay.directory/opengraph-image",
+      },
     },
+    image: `https://govpay.directory/insights/${slug}/opengraph-image`,
     mainEntityOfPage: `https://govpay.directory/insights/${slug}`,
   };
 
@@ -87,7 +92,7 @@ export default async function ArticlePage({ params }: PageProps) {
               <span className="inline-block rounded-full bg-accent-blue/20 px-3 py-1 text-xs font-bold text-accent-blue">
                 {article.category}
               </span>
-              <h1 className="mt-3 font-[family-name:var(--font-heading)] text-2xl font-bold leading-tight text-navy-100 sm:text-3xl">
+              <h1 className="mt-3 font-heading text-2xl font-bold leading-tight text-navy-100 sm:text-3xl">
                 {article.title}
               </h1>
               <p className="mt-3 text-base leading-relaxed text-navy-400">
@@ -125,7 +130,7 @@ export default async function ArticlePage({ params }: PageProps) {
             <div className="mt-8 space-y-8">
               {article.sections.map((section, index) => (
                 <section key={section.heading}>
-                  <h2 className="font-[family-name:var(--font-heading)] text-lg font-bold text-navy-100">
+                  <h2 className="font-heading text-lg font-bold text-navy-100">
                     {section.heading}
                   </h2>
                   <div className="mt-3 space-y-3 text-sm leading-relaxed text-navy-300 sm:text-base">
@@ -141,7 +146,7 @@ export default async function ArticlePage({ params }: PageProps) {
 
             {/* Related Data Links */}
             <div className="mt-10 rounded-xl border border-navy-700 bg-navy-900 p-6">
-              <h3 className="font-[family-name:var(--font-heading)] text-sm font-bold uppercase tracking-wider text-navy-400">
+              <h3 className="font-heading text-sm font-bold uppercase tracking-wider text-navy-400">
                 Explore Related Data
               </h3>
               <div className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -167,7 +172,7 @@ export default async function ArticlePage({ params }: PageProps) {
 
             {/* More Articles */}
             <div className="rounded-xl border border-navy-700 bg-navy-900 p-5">
-              <h3 className="font-[family-name:var(--font-heading)] text-sm font-bold text-navy-100">
+              <h3 className="font-heading text-sm font-bold text-navy-100">
                 More Insights
               </h3>
               <div className="mt-3 space-y-3">
@@ -193,7 +198,7 @@ export default async function ArticlePage({ params }: PageProps) {
 
             {/* Tools CTA */}
             <div className="rounded-xl border border-navy-700 bg-navy-900 p-5">
-              <h3 className="font-[family-name:var(--font-heading)] text-sm font-bold text-navy-100">
+              <h3 className="font-heading text-sm font-bold text-navy-100">
                 Salary Tools
               </h3>
               <div className="mt-3 space-y-2">
@@ -225,7 +230,7 @@ export default async function ArticlePage({ params }: PageProps) {
 
         {/* More Articles Grid */}
         <div className="mt-12 border-t border-navy-700 pt-8">
-          <h2 className="font-[family-name:var(--font-heading)] text-lg font-bold text-navy-100">
+          <h2 className="font-heading text-lg font-bold text-navy-100">
             Continue Reading
           </h2>
           <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -238,7 +243,7 @@ export default async function ArticlePage({ params }: PageProps) {
                 <span className="text-[10px] font-bold uppercase tracking-wider text-accent-blue">
                   {a.category}
                 </span>
-                <h3 className="mt-2 font-[family-name:var(--font-heading)] text-sm font-bold text-navy-100 group-hover:text-accent-blue">
+                <h3 className="mt-2 font-heading text-sm font-bold text-navy-100 group-hover:text-accent-blue">
                   {a.title}
                 </h3>
                 <p className="mt-1 text-xs text-navy-400 line-clamp-2">

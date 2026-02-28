@@ -20,7 +20,7 @@ export function JobsCTA({ agencyName, keyword }: JobsCTAProps) {
 
   return (
     <div className="rounded-xl border border-accent-blue/30 bg-accent-blue/5 p-5">
-      <h3 className="font-[family-name:var(--font-heading)] text-sm font-bold text-navy-100">
+      <h3 className="font-heading text-sm font-bold text-navy-100">
         Work at {agencyName.length > 40 ? agencyName.slice(0, 40) + "..." : agencyName}
       </h3>
       <p className="mt-1.5 text-xs leading-relaxed text-navy-400">

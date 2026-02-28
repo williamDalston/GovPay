@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
     "Privacy policy for GovPay.Directory. Learn how we handle data and protect your privacy.",
+  alternates: { canonical: "https://govpay.directory/privacy" },
 };
 
 export default function PrivacyPage() {
@@ -14,7 +15,7 @@ export default function PrivacyPage() {
         items={[{ label: "Home", href: "/" }, { label: "Privacy Policy" }]}
       />
 
-      <h1 className="font-[family-name:var(--font-heading)] text-2xl font-bold text-navy-100 sm:text-3xl">
+      <h1 className="font-heading text-2xl font-bold text-navy-100 sm:text-3xl">
         Privacy Policy
       </h1>
       <p className="mt-2 text-sm text-navy-500">
@@ -23,7 +24,7 @@ export default function PrivacyPage() {
 
       <div className="mt-8 space-y-8 text-sm leading-relaxed text-navy-300">
         <section>
-          <h2 className="font-[family-name:var(--font-heading)] text-base font-bold text-navy-100">
+          <h2 className="font-heading text-lg font-bold text-navy-100">
             Overview
           </h2>
           <p className="mt-3">
@@ -35,7 +36,7 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="font-[family-name:var(--font-heading)] text-base font-bold text-navy-100">
+          <h2 className="font-heading text-lg font-bold text-navy-100">
             Public Employee Data
           </h2>
           <p className="mt-3">
@@ -49,7 +50,7 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="font-[family-name:var(--font-heading)] text-base font-bold text-navy-100">
+          <h2 className="font-heading text-lg font-bold text-navy-100">
             Information We Collect From Visitors
           </h2>
           <div className="mt-3 space-y-3">
@@ -79,7 +80,7 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="font-[family-name:var(--font-heading)] text-base font-bold text-navy-100">
+          <h2 className="font-heading text-lg font-bold text-navy-100">
             Cookies
           </h2>
           <p className="mt-3">
@@ -90,7 +91,7 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="font-[family-name:var(--font-heading)] text-base font-bold text-navy-100">
+          <h2 className="font-heading text-lg font-bold text-navy-100">
             Third-Party Services
           </h2>
           <p className="mt-3">
@@ -101,7 +102,7 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="font-[family-name:var(--font-heading)] text-base font-bold text-navy-100">
+          <h2 className="font-heading text-lg font-bold text-navy-100">
             Data Accuracy and Corrections
           </h2>
           <p className="mt-3">
@@ -113,7 +114,7 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="font-[family-name:var(--font-heading)] text-base font-bold text-navy-100">
+          <h2 className="font-heading text-lg font-bold text-navy-100">
             Changes to This Policy
           </h2>
           <p className="mt-3">

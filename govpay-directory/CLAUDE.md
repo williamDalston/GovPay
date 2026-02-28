@@ -53,7 +53,7 @@ supabase/migrations/        # Database schema SQL
 
 - **Server Components by default.** Only pages/components needing interactivity use `"use client"`.
 - **Data layer:** All DB queries go through `src/lib/db.ts`. No direct Supabase calls elsewhere.
-- **Error handling:** Every dynamic `[slug]` route has `error.tsx`, `not-found.tsx`, and `loading.tsx`.
+- **Error handling:** Every dynamic `[slug]` and `[grade]` route has `error.tsx`, `not-found.tsx`, and `loading.tsx`.
 - **SEO:** Every page has `generateMetadata()` or `metadata` export. Dynamic routes include JSON-LD, canonical URLs, and OG images.
 - **Revalidation:** Detail pages use `revalidate = 3600` (1 hour). Static reference pages use `86400` (24 hours).
 - **Formatting:** Use `formatNumber()` and `formatCurrency()` from `src/lib/format.ts` — never raw `.toLocaleString()`.

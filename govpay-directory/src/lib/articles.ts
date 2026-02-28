@@ -2,7 +2,7 @@
  * Editorial article content for /insights/[slug].
  *
  * These articles serve two purposes:
- * 1. SEO: Target high-volume keywords (e.g., "GS pay scale 2025", "highest paying federal jobs")
+ * 1. SEO: Target high-volume keywords (e.g., "GS pay scale 2026", "highest paying federal jobs")
  * 2. AdSense: Google requires 10-15 quality editorial articles before approving display ads
  *
  * Content is stored as static data for simplicity and performance.
@@ -28,12 +28,12 @@ export interface Article {
 
 export const ARTICLES: Article[] = [
   {
-    slug: "gs-pay-scale-guide-2025",
-    title: "Complete Guide to the GS Pay Scale in 2025",
+    slug: "gs-pay-scale-guide-2026",
+    title: "Complete Guide to the GS Pay Scale in 2026",
     description:
       "Everything you need to know about the General Schedule pay system: grades, steps, locality adjustments, and how to calculate your federal salary.",
-    publishedAt: "2025-01-15",
-    updatedAt: "2025-01-15",
+    publishedAt: "2026-01-15",
+    updatedAt: "2026-01-15",
     readingTime: "8 min read",
     category: "Pay Scales",
     sections: [
@@ -50,7 +50,7 @@ export const ARTICLES: Article[] = [
       {
         heading: "Locality Pay: Why Location Matters",
         content:
-          "One of the most significant factors affecting federal pay is locality adjustment. The federal government recognizes that the cost of living varies dramatically across the country, so base GS pay is adjusted upward in higher-cost areas.\n\nThe Office of Personnel Management (OPM) defines over 50 locality pay areas, each with its own adjustment percentage. In 2025, locality adjustments range from the base rate (Rest of U.S.) to as high as 44.72% in the San Francisco-San Jose metro area. Other high-adjustment areas include Washington, DC (32.75%), New York (36.14%), and Seattle (34.01%).\n\nLocality pay is permanent — it's not a temporary bonus but a built-in part of your salary calculation. Your actual annual salary is your base GS rate multiplied by your locality adjustment factor.",
+          "One of the most significant factors affecting federal pay is locality adjustment. The federal government recognizes that the cost of living varies dramatically across the country, so base GS pay is adjusted upward in higher-cost areas.\n\nThe Office of Personnel Management (OPM) defines over 50 locality pay areas, each with its own adjustment percentage. In 2026, locality adjustments range from the base rate (Rest of U.S.) to as high as 44.72% in the San Francisco-San Jose metro area. Other high-adjustment areas include Washington, DC (32.75%), New York (36.14%), and Seattle (34.01%).\n\nLocality pay is permanent — it's not a temporary bonus but a built-in part of your salary calculation. Your actual annual salary is your base GS rate multiplied by your locality adjustment factor.",
       },
       {
         heading: "How to Calculate Your Federal Salary",
@@ -80,8 +80,8 @@ export const ARTICLES: Article[] = [
     title: "Highest Paying Federal Agencies Ranked",
     description:
       "Discover which federal agencies pay the most. We rank agencies by average salary, reveal top occupations, and show where the highest-paying positions are located.",
-    publishedAt: "2025-01-20",
-    updatedAt: "2025-01-20",
+    publishedAt: "2026-01-20",
+    updatedAt: "2026-01-20",
     readingTime: "6 min read",
     category: "Analysis",
     sections: [
@@ -118,20 +118,20 @@ export const ARTICLES: Article[] = [
     title: "Federal Locality Pay Explained: How Location Affects Your Salary",
     description:
       "Understand how locality pay adjustments work, which areas pay the most, and how to calculate your adjusted federal salary based on where you work.",
-    publishedAt: "2025-02-01",
-    updatedAt: "2025-02-01",
+    publishedAt: "2026-02-01",
+    updatedAt: "2026-02-01",
     readingTime: "7 min read",
     category: "Pay Scales",
     sections: [
       {
         heading: "What Is Locality Pay?",
         content:
-          "Locality pay is a geographic-based salary supplement that adjusts federal employee base pay to account for differences in the cost of labor across the country. Created by the Federal Employees Pay Comparability Act of 1990 (FEPCA), locality pay ensures that federal workers in high-cost areas receive compensation more comparable to their private-sector counterparts.\n\nEvery federal employee on the General Schedule receives some form of locality adjustment. Even employees in areas outside designated locality pay areas receive the \"Rest of United States\" adjustment, which serves as the baseline. In 2025, locality adjustments range from the baseline to a maximum of 44.72% above base pay.",
+          "Locality pay is a geographic-based salary supplement that adjusts federal employee base pay to account for differences in the cost of labor across the country. Created by the Federal Employees Pay Comparability Act of 1990 (FEPCA), locality pay ensures that federal workers in high-cost areas receive compensation more comparable to their private-sector counterparts.\n\nEvery federal employee on the General Schedule receives some form of locality adjustment. Even employees in areas outside designated locality pay areas receive the \"Rest of United States\" adjustment, which serves as the baseline. In 2026, locality adjustments range from the baseline to a maximum of 44.72% above base pay.",
       },
       {
-        heading: "2025 Locality Pay Areas and Rates",
+        heading: "2026 Locality Pay Areas and Rates",
         content:
-          "The Office of Personnel Management (OPM) currently designates over 50 locality pay areas. Here are some of the highest adjustment rates for 2025:\n\n• San Francisco-San Jose-Oakland: 44.72% — the highest in the nation\n• New York-Newark-Jersey City: 36.14%\n• Washington-Baltimore-Arlington: 32.75%\n• Houston-The Woodlands-Sugar Land: 34.19%\n• Los Angeles-Long Beach-Anaheim: 34.49%\n• Seattle-Tacoma-Bellevue: 34.01%\n• Boston-Cambridge-Nashua: 31.17%\n• Denver-Aurora-Lakewood: 28.81%\n\nThese percentages are applied on top of the GS base pay table. A GS-13 Step 1 employee earning a base salary of $88,012 would receive $127,385 in the San Francisco area — a difference of nearly $40,000.",
+          "The Office of Personnel Management (OPM) currently designates over 50 locality pay areas. Here are some of the highest adjustment rates for 2026:\n\n• San Francisco-San Jose-Oakland: 44.72% — the highest in the nation\n• New York-Newark-Jersey City: 36.14%\n• Washington-Baltimore-Arlington: 32.75%\n• Houston-The Woodlands-Sugar Land: 34.19%\n• Los Angeles-Long Beach-Anaheim: 34.49%\n• Seattle-Tacoma-Bellevue: 34.01%\n• Boston-Cambridge-Nashua: 31.17%\n• Denver-Aurora-Lakewood: 28.81%\n\nThese percentages are applied on top of the GS base pay table. A GS-13 Step 1 employee earning a base salary of $88,012 would receive $127,385 in the San Francisco area — a difference of nearly $40,000.",
       },
       {
         heading: "How Locality Pay Is Determined",
@@ -156,8 +156,8 @@ export const ARTICLES: Article[] = [
     title: "How Federal Employee Step Increases Work",
     description:
       "Learn about GS within-grade step increases: eligibility requirements, waiting periods, how much each step is worth, and strategies for faster pay progression.",
-    publishedAt: "2025-02-10",
-    updatedAt: "2025-02-10",
+    publishedAt: "2026-02-10",
+    updatedAt: "2026-02-10",
     readingTime: "5 min read",
     category: "Career",
     sections: [
@@ -194,8 +194,8 @@ export const ARTICLES: Article[] = [
     title: "Federal vs. Private Sector Pay: How Do They Compare?",
     description:
       "A data-driven comparison of federal government and private sector compensation, including salary, benefits, job security, and total compensation value.",
-    publishedAt: "2025-02-15",
-    updatedAt: "2025-02-15",
+    publishedAt: "2026-02-15",
+    updatedAt: "2026-02-15",
     readingTime: "7 min read",
     category: "Analysis",
     sections: [
@@ -222,7 +222,7 @@ export const ARTICLES: Article[] = [
     ],
     relatedLinks: [
       { label: "Search Federal Salaries", href: "/search" },
-      { label: "GS Pay Scale 2025", href: "/pay-scales/gs" },
+      { label: "GS Pay Scale 2026", href: "/pay-scales/gs" },
       { label: "Compare Salaries", href: "/tools/compare" },
       { label: "Cost of Living Calculator", href: "/tools/cost-of-living" },
     ],

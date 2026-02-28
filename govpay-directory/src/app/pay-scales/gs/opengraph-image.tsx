@@ -66,7 +66,7 @@ export default function Image() {
             lineHeight: 1.5,
           }}
         >
-          2025 General Schedule pay tables for all 15 grades and 10 steps.
+          2026 General Schedule pay tables for all 15 grades and 10 steps.
           Includes locality pay adjustments for every metro area.
         </div>
         <div

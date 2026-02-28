@@ -18,7 +18,7 @@ export default function StateDetailLoading() {
       </div>
 
       {/* Stats bar skeleton */}
-      <div className="mt-8 grid grid-cols-4 gap-4">
+      <div className="mt-8 grid grid-cols-2 gap-2 sm:gap-4 md:grid-cols-4">
         {Array.from({ length: 4 }).map((_, i) => (
           <div key={i} className="rounded-xl border border-navy-700 bg-navy-900 p-4">
             <div className="h-8 w-20 animate-shimmer rounded" />

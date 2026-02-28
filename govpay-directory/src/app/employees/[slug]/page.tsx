@@ -6,7 +6,7 @@ import { EmployeeCard } from "@/components/EmployeeCard";
 import { AnimatedBar } from "@/components/AnimatedBar";
 import { getEmployeeBySlug, getEmployeesByAgency, getAgencyAvgSalary, getNationalAvgSalary } from "@/lib/db";
 import { formatCurrency } from "@/lib/format";
-import { GS_BASE_PAY_2025 } from "@/lib/reference-data";
+import { GS_BASE_PAY_2026 } from "@/lib/reference-data";
 import { AdSlot } from "@/components/AdSlot";
 import { JobsCTA } from "@/components/JobsCTA";
 import { ShareButton } from "@/components/ShareButton";
@@ -46,7 +46,7 @@ export default async function EmployeePage({ params }: PageProps) {
   const relatedEmployees = agencyEmployees.filter((e) => e.id !== employee.id);
 
   const gradeNum = parseInt(employee.grade);
-  const basePay = GS_BASE_PAY_2025[gradeNum];
+  const basePay = GS_BASE_PAY_2026[gradeNum];
   const agencyAvg = await getAgencyAvgSalary(employee.agencySlug);
   const nationalAvg = await getNationalAvgSalary();
   const compVsAgency = (
@@ -92,22 +92,22 @@ export default async function EmployeePage({ params }: PageProps) {
         {/* Header */}
         <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
           <div>
-            <h1 className="font-[family-name:var(--font-heading)] text-2xl font-bold text-navy-100 sm:text-3xl">
+            <h1 className="font-heading text-2xl font-bold text-navy-100 sm:text-3xl">
               {employee.name}
             </h1>
             <p className="mt-1 text-lg text-navy-400">{employee.jobTitle}</p>
-            <div className="mt-3 flex flex-wrap gap-4 text-sm text-navy-400">
-              <span className="flex items-center gap-1.5">
-                <Building2 size={14} className="text-accent-blue" />
+            <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-sm text-navy-400">
+              <span className="flex min-w-0 items-center gap-1.5">
+                <Building2 size={14} className="shrink-0 text-accent-blue" />
                 <Link
                   href={`/agencies/${employee.agencySlug}`}
-                  className="hover:text-accent-blue"
+                  className="truncate hover:text-accent-blue"
                 >
                   {employee.agency}
                 </Link>
               </span>
               <span className="flex items-center gap-1.5">
-                <MapPin size={14} className="text-accent-green" />
+                <MapPin size={14} className="shrink-0 text-accent-green" />
                 <Link
                   href={`/states/${employee.stateSlug}`}
                   className="hover:text-accent-blue"
@@ -116,11 +116,11 @@ export default async function EmployeePage({ params }: PageProps) {
                 </Link>
               </span>
               <span className="flex items-center gap-1.5">
-                <Briefcase size={14} className="text-accent-amber" />
+                <Briefcase size={14} className="shrink-0 text-accent-amber" />
                 {employee.payPlan}-{employee.grade}, Step {employee.step}
               </span>
               <span className="flex items-center gap-1.5">
-                <Calendar size={14} className="text-navy-500" />
+                <Calendar size={14} className="shrink-0 text-navy-500" />
                 FY {employee.year}
               </span>
             </div>
@@ -136,13 +136,13 @@ export default async function EmployeePage({ params }: PageProps) {
         <div className="mt-8 grid gap-6 lg:grid-cols-3">
           <div className="lg:col-span-2">
             <div className="rounded-xl border border-navy-700 bg-navy-900 p-6">
-              <h2 className="font-[family-name:var(--font-heading)] text-sm font-bold uppercase tracking-wider text-navy-400">
+              <h2 className="font-heading text-sm font-bold uppercase tracking-wider text-navy-400">
                 Compensation Details
               </h2>
               <div className="mt-4 grid gap-4 sm:grid-cols-2">
                 <div className="rounded-lg bg-navy-800 p-4">
                   <p className="text-xs text-navy-500">Total Compensation</p>
-                  <p className="mt-1 font-[family-name:var(--font-data)] text-2xl font-bold text-accent-green sm:text-3xl">
+                  <p className="mt-1 font-data text-2xl font-bold text-accent-green sm:text-3xl">
                     {formatCurrency(employee.totalCompensation)}
                   </p>
                   <p className="mt-1 text-xs text-navy-500">
@@ -151,7 +151,7 @@ export default async function EmployeePage({ params }: PageProps) {
                 </div>
                 <div className="rounded-lg bg-navy-800 p-4">
                   <p className="text-xs text-navy-500">Base Salary</p>
-                  <p className="mt-1 font-[family-name:var(--font-data)] text-2xl font-bold text-navy-100 sm:text-3xl">
+                  <p className="mt-1 font-data text-2xl font-bold text-navy-100 sm:text-3xl">
                     {formatCurrency(employee.baseSalary)}
                   </p>
                   <p className="mt-1 text-xs text-navy-500">
@@ -163,19 +163,19 @@ export default async function EmployeePage({ params }: PageProps) {
               <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3">
                 <div className="rounded-lg bg-navy-800 p-4">
                   <p className="text-xs text-navy-500">Pay Plan</p>
-                  <p className="mt-1 font-[family-name:var(--font-data)] text-lg font-bold text-navy-100">
+                  <p className="mt-1 font-data text-lg font-bold text-navy-100">
                     {employee.payPlan}
                   </p>
                 </div>
                 <div className="rounded-lg bg-navy-800 p-4">
                   <p className="text-xs text-navy-500">Grade / Step</p>
-                  <p className="mt-1 font-[family-name:var(--font-data)] text-lg font-bold text-navy-100">
+                  <p className="mt-1 font-data text-lg font-bold text-navy-100">
                     {employee.grade} / {employee.step}
                   </p>
                 </div>
                 <div className="col-span-2 rounded-lg bg-navy-800 p-4 sm:col-span-1">
                   <p className="text-xs text-navy-500">Occupation</p>
-                  <p className="mt-1 font-[family-name:var(--font-data)] text-lg font-bold text-navy-100">
+                  <p className="mt-1 font-data text-lg font-bold text-navy-100">
                     {employee.occupationCode}
                   </p>
                   <p className="truncate text-xs text-navy-500">
@@ -187,7 +187,7 @@ export default async function EmployeePage({ params }: PageProps) {
 
             {/* Context narrative */}
             <div className="mt-6 rounded-xl border border-navy-700 bg-navy-900 p-6">
-              <h2 className="font-[family-name:var(--font-heading)] text-sm font-bold uppercase tracking-wider text-navy-400">
+              <h2 className="font-heading text-sm font-bold uppercase tracking-wider text-navy-400">
                 Compensation Context
               </h2>
               <div className="mt-4 space-y-3 text-sm leading-relaxed text-navy-300">
@@ -250,7 +250,7 @@ export default async function EmployeePage({ params }: PageProps) {
           {/* Sidebar */}
           <div className="space-y-6">
             <div className="rounded-xl border border-navy-700 bg-navy-900 p-5">
-              <h3 className="font-[family-name:var(--font-heading)] text-sm font-bold text-navy-100">
+              <h3 className="font-heading text-sm font-bold text-navy-100">
                 How This Salary Compares
               </h3>
               <div className="mt-4 space-y-3">
@@ -258,7 +258,7 @@ export default async function EmployeePage({ params }: PageProps) {
                   <div className="flex items-center justify-between text-xs">
                     <span className="text-navy-400">vs. Agency Average</span>
                     <span
-                      className={`font-[family-name:var(--font-data)] font-bold ${parseFloat(compVsAgency) > 0 ? "text-accent-green" : "text-accent-red"}`}
+                      className={`font-data font-bold ${parseFloat(compVsAgency) > 0 ? "text-accent-green" : "text-accent-red"}`}
                     >
                       {parseFloat(compVsAgency) > 0 ? "+" : ""}
                       {compVsAgency}%
@@ -273,7 +273,7 @@ export default async function EmployeePage({ params }: PageProps) {
                   <div className="flex items-center justify-between text-xs">
                     <span className="text-navy-400">vs. National Average</span>
                     <span
-                      className={`font-[family-name:var(--font-data)] font-bold ${parseFloat(compVsNational) > 0 ? "text-accent-green" : "text-accent-red"}`}
+                      className={`font-data font-bold ${parseFloat(compVsNational) > 0 ? "text-accent-green" : "text-accent-red"}`}
                     >
                       {parseFloat(compVsNational) > 0 ? "+" : ""}
                       {compVsNational}%
@@ -288,7 +288,7 @@ export default async function EmployeePage({ params }: PageProps) {
             </div>
 
             <div className="rounded-xl border border-navy-700 bg-navy-900 p-5">
-              <h3 className="font-[family-name:var(--font-heading)] text-sm font-bold text-navy-100">
+              <h3 className="font-heading text-sm font-bold text-navy-100">
                 Quick Links
               </h3>
               <div className="mt-3 space-y-2">
@@ -337,7 +337,7 @@ export default async function EmployeePage({ params }: PageProps) {
         {/* Related Employees */}
         {relatedEmployees.length > 0 && (
           <div className="mt-12">
-            <h2 className="font-[family-name:var(--font-heading)] text-lg font-bold text-navy-100">
+            <h2 className="font-heading text-lg font-bold text-navy-100">
               More at {employee.agency}
             </h2>
             <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -351,12 +351,12 @@ export default async function EmployeePage({ params }: PageProps) {
         {/* Related Guides — drives pageviews to editorial content */}
         {employee.payPlan === "GS" && (
           <div className="mt-8 rounded-xl border border-navy-700 bg-navy-900 p-6">
-            <h2 className="font-[family-name:var(--font-heading)] text-sm font-bold uppercase tracking-wider text-navy-400">
+            <h2 className="font-heading text-sm font-bold uppercase tracking-wider text-navy-400">
               Related Guides
             </h2>
             <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               <Link
-                href="/insights/gs-pay-scale-guide-2025"
+                href="/insights/gs-pay-scale-guide-2026"
                 className="rounded-lg border border-navy-700 bg-navy-800 px-4 py-3 text-sm text-navy-300 transition-all hover:border-accent-blue/50 hover:text-accent-blue"
               >
                 <ArrowRight size={12} className="mr-1 inline text-accent-blue" />

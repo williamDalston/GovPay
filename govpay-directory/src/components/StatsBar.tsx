@@ -13,13 +13,13 @@ interface StatsBarProps {
 
 export function StatsBar({ stats }: StatsBarProps) {
   return (
-    <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+    <div className="grid grid-cols-2 gap-2 sm:gap-4 md:grid-cols-4" role="region" aria-label="Key statistics">
       {stats.map((stat) => (
         <div
           key={stat.label}
-          className="overflow-hidden rounded-xl border border-navy-700 bg-navy-900 px-3 py-3 sm:px-4"
+          className="overflow-hidden rounded-xl border border-navy-700 bg-navy-900 px-2.5 py-3 sm:px-4"
         >
-          <p className="truncate font-[family-name:var(--font-data)] text-lg font-bold text-navy-100 sm:text-xl md:text-2xl">
+          <p className="truncate font-data text-base font-bold text-navy-100 sm:text-xl md:text-2xl">
             <AnimatedNumber value={stat.value} />
           </p>
           <p className="mt-0.5 truncate text-[11px] text-navy-400 sm:text-xs">{stat.label}</p>

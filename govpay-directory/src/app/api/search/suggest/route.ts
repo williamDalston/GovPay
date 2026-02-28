@@ -29,6 +29,9 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error("Suggest error:", error);
-    return NextResponse.json({ employees: [], agencies: [] });
+    return NextResponse.json(
+      { employees: [], agencies: [] },
+      { status: 500, headers: rlHeaders }
+    );
   }
 }
