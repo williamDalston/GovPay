@@ -22,12 +22,6 @@ const BASE_URL = "https://www.govpay.directory";
 const DATA_UPDATED = new Date("2026-02-27"); // Last ETL run (1.8M+ records loaded)
 const SITE_UPDATED = new Date("2026-02-27"); // Last meaningful code deploy
 
-export async function generateSitemaps() {
-  // Single sitemap with high-value aggregate pages only
-  // No longer generating 40+ sitemaps for individual employee pages
-  return [{ id: 0 }];
-}
-
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Static pages — /search intentionally excluded (client-rendered, noindex)
   const staticPages: MetadataRoute.Sitemap = [
